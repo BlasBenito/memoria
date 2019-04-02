@@ -1,57 +1,62 @@
-#' Plots main simulation parameters.
+#' Organizes time series data into lags.
 #'
-#' @description Plots the normal function/s, fecundity, growth curve, and maturity age, of each virtual taxa in \code{parameters}.
+#' @description Takes a multivariate time series, where at least one variable is meant to be used as a response in a model while the others are meant to be used as predictors, and organizes it in to quantify ecological memory through models of the form \eqn{p_{t} = p_{t-1} +...+ p_{t-n} + d_{t} + d_{t-1} +...+ d_{t-n}}, where:
 #'
-#' @usage parametersCheck(
-#'   parameters,
-#'   species="all",
-#'   driver.A=NULL,
-#'   driver.B=NULL,
-#'   drivers=NULL,
-#'   filename=NULL
+#' \itemize{
+#'  \item \eqn{d} is a driver (several drivers can be added).
+#'  \item \eqn{t} is the time of any given value of the response \emph{p}.
+#'  \item \eqn{t-1} is the lag number 1 (in time units).
+#'  \item \eqn{p_{t-1} +...+ p_{t-n}}  represents the endogenous component of ecological memory.
+#'  \item \eqn{d_{t-1} +...+ d_{t-n}}  represents the exogenous component of ecological memory.
+#'  \item \eqn{d_{t}} represents the concurrent effect of the driver over the response.
+#' }
+#'
+#'
+#' @usage prepareLaggedData(
+#'   input.data = NULL,
+#'   response = NULL,
+#'   drivers = NULL,
+#'   time = NULL,
+#'   lags = seq(0, 200, by=20),
+#'   time.zoom=NULL,
+#'   scale=FALSE
 #'   )
 #'
-#' @param parameters the parameters dataframe.
-#' @param species if "all" or "ALL", all species in "parameters" are plotted. It also accepts a vector of numbers representing the rows of the selected species, or a vector of names of the selected species.
-#' @param driver.A  numeric vector with driver values.
-#' @param driver.B numeric vector with driver values.
-#' @param drivers dataframe with drivers
-#' @param filename character string, filename of the output pdf.
+#' @param input.data a dataframe with one time series per column.
+#' @param response character string, name of the numeric column to be used as response in the model.
+#' @param drivers  character vector, names of the numeric columns to be used as predictors in the model.
+#' @param time character vector, name of the numeric column with the time/age.
+#' @param lags numeric vector, lags to be used in the equation. Generally, a regular sequence of numbers. The use \code{\link{seq}} to define it is highly recommended. If 0 is absent from lags, it is added automatically to allow the consideration of a concurrent effect.
+#' @param time.zoom numeric vector of two numbers of the \code{time} column used to subset the data if desired.
+#' @param scale boolean, if TRUE, applies the \code{\link{scale}} function to normalize the data. Required if the lagged data is going to be used to fit linear models.
 #'
-#' @details The function prints the plot, can save it to a pdf file if \code{filename} is provided, and returns a \code{\link{ggplot2}} object.
+#' @details The function returns a dataframe. Column names have the lag number as a suffix. The response variable is identified by changing its name to "Response".
 #'
 #' @author Blas M. Benito  <blasbenito@gmail.com>
 #'
-#' @return A \code{\link{ggplot2}} object.
+#' @return A dataframe.
 #'
-#' @seealso \code{\link{parametersDataframe}}, \code{\link{fixParametersTypes}}
+#' @seealso \code{\link{computeMemory}}
 #'
 #' @examples
-#'#generating driver
-#'driver <- simulateDriver(
-#'  random.seed = 10,
-#'  time = 1:1000,
-#'  autocorrelation.length = 200,
-#'  output.min = 0,
-#'  output.max = 100,
-#'  rescale = TRUE
-#'  )
+#'#loading data
+#'data(simulation)
 #'
-#'#preparing parameters
-#'parameters <- parametersDataframe(rows=2)
-#'parameters[1,] <- c("Species 1", 50, 20, 2, 0.2, 0, 100, 1000, 1, 0, 50, 10, 0, 0, NA, NA)
-#'parameters[2,] <- c("Species 1", 500, 100, 10, 0.02, 0, 100, 1000, 1, 0, 50, 10, 0, 0, NA, NA)
-#'parameters <- fixParametersTypes(x=parameters)
-#'
-#'#plotting parameters
-#'parametersCheck(
-#'  parameters=parameters,
-#'  driver.A=driver,
-#'  filename="Parameters.pdf"
-#'  )
+#'#adding lags
+#'sim.lags <- prepareLaggedData(
+#'   input.data = simulation[[1]],
+#'   response = "Pollen",
+#'   drivers = "Driver",
+#'   time = "Time",
+#'   lags = seq(0, 200, by=20),
+#'   time.zoom=NULL,
+#'   scale=FALSE
+#'   )
 #'
 #' @export
-prepareLaggedData = function(simulation.data, response, drivers, time, lags, time.zoom=NULL, scale=FALSE){
+prepareLaggedData = function(input.data, response, drivers, time, lags, time.zoom=NULL, scale=FALSE){
+
+  simulation.data <- input.data
 
   #computing data resolution to adjust lags for the annual resolution dataset
   temporal.resolution = simulation.data[2, time] - simulation.data[1, time]

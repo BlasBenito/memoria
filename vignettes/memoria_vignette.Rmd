@@ -1,6 +1,6 @@
 ---
-title: 'Appendix II'
-subtitle: 'Analyzing ecological memory with Random Forest'
+title: 'memoria'
+subtitle: 'Analyzing ecological memory with Random Forest in palaeoecological datasets'
 author: "Blas M. Benito"
 output:
   pdf_document:
