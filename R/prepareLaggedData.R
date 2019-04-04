@@ -1,6 +1,9 @@
 #' Organizes time series data into lags.
 #'
-#' @description Takes a multivariate time series, where at least one variable is meant to be used as a response in a model while the others are meant to be used as predictors, and organizes it in to quantify ecological memory through models of the form \eqn{p_{t} = p_{t-1} +...+ p_{t-n} + d_{t} + d_{t-1} +...+ d_{t-n}}, where:
+#' @description Takes a multivariate time series, where at least one variable is meant to be used as a response in a model while the others are meant to be used as predictors, and organizes it in to quantify ecological memory through models of the form:
+#'  \eqn{p_{t} ~ p_{t-1} +...+ p_{t-n} + d_{t} + d_{t-1} +...+ d_{t-n}}
+#'
+#'  where:
 #'
 #' \itemize{
 #'  \item \eqn{d} is a driver (several drivers can be added).
@@ -34,7 +37,7 @@
 #'
 #' @author Blas M. Benito  <blasbenito@gmail.com>
 #'
-#' @return A dataframe.
+#' @return A dataframe with columns representing time-delayed values of the drivers and the response.
 #'
 #' @seealso \code{\link{computeMemory}}
 #'
@@ -54,7 +57,15 @@
 #'   )
 #'
 #' @export
-prepareLaggedData = function(input.data, response, drivers, time, lags, time.zoom=NULL, scale=FALSE){
+prepareLaggedData = function(input.data = NULL,
+                             response = NULL,
+                             drivers = NULL,
+                             time = NULL,
+                             lags = NULL,
+                             time.zoom = NULL,
+                             scale = FALSE){
+
+  require(zoo)
 
   simulation.data <- input.data
 
@@ -62,50 +73,50 @@ prepareLaggedData = function(input.data, response, drivers, time, lags, time.zoo
   temporal.resolution = simulation.data[2, time] - simulation.data[1, time]
 
   #converting lags from years to cases to be used as lags
-  lags.to.rows = round(lags/temporal.resolution, 0)
+  lags.to.rows <- round(lags/temporal.resolution, 0)
 
   #adds 0 to lags if it's not
   if(!(0 %in% lags)){
-    lags.to.rows = c(0, lags.to.rows)
-    lags = c(0, lags)
+    lags.to.rows <- c(0, lags.to.rows)
+    lags <- c(0, lags)
   }
 
   #apply time.zoom if so
   if(!is.null(time.zoom) & is.vector(time.zoom) & is.numeric(time.zoom) & length(time.zoom) == 2){
-    simulation.data = simulation.data[simulation.data[, time] >= time.zoom[1] & simulation.data[, time] <= time.zoom[2], ]
+    simulation.data <- simulation.data[simulation.data[, time] >= time.zoom[1] & simulation.data[, time] <= time.zoom[2], ]
   }
 
   #response lags
-  response.lags = do.call("merge", lapply(lags.to.rows, function(lag.to.row) lag(as.zoo(simulation.data[,response]), -lag.to.row)))
+  response.lags <- do.call("merge", lapply(lags.to.rows, function(lag.to.row) lag(as.zoo(simulation.data[,response]), -lag.to.row)))
 
   #naming columns
-  colnames(response.lags) = paste("Response", lags, sep = "_")
+  colnames(response.lags) <- paste("Response", lags, sep = "_")
 
   #driver lags
   for(driver in drivers){
 
-    driver.lags = do.call("merge", lapply(lags.to.rows, function(lag.to.row) lag(as.zoo(simulation.data[,driver]), -lag.to.row)))
+    driver.lags <- do.call("merge", lapply(lags.to.rows, function(lag.to.row) lag(as.zoo(simulation.data[,driver]), -lag.to.row)))
 
     #naming columns
-    colnames(driver.lags) = paste(driver, lags, sep = "_")
+    colnames(driver.lags) <- paste(driver, lags, sep = "_")
 
     #joining with response lags
-    response.lags = cbind(response.lags, driver.lags)
+    response.lags <- cbind(response.lags, driver.lags)
 
   }
 
   #removing NA
-  response.lags = as.data.frame(response.lags)
-  response.lags$time = simulation.data[, time]
-  response.lags = na.omit(response.lags)
-  time = response.lags$time
-  response.lags$time = NULL
+  response.lags <- as.data.frame(response.lags)
+  response.lags$time <- simulation.data[, time]
+  response.lags <- na.omit(response.lags)
+  time <- response.lags$time
+  response.lags$time <- NULL
 
   #scaling data
   if(scale==TRUE){
-    response.lags = data.frame(scale(response.lags), time)
+    response.lags <- data.frame(scale(response.lags), time)
   } else {
-    response.lags = data.frame(response.lags, time)
+    response.lags <- data.frame(response.lags, time)
   }
 
   return(response.lags)
