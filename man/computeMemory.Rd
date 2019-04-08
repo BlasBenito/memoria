@@ -2,9 +2,10 @@
 % Please edit documentation in R/computeMemory.R
 \name{computeMemory}
 \alias{computeMemory}
-\title{Organizes time series data into lags.}
+\title{Quantifies ecological memory with Random Forest}
 \usage{
-computeMemory = function(lagged.data,
+computeMemory(
+ lagged.data = NULL,
  drivers = NULL,
  response = "Response",
  add.random = TRUE,
@@ -14,28 +15,47 @@ computeMemory = function(lagged.data,
 )
 }
 \arguments{
-\item{lagged.data}{a lagged dataset resulting from \code{\link{prepareLaggedData}}.}
+\item{lagged.data}{a lagged dataset resulting from \code{\link{prepareLaggedData}}. See \code{\link{laggedSimData}} as example.}
 
 \item{drivers}{a string or vector of strings with variables to be used as predictors in the model (i.e. c("Suitability", "Driver.A"))}
 
+\item{response}{character string, name of the response variable (typically, "Response_0")}
+
 \item{add.random}{if TRUE, adds a random term to the model, useful to assess the significance of the variable importance scores}
 
+\item{random.mode}{either "white.noise" or "autocorrelated". See details.}
+
+\item{repetitions}{integer, number of random forest models to fit}
+
+\item{subset.response}{character string with values "up", "down" or "none", triggers the subsetting of the input dataset. "up" only models memory on cases where the response's trend is positive, "down" selectes cases with negative trends, and "none" selects all cases.}
+
+\item{min.node.size}{integer, argument of the \link[ranger]{ranger} function. Minimal number of samples to be allocated in a terminal node. Default is 5.}
+
+\item{num.trees}{integer, argument of the \link[ranger]{ranger} function. Number of regression trees to be fitted (size of the forest). Default is 2000.}
+
+\item{mtry}{integer, argument of the \link[ranger]{ranger} function. Number of variables to possibly split at in each node. Default is 2.}
+
 \item{drivers}{character vector, names of the numeric columns to be used as predictors in the model.}
-
-\item{random.mode:}{either "white.noise" or "autocorrelated". See details and \code{\link{addRandomColumn}}.}
-
-\item{repetitions:}{integer, number of random forest models to fit}
-
-\item{response:}{character string, name of the response variable (typically, "Response_0")}
-
-\item{subset.response:}{character string with values "up", "down" or "none", triggers the subsetting of the input dataset. "up" only models memory on cases where the response's trend is positive, "down" selectes cases with negative trends, and "none" selects all cases.}
 }
 \value{
-A dataframe with columns representing time-delayed values of the drivers and the response.
+A list with three 4 slots:
+ \itemize{
+ \item \code{memory} dataframe with five columns:
+    \itemize{
+      \item \code{Variable} character, names and lags of the different variables used to model ecological memory.
+      \item \code{median} numeric, median importance across \code{repetitions} of the given \code{Variable} according to Random Forest.
+      \item \code{sd} numeric, standard deviation of the importance values of the given \code{Variable} across \code{repetitions}.
+      \item \code{min} and \code{max} numeric, percentiles 0.05 and 0.95 of importance values of the given \code{Variable} across \code{repetitions}.
+    }
+ \item \code{R2} vector, values of pseudo R-squared value obtained for the Random Forest model fitted on each repetition. Pseudo R-squared is the Pearson correlation beteween the observed and predicted data.
+ \item \code{prediction} dataframe, with the same columns as the dataframe in the slot \code{memory}, with the median and confidence intervals of the predictions of all random forest models fitted.
+ \item \code{multicollinearity} multicollinearity analysis on the input data performed with \link[HH]{vif}. A vif value higher than 5 indicates that the given variable is highly correlated with other variables.
+}
 }
 \description{
-Takes an oputput of \code{\link{prepareLaggedData}} to fit the following model with Random Forest:
- \eqn{p_{t} ~ p_{t-1} +...+ p_{t-n} + d_{t} + d_{t-1} +...+ d_{t-n}}
+Takes the oputput of \code{\link{prepareLaggedData}} to fit the following model with Random Forest:
+
+ \eqn{p_{t} = p_{t-1} +...+ p_{t-n} + d_{t} + d_{t-1} +...+ d_{t-n} + r}
 
  where:
 
@@ -46,26 +66,11 @@ Takes an oputput of \code{\link{prepareLaggedData}} to fit the following model w
  \item \eqn{p_{t-1} +...+ p_{t-n}}  represents the endogenous component of ecological memory.
  \item \eqn{d_{t-1} +...+ d_{t-n}}  represents the exogenous component of ecological memory.
  \item \eqn{d_{t}} represents the concurrent effect of the driver over the response.
+ \item \eqn{r} represents a column of random values, used to test the significance of the variable importance scores returned by Random Forest.
 }
 }
 \details{
-The function returns a dataframe. Column names have the lag number as a suffix. The response variable is identified by changing its name to "Response".
-}
-\examples{
-#loading data
-data(simulation)
-
-#adding lags
-sim.lags <- prepareLaggedData(
-  input.data = simulation[[1]],
-  response = "Pollen",
-  drivers = "Driver",
-  time = "Time",
-  lags = seq(0, 200, by=20),
-  time.zoom=NULL,
-  scale=FALSE
-  )
-
+This function uses the \link[ranger]{ranger} package to fit Random Forest models. It fits the model explained above as many times as defined in the argument \code{repetitions}. To test the statistical significance of the variable importance scores returned by random forest, on each repetition the model is fitted with a different \code{r} (random) term. If \code{random.mode} equals "autocorrelated", the random term will have a temporal autocorrelation, and if it equals "white.noise", it will be a pseudo-random sequence of numbers generated with \code{\link{rnorm}}, with no temporal autocorrelation. The importance of the random sequence (as computed by random forest) is stored for each model run, and used as a benchmark to assess the importance of the other predictors used in the models. Importance values of other predictors that are above the median of the importance of the random term should be interpreted as non-random, and therefore, significant.
 }
 \seealso{
 \code{\link{computeMemory}}

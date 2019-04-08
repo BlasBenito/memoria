@@ -1,6 +1,6 @@
 #' Organizes time series data into lags.
 #'
-#' @description Takes a multivariate time series, where at least one variable is meant to be used as a response in a model while the others are meant to be used as predictors, and organizes it in to quantify ecological memory through models of the form:
+#' @description Takes a multivariate time series, where at least one variable is meant to be used as a response while the others are meant to be used as predictors in a model, and organizes it in to quantify ecological memory through models of the form:
 #'  \eqn{p_{t} ~ p_{t-1} +...+ p_{t-n} + d_{t} + d_{t-1} +...+ d_{t-n}}
 #'
 #'  where:
@@ -64,8 +64,6 @@ prepareLaggedData = function(input.data = NULL,
                              lags = NULL,
                              time.zoom = NULL,
                              scale = FALSE){
-
-  require(zoo)
 
   simulation.data <- input.data
 
