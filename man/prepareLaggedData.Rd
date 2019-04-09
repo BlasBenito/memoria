@@ -9,6 +9,7 @@ prepareLaggedData(
   response = NULL,
   drivers = NULL,
   time = NULL,
+  oldest.sample = "first",
   lags = seq(0, 200, by=20),
   time.zoom=NULL,
   scale=FALSE
@@ -23,14 +24,16 @@ prepareLaggedData(
 
 \item{time}{character vector, name of the numeric column with the time/age.}
 
-\item{lags}{numeric vector, lags to be used in the equation. Generally, a regular sequence of numbers. The use \code{\link{seq}} to define it is highly recommended. If 0 is absent from lags, it is added automatically to allow the consideration of a concurrent effect.}
+\item{oldest.sample}{character string, either "first" or "last". When "first", the first row taken as the oldest case of the time series and the last row is taken as the newest case, so ecological memory flows from the first to the last row of \code{input.data}. When "last", the last row is taken as the oldest sample, and this is the mode that should be used when \code{input.data} represents a palaeoecological dataset. Default behavior is "first".}
+
+\item{lags}{numeric vector of positive integers, lags to be used in the equation. Generally, a regular sequence of numbers, in the same units as \code{time}. The use \code{\link{seq}} to define it is highly recommended. If 0 is absent from lags, it is added automatically to allow the consideration of a concurrent effect. Lags should take into account the temporal resolution of the data, and be aligned to it. For example, if the interval between consecutive samples is 100 years, lags should be something like \code{0, 100, 200, 300}. Lags can also be multiples of the time resolution, such as \code{0, 200, 400, 600} (in the case time resolution is 100 years).}
 
 \item{time.zoom}{numeric vector of two numbers of the \code{time} column used to subset the data if desired.}
 
 \item{scale}{boolean, if TRUE, applies the \code{\link{scale}} function to normalize the data. Required if the lagged data is going to be used to fit linear models.}
 }
 \value{
-A dataframe with columns representing time-delayed values of the drivers and the response.
+A dataframe with columns representing time-delayed values of the drivers and the response. Column names have the lag number as a suffix. The response variable is identified in the output as "Response_0".
 }
 \description{
 Takes a multivariate time series, where at least one variable is meant to be used as a response while the others are meant to be used as predictors in a model, and organizes it in to quantify ecological memory through models of the form:
@@ -48,7 +51,7 @@ Takes a multivariate time series, where at least one variable is meant to be use
 }
 }
 \details{
-The function returns a dataframe. Column names have the lag number as a suffix. The response variable is identified by changing its name to "Response".
+The function interprets the \code{time} column as an index representing the
 }
 \examples{
 #loading data
@@ -60,6 +63,7 @@ sim.lags <- prepareLaggedData(
   response = "Pollen",
   drivers = "Driver",
   time = "Time",
+  oldest.sample = "first",
   lags = seq(0, 200, by=20),
   time.zoom=NULL,
   scale=FALSE

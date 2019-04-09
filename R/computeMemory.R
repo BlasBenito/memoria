@@ -29,7 +29,7 @@
 #'
 #' @param lagged.data a lagged dataset resulting from \code{\link{prepareLaggedData}}. See \code{\link{laggedSimData}} as example.
 #' @param drivers a string or vector of strings with variables to be used as predictors in the model (i.e. c("Suitability", "Driver.A"))
-#' @param drivers  character vector, names of the numeric columns to be used as predictors in the model.
+#' @param drivers  a character string or vector of character strings with variables to be used as predictors in the model (i.e. c("Suitability", "Driver.A")). \strong{Important:} \code{drivers} names must not have the character "_".
 #' @param add.random if TRUE, adds a random term to the model, useful to assess the significance of the variable importance scores
 #' @param random.mode either "white.noise" or "autocorrelated". See details.
 #' @param repetitions integer, number of random forest models to fit
@@ -58,20 +58,22 @@
 #' }
 #'
 #'
-#' @seealso \code{\link{computeMemory}}
+#' @seealso \code{\link{plotMemory}}, \code{\link{extractMemoryFeatures}}
 #'
 #' @examples
 #'#loading data
 #'data(laggedSimData)
 #'
+#'#computing ecological memory
 #'mem.output <- computeMemory(
 #'  lagged.data = laggedSimData,
-#'  drivers = "Driver.A,
+#'  drivers = "Driver.A",
 #'  response = "Response",
 #'  add.random = TRUE,
 #'  random.mode = "autocorrelated",
 #'  repetitions = 10,
-#'  subset.response = "none")
+#'  subset.response = "none"
+#'  )
 #'
 #' @export
 computeMemory <- function(lagged.data = NULL,
@@ -86,10 +88,45 @@ computeMemory <- function(lagged.data = NULL,
                          mtry = 2
                          ){
 
+  #checking data
+  if(inherits(lagged.data, "data.frame") == FALSE){stop("The input data must be a dataframe produced by prepareLaggedData.")}
+
+  #checking drivers
+  if(is.character(drivers) == FALSE){stop("Argument drivers should be a character vector with column names of lagged.data to be used as predictors in the model.")}
+
+  #checking response
+  if(is.character(response) == FALSE){stop("Argument response should be a character vector with a column name of lagged.data to be used as response in the model. If lagged.data was prepared with prepareLaggedData, the response column is likely named 'Response'.")}
+
+  #checking random.mode
+  if(!(random.mode %in% c("autocorrelated", "correlated", "autocor", "white.noise", "white", "noise"))){
+    message("Setting random.mode to 'autocorrelated'.")
+    random.mode <- "autocorrelated"
+  }
+
+  #checking repetitions
+  if(is.numeric(repetitions) == FALSE){repetitions <- 10}
+  if(is.integer(repetitions) == FALSE){repetitions <- as.integer(repetitions)}
+
+  #checking min.node.size
+  if(min.node.size < 5){
+    message("Argument min.node.size should be equal or higher than 5, I am setting it to 5.")
+    min.node.size <- 5
+  }
+
+  if(num.trees < 500){
+    message("Argument num.trees should be equal or higher than 500, I am setting it to 500.")
+    num.trees <- 500
+  }
+
+  if(mtry < 2){
+    message("Argument mtry should be equal or higher than 2, I am setting it to 2")
+    mtry <- 2
+  }
+
   #function to add random columns to a dataframe for testing purposes
   addRandomColumn <- function(x, random.mode = "autocorrelated"){
 
-    if(random.mode=="autocorrelated"){
+    if(random.mode %in% c("autocorrelated", "correlated", "autocor")){
 
       #generating the data
       x$Random = as.vector(rescaleVector(filter(rnorm(nrow(x)),
@@ -98,7 +135,7 @@ computeMemory <- function(lagged.data = NULL,
                                                 circular=TRUE), new.max = 1, new.min=0))
     }
 
-    if(random.mode=="white.noise"){
+    if(random.mode %in% c("white.noise", "white", "noise")){
       x$Random = rnorm(nrow(x))
     }
 
@@ -143,7 +180,7 @@ computeMemory <- function(lagged.data = NULL,
   lagged.data <- lagged.data[, grepl(string.pattern, colnames(lagged.data))]
 
   #multicollinearity
-  multicollinearity <- data.frame(vif(lagged.data[, 2:ncol(lagged.data)]))
+  multicollinearity <- data.frame(HH::vif(lagged.data[, 2:ncol(lagged.data)]))
   multicollinearity <- data.frame(variable=rownames(multicollinearity), vif=multicollinearity[,1])
 
   #object to store outputs
@@ -155,7 +192,7 @@ computeMemory <- function(lagged.data = NULL,
   lagged.data$subset.column <- NA
 
   #response string (checking if there is a 0 or not in the response)
-  if(stringr::str_detect(response, "_0")==FALSE){response <- paste(response, "_0", sep="")}
+  if(stringr::str_detect(response, "_0") == FALSE){response <- paste(response, "_0", sep="")}
   if(!(response %in% colnames(lagged.data))){stop("Response variable not found in the input data.")}
 
   #adding labels
@@ -176,14 +213,14 @@ computeMemory <- function(lagged.data = NULL,
     # cat(i, " ")
 
     #subsetting according to user choice
-    if(subset.response == "up"){lagged.data.model <- lagged.data[subset.vector=="up", ]}
-    if(subset.response == "down"){lagged.data.model <- lagged.data[subset.vector=="down", ]}
+    if(subset.response == "up"){lagged.data.model <- lagged.data[subset.vector == "up", ]}
+    if(subset.response == "down"){lagged.data.model <- lagged.data[subset.vector == "down", ]}
     if(subset.response == "none" | is.null(subset.response)){lagged.data.model <- lagged.data}
     lagged.data.model <- na.omit(lagged.data.model)
 
     #adding random column
     if(add.random == TRUE){
-      lagged.data.model <- addRandomColumn(x=lagged.data)
+      lagged.data.model <- addRandomColumn(x=lagged.data, random.mode = random.mode)
     }#end of adding random column
 
     #fitting random forest
@@ -201,7 +238,7 @@ computeMemory <- function(lagged.data = NULL,
     )
 
     #importance
-    importance.list[[i]] <- data.frame(t(importance(model.output)))
+    importance.list[[i]] <- data.frame(t(ranger::importance(model.output)))
 
     #prediction
     prediction <- predict(object=model.output, data=lagged.data.model, type="response")$predictions
@@ -233,18 +270,18 @@ computeMemory <- function(lagged.data = NULL,
 
   #repeating the random variable
   if(add.random == TRUE){
-    importance.df <- rbind(importance.df, importance.df[rep(which(importance.df$Variable=="Random"), each=length(na.omit(unique(importance.df$Lag)))-1),])
-    importance.df[importance.df$Variable=="Random", "Lag"] <- na.omit(unique(importance.df$Lag))
+    importance.df <- rbind(importance.df, importance.df[rep(which(importance.df$Variable == "Random"), each=length(na.omit(unique(importance.df$Lag)))-1),])
+    importance.df[importance.df$Variable == "Random", "Lag"] <- na.omit(unique(importance.df$Lag))
   }
 
   #setting the floor of random at 0
-  importance.df[importance.df$Variable=="Random", "min"] <- 0
+  importance.df[importance.df$Variable == "Random", "min"] <- 0
 
   #setting the median of random to 0 if it is negative (only important when white.noise is selected)
-  if(random.mode=="white.noise" & importance.df[importance.df$Variable=="Random", "median"][1] < 0){importance.df[importance.df$Variable=="Random", "median"] <- 0}
+  if(random.mode == "white.noise" & importance.df[importance.df$Variable == "Random", "median"][1] < 0){importance.df[importance.df$Variable == "Random", "median"] <- 0}
 
   #variable as factor
-  if(add.random==TRUE){
+  if(add.random == TRUE){
     importance.df$Variable <- factor(importance.df$Variable, levels=c("Response", drivers, "Random"))
   } else {
     importance.df$Variable <- factor(importance.df$Variable, levels=c("Response", drivers))

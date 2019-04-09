@@ -82,5 +82,30 @@
 #' @seealso \code{\link{simulatePopulation}}, \code{\link{plotSimulation}}
 "laggedSimData"
 
+
+#' Dataframe with sample pollen and climate data.
+#'
+#' A dataframe containing pollen and climate data interpolated at 0.1 ky temporal resolution with the following columns:
+#'
+#' \itemize{
+#'   \item \emph{age} in years, at regular intervals of 100 years.
+#'   \item \emph{pinus} interpolated pollen counts of Pinus.
+#'   \item \emph{quercus} interpolated pollen counts of Quercus.
+#'   \item \emph{poaceae} interpolated pollen counts of Poaceae.
+#'   \item \emph{artemisia} interpolated pollen counts of Artemisia.
+#'   \item \emph{temperatureAverage} average annual temperature in Celsius degrees.
+#'   \item \emph{rainfallAverage} average annual precipitation in milimetres per day (mm/day).
+#'   \item \emph{temperatureWarmestMonth} average temperature of the warmest month, in Celsius degrees.
+#'   \item \emph{temperatureColdestMonth} average temperature of the coldest month, in Celsius degrees.
+#'   \item \emph{oxigenIsotope} delta O18, global ratio of stable isotopes in the sea floor, see \url{http://lorraine-lisiecki.com/stack.html} for further details.
+#' }
+#' @author Blas M. Benito  <blasbenito@gmail.com>
+#' @docType data
+#' @keywords datasets
+#' @name pollenData
+#' @usage data(pollenData)
+#' @format dataframe with 10 columns and 7986 rows.
+"pollenData"
+
 #' @import ggplot2 viridis zoo stringr ranger HH
 NULL

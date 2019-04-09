@@ -35,7 +35,7 @@ computeMemory(
 
 \item{mtry}{integer, argument of the \link[ranger]{ranger} function. Number of variables to possibly split at in each node. Default is 2.}
 
-\item{drivers}{character vector, names of the numeric columns to be used as predictors in the model.}
+\item{drivers}{a character string or vector of character strings with variables to be used as predictors in the model (i.e. c("Suitability", "Driver.A")). \strong{Important:} \code{drivers} names must not have the character "_".}
 }
 \value{
 A list with three 4 slots:
@@ -72,8 +72,24 @@ Takes the oputput of \code{\link{prepareLaggedData}} to fit the following model 
 \details{
 This function uses the \link[ranger]{ranger} package to fit Random Forest models. It fits the model explained above as many times as defined in the argument \code{repetitions}. To test the statistical significance of the variable importance scores returned by random forest, on each repetition the model is fitted with a different \code{r} (random) term. If \code{random.mode} equals "autocorrelated", the random term will have a temporal autocorrelation, and if it equals "white.noise", it will be a pseudo-random sequence of numbers generated with \code{\link{rnorm}}, with no temporal autocorrelation. The importance of the random sequence (as computed by random forest) is stored for each model run, and used as a benchmark to assess the importance of the other predictors used in the models. Importance values of other predictors that are above the median of the importance of the random term should be interpreted as non-random, and therefore, significant.
 }
+\examples{
+#loading data
+data(laggedSimData)
+
+#computing ecological memory
+mem.output <- computeMemory(
+ lagged.data = laggedSimData,
+ drivers = "Driver.A",
+ response = "Response",
+ add.random = TRUE,
+ random.mode = "autocorrelated",
+ repetitions = 10,
+ subset.response = "none"
+ )
+
+}
 \seealso{
-\code{\link{computeMemory}}
+\code{\link{plotMemory}}, \code{\link{extractMemoryFeatures}}
 }
 \author{
 Blas M. Benito  <blasbenito@gmail.com>

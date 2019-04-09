@@ -25,6 +25,21 @@ A ggplot object.
 \description{
 
 }
+\examples{
+#loading data
+data(laggedSimData)
+
+mem.output <- computeMemory(
+ lagged.data = laggedSimData,
+ drivers = "Driver.A",
+ response = "Response"
+)
+
+mem.output.plot <- plotMemory(
+ memory.output = mem.output
+ )
+
+}
 \seealso{
 \code{\link{computeMemory}}
 }

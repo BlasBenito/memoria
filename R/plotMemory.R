@@ -25,7 +25,7 @@
 #'
 #'mem.output <- computeMemory(
 #'  lagged.data = laggedSimData,
-#'  drivers = "Driver.A,
+#'  drivers = "Driver.A",
 #'  response = "Response"
 #')
 #'
@@ -40,6 +40,9 @@ plotMemory <- function(
   legend.position = "right",
   filename = NULL
   ){
+
+  #loading cowplot
+  library(cowplot)
 
   #to dataframe
   memory.output.df <- memory.output$memory
