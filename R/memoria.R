@@ -83,6 +83,47 @@
 "laggedSimData"
 
 
+#' Dataframe with pollen counts.
+#'
+#' A dataframe with the following columns:
+#'
+#' \itemize{
+#'   \item \emph{age} in kiloyears before present (ky BP).
+#'   \item \emph{pinus} pollen counts of Pinus.
+#'   \item \emph{quercus} pollen counts of Quercus.
+#'   \item \emph{poaceae} pollen counts of Poaceae.
+#'   \item \emph{artemisia} pollen counts of Artemisia.
+#' }
+#' @author Blas M. Benito  <blasbenito@gmail.com>
+#' @docType data
+#' @keywords datasets
+#' @name pollen
+#' @usage data(pollen)
+#' @format dataframe with 10 columns and 7986 rows.
+"palaeodata"
+
+
+#' Dataframe with palaeoclimatic data.
+#'
+#' A dataframe containing palaeoclimate data at 1 ky temporal resolution with the following columns:
+#'
+#' \itemize{
+#'   \item \emph{age}  in kiloyears before present (ky BP).
+#'   \item \emph{temperatureAverage} average annual temperature in Celsius degrees.
+#'   \item \emph{rainfallAverage} average annual precipitation in milimetres per day (mm/day).
+#'   \item \emph{temperatureWarmestMonth} average temperature of the warmest month, in Celsius degrees.
+#'   \item \emph{temperatureColdestMonth} average temperature of the coldest month, in Celsius degrees.
+#'   \item \emph{oxigenIsotope} delta O18, global ratio of stable isotopes in the sea floor, see \url{http://lorraine-lisiecki.com/stack.html} for further details.
+#' }
+#' @author Blas M. Benito  <blasbenito@gmail.com>
+#' @docType data
+#' @keywords datasets
+#' @name climate
+#' @usage data(climate)
+#' @format dataframe with 10 columns and 7986 rows.
+"climate"
+
+
 #' Dataframe with sample pollen and climate data.
 #'
 #' A dataframe containing pollen and climate data interpolated at 0.1 ky temporal resolution with the following columns:
@@ -102,10 +143,10 @@
 #' @author Blas M. Benito  <blasbenito@gmail.com>
 #' @docType data
 #' @keywords datasets
-#' @name pollenData
-#' @usage data(pollenData)
+#' @name palaeodata
+#' @usage data(palaeodata)
 #' @format dataframe with 10 columns and 7986 rows.
-"pollenData"
+"palaeodata"
 
 #' @import ggplot2 viridis zoo stringr ranger HH
 NULL

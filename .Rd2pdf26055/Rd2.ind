@@ -1,0 +1,88 @@
+\begin{theindex}
+
+  \item $*$Topic{\relax \fontsize  {12}{14}\selectfont  \ \textbf  {datasets}}
+    \subitem \texttt  {climate}, \hyperpage{2}
+    \subitem \texttt  {laggedSimData}, \hyperpage{6}
+    \subitem \texttt  {palaeodata}, \hyperpage{8}
+    \subitem \texttt  {parameters}, \hyperpage{9}
+    \subitem \texttt  {pollen}, \hyperpage{11}
+    \subitem \texttt  {simulation}, \hyperpage{14}
+
+  \indexspace
+
+  \item \texttt  {aggregateSimulation}, 
+		\hyperindexformat{\textit}{15, 16}
+
+  \indexspace
+
+  \item \texttt  {climate}, \hyperpage{2}
+  \item \texttt  {computeMemory}, \hyperpage{2}, 
+		\hyperindexformat{\textit}{5, 6}, 
+		\hyperindexformat{\textit}{10, 11}, 
+		\hyperindexformat{\textit}{13}
+
+  \indexspace
+
+  \item \texttt  {extractMemoryFeatures}, \hyperindexformat{\textit}{4}, 
+		\hyperpage{5}
+
+  \indexspace
+
+  \item \texttt  {fixParametersTypes}, \hyperindexformat{\textit}{9}
+
+  \indexspace
+
+  \item \texttt  {laggedSimData}, \hyperindexformat{\textit}{3}, 
+		\hyperpage{6}
+  \item \texttt  {loess}, \hyperindexformat{\textit}{7}, 
+		\hyperindexformat{\textit}{15}
+
+  \indexspace
+
+  \item \texttt  {mergePalaeoData}, \hyperpage{7}
+
+  \indexspace
+
+  \item \texttt  {palaeodata}, \hyperpage{8}
+  \item \texttt  {palaeodata} \textit  {(\texttt  {pollen})}, 
+		\hyperpage{11}
+  \item \texttt  {parameters}, \hyperpage{9}, 
+		\hyperindexformat{\textit}{14}
+  \item \texttt  {parametersCheck}, \hyperindexformat{\textit}{10}
+  \item \texttt  {parametersDataframe}, 
+		\hyperindexformat{\textit}{9, 10}
+  \item \texttt  {plotMemory}, \hyperindexformat{\textit}{4}, 
+		\hyperpage{10}
+  \item \texttt  {plotSimulation}, \hyperindexformat{\textit}{6}, 
+		\hyperindexformat{\textit}{14}
+  \item \texttt  {pollen}, \hyperpage{11}
+  \item \texttt  {prepareLaggedData}, \hyperindexformat{\textit}{2, 3}, 
+		\hyperindexformat{\textit}{6}, \hyperpage{12}
+
+  \indexspace
+
+  \item \texttt  {ranger}, \hyperindexformat{\textit}{3}
+  \item \texttt  {rnorm}, \hyperindexformat{\textit}{3}
+
+  \indexspace
+
+  \item \texttt  {scale}, \hyperindexformat{\textit}{13}
+  \item \texttt  {seq}, \hyperindexformat{\textit}{13}
+  \item \texttt  {simulateAccumulationRate}, 
+		\hyperindexformat{\textit}{15, 16}
+  \item \texttt  {simulatePopulation}, \hyperindexformat{\textit}{6}, 
+		\hyperindexformat{\textit}{9, 10}, 
+		\hyperindexformat{\textit}{14, 15}
+  \item \texttt  {simulation}, \hyperindexformat{\textit}{6}, 
+		\hyperpage{14}
+
+  \indexspace
+
+  \item \texttt  {toRegularTime}, \hyperindexformat{\textit}{7, 8}, 
+		\hyperpage{15}
+
+  \indexspace
+
+  \item \texttt  {vif}, \hyperindexformat{\textit}{4}
+
+\end{theindex}

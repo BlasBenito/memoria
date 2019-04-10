@@ -2,6 +2,7 @@
 
 export(computeMemory)
 export(extractMemoryFeatures)
+export(mergePalaeoData)
 export(plotMemory)
 export(prepareLaggedData)
 export(toRegularTime)
