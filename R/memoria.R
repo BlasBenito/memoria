@@ -124,6 +124,30 @@
 "climate"
 
 
+#' Output of \code{\link{computeMemory}}
+#'
+#' List with the following slots containing the output of \code{\link{computeMemory}}.
+#'
+#'  \itemize{
+#'  \item \code{memory} dataframe with five columns:
+#'     \itemize{
+#'       \item \code{Variable} character, names and lags of the different variables used to model ecological memory.
+#'       \item \code{median} numeric, median importance across \code{repetitions} of the given \code{Variable} according to Random Forest.
+#'       \item \code{sd} numeric, standard deviation of the importance values of the given \code{Variable} across \code{repetitions}.
+#'       \item \code{min} and \code{max} numeric, percentiles 0.05 and 0.95 of importance values of the given \code{Variable} across \code{repetitions}.
+#'     }
+#'  \item \code{R2} vector, values of pseudo R-squared value obtained for the Random Forest model fitted on each repetition. Pseudo R-squared is the Pearson correlation beteween the observed and predicted data.
+#'  \item \code{prediction} dataframe, with the same columns as the dataframe in the slot \code{memory}, with the median and confidence intervals of the predictions of all random forest models fitted.
+#'  \item \code{multicollinearity} multicollinearity analysis on the input data performed with \link[HH]{vif}. A vif value higher than 5 indicates that the given variable is highly correlated with other variables.
+#' }
+#' @author Blas M. Benito  <blasbenito@gmail.com>
+#' @docType data
+#' @keywords datasets
+#' @name memoryPattern
+#' @usage data(memoryPattern)
+#' @format dataframe with 10 columns and 7986 rows.
+"memoryPattern"
+
 #' Dataframe with sample pollen and climate data.
 #'
 #' A dataframe containing pollen and climate data interpolated at 0.1 ky temporal resolution with the following columns:
