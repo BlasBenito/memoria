@@ -45,19 +45,21 @@
 #'
 #' @examples
 #'#loading data
-#'data(simulation)
+#'data(palaeodata)
 #'
 #'#adding lags
-#'sim.lags <- prepareLaggedData(
-#'   input.data = simulation[[1]],
-#'   response = "Pollen",
-#'   drivers = "Driver",
-#'   time = "Time",
-#'   oldest.sample = "first",
-#'   lags = seq(0, 200, by=20),
-#'   time.zoom=NULL,
-#'   scale=FALSE
-#'   )
+#'lagged.data <- prepareLaggedData(
+#'  input.data = palaeodata,
+#'  response = "pollen.pinus",
+#'  drivers = c("climate.temperatureAverage", "climate.rainfallAverage"),
+#'  time = "age",
+#'  oldest.sample = "last",
+#'  lags = seq(0.2, 1, by=0.2),
+#'  time.zoom=NULL,
+#'  scale=FALSE
+#')
+#
+#'str(lagged.data)
 #'
 #' @export
 prepareLaggedData = function(input.data = NULL,
@@ -80,7 +82,9 @@ prepareLaggedData = function(input.data = NULL,
   if(is.character(drivers) == FALSE){
     stop("Argument drivers must be a character string or character vector.")
   } else {
-    if(!(drivers %in% colnames(input.data))){stop("The drivers columns do not exist in input.data.")}
+    for(driver in drivers){
+    if(!(driver %in% colnames(input.data))){stop(paste("The driver ", driver,  " column does not exist in input.data.", sep=""))}
+    }
   }
 
   if(is.character(time) == FALSE){
@@ -89,9 +93,9 @@ prepareLaggedData = function(input.data = NULL,
     if(!(time %in% colnames(input.data))){stop("The time column do not exist in input.data.")}
   }
 
-  if(!(oldest.sample %in% c("first", "last"))){
+  if(!(oldest.sample %in% c("first", "FIRST", "First", "last", "LAST", "Last"))){
     oldest.sample <- "first"
-    message("Argument oldest.sample was not defined, I set it up to 'first'. Check the help file for more details.")
+    message("Argument oldest.sample was not defined, I am setting it up to 'first'. Check the help file for more details.")
   }
 
   if(is.null(time.zoom) == FALSE){
@@ -104,7 +108,7 @@ prepareLaggedData = function(input.data = NULL,
   for(i in length(lags):2){
     diff.lags <- c(diff.lags, lags[i] - lags[i-1])
   }
-  if(sd(diff.lags) != 0){stop("Numeric sequence provided in argument lags is not regular.")}
+  if(round(sd(diff.lags), 2) != 0){stop("Numeric sequence provided in argument lags is not regular.")}
 
   #computing data resolution to adjust lags for the annual resolution dataset
   temporal.resolution = input.data[2, time] - input.data[1, time]

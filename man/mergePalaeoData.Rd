@@ -37,7 +37,7 @@ x <- mergePalaeoData(
    climate=climate
  ),
  time.column = "age",
- interpolation.interval = 0.5
+ interpolation.interval = 0.2
  )
 
 }

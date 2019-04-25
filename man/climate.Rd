@@ -4,7 +4,7 @@
 \name{climate}
 \alias{climate}
 \title{Dataframe with palaeoclimatic data.}
-\format{dataframe with 10 columns and 7986 rows.}
+\format{dataframe with 6 columns and 800 rows.}
 \usage{
 data(climate)
 }
@@ -13,7 +13,7 @@ A dataframe containing palaeoclimate data at 1 ky temporal resolution with the f
 }
 \details{
 \itemize{
-  \item \emph{age}  in kiloyears before present (ky BP).
+  \item \emph{age} in kiloyears before present (ky BP).
   \item \emph{temperatureAverage} average annual temperature in Celsius degrees.
   \item \emph{rainfallAverage} average annual precipitation in milimetres per day (mm/day).
   \item \emph{temperatureWarmestMonth} average temperature of the warmest month, in Celsius degrees.

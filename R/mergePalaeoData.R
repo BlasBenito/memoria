@@ -32,7 +32,7 @@
 #'    climate=climate
 #'  ),
 #'  time.column = "age",
-#'  interpolation.interval = 0.5
+#'  interpolation.interval = 0.2
 #'  )
 #'
 #'@export
@@ -70,9 +70,9 @@ mergePalaeoData<-function(datasets.list = NULL,
      }
      temporal.resolution <- round(mean(temp.diff), 2)
      resolution.increase.factor <- round(temporal.resolution / interpolation.interval, 2)
-     message(paste("Temporal resolution of ", names(datasets.list)[i.list], " is ",temporal.resolution, "; resolution increase factor is ",resolution.increase.factor, sep=""))
+     message(paste("The average temporal resolution of ", names(datasets.list)[i.list], " is ",temporal.resolution, "; resolution increase factor is ",resolution.increase.factor, sep=""))
      if(resolution.increase.factor > 10){
-       warning("The resolution increase factor is higher than 10, please consider incrementing the value of the argument interpolation.interval.")
+       message("The resolution increase factor is higher than 10, please consider incrementing the value of the argument interpolation.interval.")
      }
   }
 

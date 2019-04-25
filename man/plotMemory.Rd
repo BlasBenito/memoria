@@ -27,17 +27,11 @@ A ggplot object.
 }
 \examples{
 #loading data
-data(laggedSimData)
+data(palaeodataMemory)
 
-mem.output <- computeMemory(
- lagged.data = laggedSimData,
- drivers = "Driver.A",
- response = "Response"
-)
+#plotting memory pattern
+plotMemory(memory.output=palaeodataMemory)
 
-mem.output.plot <- plotMemory(
- memory.output = mem.output
- )
 
 }
 \seealso{

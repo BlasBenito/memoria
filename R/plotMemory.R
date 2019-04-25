@@ -21,17 +21,11 @@
 #'
 #' @examples
 #'#loading data
-#'data(laggedSimData)
+#'data(palaeodataMemory)
 #'
-#'mem.output <- computeMemory(
-#'  lagged.data = laggedSimData,
-#'  drivers = "Driver.A",
-#'  response = "Response"
-#')
+#'#plotting memory pattern
+#'plotMemory(memory.output=palaeodataMemory)
 #'
-#'mem.output.plot <- plotMemory(
-#'  memory.output = mem.output
-#'  )
 #'
 #'@export
 plotMemory <- function(
@@ -43,9 +37,18 @@ plotMemory <- function(
 
   #loading cowplot
   library(cowplot)
+  library(viridis)
 
   #to dataframe
   memory.output.df <- memory.output$memory
+
+  #guessing units of Lags
+  if((memory.output.df[2, "Lag"] - memory.output.df[1, "Lag"]) < 1){
+    lag.units <- "ky"
+  } else {
+    lag.units <- "years"
+  }
+
 
   #plot
   plot.memory <- ggplot(data=memory.output.df, aes(x=Lag, y=median, group=Variable, color=Variable, fill=Variable)) +
@@ -53,8 +56,9 @@ plotMemory <- function(
     geom_line(alpha=0.6, size=1.5) +
     scale_color_viridis(discrete=TRUE) +
     scale_fill_viridis(discrete=TRUE) +
-    scale_x_continuous(breaks=unique(memory.output.df$Lag)) +
-    xlab("Lag (years)") +
+    scale_x_continuous(breaks=unique(memory.output.df$Lag), expand=c(0,0)) +
+    scale_y_continuous(expand=c(0,0)) +
+    xlab(paste("Lag (", lag.units, ")", sep="")) +
     ylab("Relative importance") +
     theme(strip.text.x = element_text(size = 12),
           legend.position = legend.position,

@@ -3,7 +3,6 @@
 \docType{data}
 \name{pollen}
 \alias{pollen}
-\alias{palaeodata}
 \title{Dataframe with pollen counts.}
 \format{dataframe with 10 columns and 7986 rows.}
 \usage{

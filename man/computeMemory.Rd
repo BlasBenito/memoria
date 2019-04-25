@@ -74,18 +74,23 @@ This function uses the \link[ranger]{ranger} package to fit Random Forest models
 }
 \examples{
 #loading data
-data(laggedSimData)
+data(palaeodataLagged)
 
-#computing ecological memory
-mem.output <- computeMemory(
- lagged.data = laggedSimData,
- drivers = "Driver.A",
+memory.output <- computeMemory(
+ lagged.data = palaeodataLagged,
+ drivers = c("climate.temperatureAverage", "climate.rainfallAverage"),
  response = "Response",
  add.random = TRUE,
  random.mode = "autocorrelated",
  repetitions = 10,
  subset.response = "none"
- )
+)
+
+str(memory.output)
+str(memory.output$memory)
+
+#plotting output
+plotMemory(memory.output = memory.output)
 
 }
 \seealso{

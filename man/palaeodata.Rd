@@ -3,21 +3,21 @@
 \docType{data}
 \name{palaeodata}
 \alias{palaeodata}
-\title{Dataframe with sample pollen and climate data.}
+\title{Dataframe with pollen and climate data.}
 \format{dataframe with 10 columns and 7986 rows.}
 \usage{
 data(palaeodata)
 }
 \description{
-A dataframe containing pollen and climate data interpolated at 0.1 ky temporal resolution with the following columns:
+A dataframe with a regular time grid of 0.2 ky resolution resulting from applying \link{\code{mergePalaeoData}} to the datasets \link{\code{climate}} and \link{\code{pollen}}:
 }
 \details{
 \itemize{
-  \item \emph{age} in years, at regular intervals of 100 years.
-  \item \emph{pinus} interpolated pollen counts of Pinus.
-  \item \emph{quercus} interpolated pollen counts of Quercus.
-  \item \emph{poaceae} interpolated pollen counts of Poaceae.
-  \item \emph{artemisia} interpolated pollen counts of Artemisia.
+  \item \emph{age} in ky before present (ky BP).
+  \item \emph{pinus} pollen counts of Pinus.
+  \item \emph{quercus} pollen counts of Quercus.
+  \item \emph{poaceae} pollen counts of Poaceae.
+  \item \emph{artemisia} pollen counts of Artemisia.
   \item \emph{temperatureAverage} average annual temperature in Celsius degrees.
   \item \emph{rainfallAverage} average annual precipitation in milimetres per day (mm/day).
   \item \emph{temperatureWarmestMonth} average temperature of the warmest month, in Celsius degrees.

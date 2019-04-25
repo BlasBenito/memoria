@@ -55,19 +55,20 @@ The function interprets the \code{time} column as an index representing the
 }
 \examples{
 #loading data
-data(simulation)
+data(palaeodata)
 
 #adding lags
-sim.lags <- prepareLaggedData(
-  input.data = simulation[[1]],
-  response = "Pollen",
-  drivers = "Driver",
-  time = "Time",
-  oldest.sample = "first",
-  lags = seq(0, 200, by=20),
-  time.zoom=NULL,
-  scale=FALSE
-  )
+lagged.data <- prepareLaggedData(
+ input.data = palaeodata,
+ response = "pollen.pinus",
+ drivers = c("climate.temperatureAverage", "climate.rainfallAverage"),
+ time = "age",
+ oldest.sample = "last",
+ lags = seq(0.2, 1, by=0.2),
+ time.zoom=NULL,
+ scale=FALSE
+)
+str(lagged.data)
 
 }
 \seealso{
