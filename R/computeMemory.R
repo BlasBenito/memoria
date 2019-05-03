@@ -43,7 +43,7 @@
 #'
 #' @author Blas M. Benito  <blasbenito@gmail.com>
 #'
-#' @return A list with three 4 slots:
+#' @return A list with 4 slots:
 #'  \itemize{
 #'  \item \code{memory} dataframe with five columns:
 #'     \itemize{

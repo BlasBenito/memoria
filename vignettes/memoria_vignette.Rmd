@@ -1,6 +1,17 @@
 ---
-title: 'memoria'
-subtitle: 'Analyzing ecological memory with Random Forest in palaeoecological datasets'
+title: 'virtualPollen'
+subtitle: 'Generation of virtual pollen curves'
+author: "Blas M. Benito"
+fig_width: 6
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Using virtualPollen}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+---
+title: Quantifying ecological memory in palaeoecological datasets and other long time-series with the \emph{memoria} package.
 author: "Blas M. Benito"
 output:
   pdf_document:

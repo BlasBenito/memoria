@@ -1,0 +1,12 @@
+^README\.Rmd$
+^\.travis\.yml$
+^Meta$
+^doc$
+^.*\.Rproj$
+^\.Rproj\.user$
+^virtualPollen.Rproj
+^README\.Rmd$
+^cran-comments\.md$
+^\virtualPollen_1.0.0\.tar.gz$
+^\virtualPollen\.Rcheck
+^CRAN-RELEASE$

@@ -37,7 +37,7 @@
 #' @keywords datasets
 #' @name pollen
 #' @usage data(pollen)
-#' @format dataframe with 10 columns and 7986 rows.
+#' @format dataframe with 5 columns and 639 rows.
 "pollen"
 
 
