@@ -24,7 +24,7 @@
 #'data(palaeodataMemory)
 #'
 #'#plotting memory pattern
-#'plotMemory(memory.output=palaeodataMemory)
+#'plotMemory(memory.output = palaeodataMemory)
 #'
 #'
 #'@export
@@ -63,7 +63,8 @@ plotMemory <- function(
     theme(strip.text.x = element_text(size = 12),
           legend.position = legend.position,
           axis.text.x = element_text(size=12)) +
-    ggtitle(title)
+    ggtitle(title) +
+    cowplot::theme_cowplot()
 
   print(plot.memory)
 

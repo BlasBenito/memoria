@@ -51,31 +51,61 @@ install.packages("memoria")
 
 ```{r, message=FALSE, warning=FALSE, results="hide"}
 library(memoria)
+
+#other useful libraries
+library(ggplot2)
+library(cowplot)
+library(viridis)
+library(tidyr)
 ```
 
 ## Workflow
 
-Below I will provide basic instructions to use *memoria* in two different scenarios. **Scenario 1** addumes the user is providing a long time-series with at least one environmental driver and one biotic response. **Scenario 2** assumes that the user is working with simulated pollen curves produced by the [virtualPollen](https://CRAN.R-project.org/package=virtualPollen) package.
-
-## Scenario 1: real data
+To work with the *memoria* package the user has to provide a long time-series with at least one environmental driver and one biotic response. The steps below assume that the driver and the biotic response were taken at different temporal resolutions or depth intervals, but if that is not the case, the actual workflow would start at point **2**.
 
 **1.** **Prepare data**. The function *mergePalaeoData* allows the user to: 1) merge together environmental proxies/variables and biotic responses sampled at different time resolutions; 2) reinterpolate the data into a regular time grid using *loess*.
 
-In this particular example, the user has two datasets: 
+In this scenario we consider two datasets: 
 
 * *pollen*, with 639 samples dated in ky BP and four pollen types: Pinus, Quercus, Poaceae, and Artemisia.
 
 * *climate*, with 800 samples dated in ky BP, and five climate variables: average temperature and rainfall, temperature of the warmest and coldest month, and oxigen isotope.
 
-The datasets are not aligned, and *pollen* is not sampled at regular times. The code below fix these issues by mergin the data into the same regular time grid.
-
-
-
-```{r}
-#loading data
+```{r, fig.height=4, fig.width=9}
+#loading and plotting pollen data
 data(pollen)
+
+#plotting the data
+ggplot(data=gather(pollen, pollen.type, pollen.abundance, 2:5), 
+       aes(x=age, 
+           y=pollen.abundance, 
+           group=pollen.type)) + 
+  geom_line() + 
+  facet_wrap("pollen.type", ncol=1, scales = "free_y") +
+  xlab("Age (ky BP)") +
+  ylab("Pollen counts") +
+  ggtitle("Pollen dataset")
+```
+
+```{r, fig.height=4, fig.width=9}
+#loading and plotting climate data
 data(climate)
 
+#plotting the data
+ggplot(data=gather(climate, variable, value, 2:5), 
+       aes(x=age, 
+           y=value, 
+           group=variable)) + 
+  geom_line() + 
+  facet_wrap("variable", ncol=1, scales = "free_y") +
+  xlab("Age (ky BP)") +
+  ylab("") +
+  ggtitle("Palaeoclimatic data")
+```
+
+The datasets are not aligned, and *pollen* is not sampled at regular times, which makes any kind of analysis challenging. The code below fixes these issues by merging the data into the same regular time grid through the function *mergePalaeoData*. The function warns the user when the interpolation factor (difference between the original temporal resolution of the data and the interpolated resolution) is higher than one order of magnitude. Please, check the help file of the function to better understand how it works. 
+
+```{r, fig.height=8, fig.width=9}
 #merging and interpolating into a
 #regular time grid of 0.2 ky resolution
 pollen.climate <- mergePalaeoData(
@@ -88,6 +118,17 @@ pollen.climate <- mergePalaeoData(
  )
 
 str(pollen.climate)
+
+#plotting the data
+ggplot(data=gather(pollen.climate, variable, value, 2:10), 
+       aes(x=age, 
+           y=value, 
+           group=variable)) + 
+  geom_line() + 
+  facet_wrap("variable", ncol=1, scales = "free_y") +
+  xlab("Age (ky BP)") +
+  ylab("") +
+  ggtitle("Pollen and palaeoclimate")
 ```
 
 **2.** **Organize the data in time lags**. To fit the model in **Equation 1** it is required to select a response variable, a set of drivers (or a single driver), and organize the data in lags, so every sample in the response column is aligned with antecedent values of the response and the environmental drivers for a given set of lags. The function *prepareLaggedData* generates a dataframe with one column per term in **Equation 1**. In this case, we use the pollen abundance of Pinus as response varaible, and average temperature and rainfall as drivers/predictors.
@@ -108,7 +149,7 @@ str(pollen.climate.lagged)
 
 ```
 
-Pay attention to the *oldest.sample* argument. When it is set to "last", it assumes that the dataframe is ordered (top to bottom) by depth/age, and therefore represents a palaeoecological dataset. If it is set to "first", it assumes that the first sample defines the beginning of the time series.
+Extra attention should be paid to the *oldest.sample* argument. When it is set to "last", as above, it assumes that the dataframe is ordered (top to bottom) by depth/age, and therefore represents a palaeoecological dataset. In this case, the lag 1 of the first sample is the second sample. If it is set to "first", it assumes that the first sample defines the beginning of the time series. In such a case, the lag 1 of the second sample is the first sample. 
 
 Also note that:
 *  The resoponse column is identified with the string *Response_0* (as in "value of the response for the lag 0").
@@ -116,11 +157,9 @@ Also note that:
 *  The exogenous memory terms are identified by the name of the climatic variables followed by the lags between 0.2 and 1.
 *  The concurrent effect is identified by the names of the climate variables with the lag 0.
 
-**3.** **Compute ecological memory pattern on the lagged data**. The function *computeMemory* uses fits a model following the general structure provided in **Equation 1** to the lagged data. 
+**3.** **Fit Random Forest model on the lagged data to assess ecological memory**. The function *computeMemory* fits a Random Forest on the lagged data following **Equation 1**. It does so by using the implementation of Random Forest available in the [ranger](https://CRAN.R-project.org/package=ranger) package. This is the fastest Random Forest implementation available to date, and has the ability to use every processor available in a computer, considerably speeding up the model-fitting process.
 
-It does so by using the implementation of Random Forest available in the [ranger](https://CRAN.R-project.org/package=ranger) package. This implementation is the fastest available to date, and has the ability to use every processor available in a computer, considerably speeding up the model-fitting process.
-
-The goal of this function is to measure the importance of every term in **Equation 1**. Random Forest provides a robust measure of variable importance that is quite insensitive to multicollinearity or temporal autocorrelation. It is based on the loss of accuracy when a given predictor is randomly permuted across a large number of regression trees (please, see the vignette for further information). 
+The goal of *computeMemory* is to measure the importance of every term in **Equation 1**. Random Forest provides a robust measure of variable importance that is insensitive to multicollinearity or temporal autocorrelation in the input dataset. It is based on the loss of accuracy when a given predictor is randomly permuted across a large number of regression trees (please, see the vignette for further information). 
 
 However, Random Forest does not provide any measure of significance, making it difficult to assess when the importance of a given predictor is the result of chance. To solve this issue, *computeMemory* adds a new term, named *r*, to **Equation 1**. This new term is either a totally random sequence of numbers (mode *white.noise*) or a time series with a temporal autocorrelation generated randomly (mode *autocorrelated*). Both serve as a sort of null test, but using the *autocorrelated* mode provides much more robust results. 
 
@@ -137,7 +176,7 @@ memory.output <- computeMemory(
  response = "Response",
  add.random = TRUE,
  random.mode = "white.noise",
- repetitions = 10 #recommended value is 300
+ repetitions = 100
 )
 
 #the output is a list with 4 slots
@@ -170,7 +209,7 @@ memory.output.autocor <- computeMemory(
  response = "Response",
  add.random = TRUE,
  random.mode = "autocorrelated",
- repetitions = 10
+ repetitions = 100
 )
 
 #plotting the memory pattern 

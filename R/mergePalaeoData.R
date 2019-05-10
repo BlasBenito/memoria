@@ -70,7 +70,7 @@ mergePalaeoData<-function(datasets.list = NULL,
      }
      temporal.resolution <- round(mean(temp.diff), 2)
      resolution.increase.factor <- round(temporal.resolution / interpolation.interval, 2)
-     message(paste("The average temporal resolution of ", names(datasets.list)[i.list], " is ",temporal.resolution, "; resolution increase factor is ",resolution.increase.factor, sep=""))
+     message(paste("The average temporal resolution of ", names(datasets.list)[i.list], " is ",temporal.resolution, "; you are incrementing data resolution by a factor of ",resolution.increase.factor, sep=""))
      if(resolution.increase.factor > 10){
        message("The resolution increase factor is higher than 10, please consider incrementing the value of the argument interpolation.interval.")
      }

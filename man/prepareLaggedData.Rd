@@ -36,19 +36,7 @@ prepareLaggedData(
 A dataframe with columns representing time-delayed values of the drivers and the response. Column names have the lag number as a suffix. The response variable is identified in the output as "Response_0".
 }
 \description{
-Takes a multivariate time series, where at least one variable is meant to be used as a response while the others are meant to be used as predictors in a model, and organizes it in to quantify ecological memory through models of the form:
- \eqn{p_{t} ~ p_{t-1} +...+ p_{t-n} + d_{t} + d_{t-1} +...+ d_{t-n}}
-
- where:
-
-\itemize{
- \item \eqn{d} is a driver (several drivers can be added).
- \item \eqn{t} is the time of any given value of the response \emph{p}.
- \item \eqn{t-1} is the lag number 1 (in time units).
- \item \eqn{p_{t-1} +...+ p_{t-n}}  represents the endogenous component of ecological memory.
- \item \eqn{d_{t-1} +...+ d_{t-n}}  represents the exogenous component of ecological memory.
- \item \eqn{d_{t}} represents the concurrent effect of the driver over the response.
-}
+Takes a multivariate time series, where at least one variable is meant to be used as a response while the others are meant to be used as predictors in a model, and organizes it in time lags, generating one new column per lag and variable in the model.
 }
 \details{
 The function interprets the \code{time} column as an index representing the

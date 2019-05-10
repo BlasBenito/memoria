@@ -30,10 +30,10 @@
 #' @param lagged.data a lagged dataset resulting from \code{\link{prepareLaggedData}}. See \code{\link{laggedSimData}} as example.
 #' @param drivers a string or vector of strings with variables to be used as predictors in the model (i.e. c("Suitability", "Driver.A"))
 #' @param drivers  a character string or vector of character strings with variables to be used as predictors in the model (i.e. c("Suitability", "Driver.A")). \strong{Important:} \code{drivers} names must not have the character "_".
-#' @param add.random if TRUE, adds a random term to the model, useful to assess the significance of the variable importance scores
+#' @param add.random if TRUE, adds a random term to the model, useful to assess the significance of the variable importance scores.
 #' @param random.mode either "white.noise" or "autocorrelated". See details.
-#' @param repetitions integer, number of random forest models to fit
-#' @param response character string, name of the response variable (typically, "Response_0")
+#' @param repetitions integer, number of random forest models to fit.
+#' @param response character string, name of the response variable (typically, "Response_0").
 #' @param subset.response character string with values "up", "down" or "none", triggers the subsetting of the input dataset. "up" only models memory on cases where the response's trend is positive, "down" selectes cases with negative trends, and "none" selects all cases.
 #' @param min.node.size integer, argument of the \link[ranger]{ranger} function. Minimal number of samples to be allocated in a terminal node. Default is 5.
 #' @param num.trees integer, argument of the \link[ranger]{ranger} function. Number of regression trees to be fitted (size of the forest). Default is 2000.

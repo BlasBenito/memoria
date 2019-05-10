@@ -30,7 +30,7 @@ A ggplot object.
 data(palaeodataMemory)
 
 #plotting memory pattern
-plotMemory(memory.output=palaeodataMemory)
+plotMemory(memory.output = palaeodataMemory)
 
 
 }

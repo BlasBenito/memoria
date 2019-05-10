@@ -19,13 +19,13 @@ computeMemory(
 
 \item{drivers}{a string or vector of strings with variables to be used as predictors in the model (i.e. c("Suitability", "Driver.A"))}
 
-\item{response}{character string, name of the response variable (typically, "Response_0")}
+\item{response}{character string, name of the response variable (typically, "Response_0").}
 
-\item{add.random}{if TRUE, adds a random term to the model, useful to assess the significance of the variable importance scores}
+\item{add.random}{if TRUE, adds a random term to the model, useful to assess the significance of the variable importance scores.}
 
 \item{random.mode}{either "white.noise" or "autocorrelated". See details.}
 
-\item{repetitions}{integer, number of random forest models to fit}
+\item{repetitions}{integer, number of random forest models to fit.}
 
 \item{subset.response}{character string with values "up", "down" or "none", triggers the subsetting of the input dataset. "up" only models memory on cases where the response's trend is positive, "down" selectes cases with negative trends, and "none" selects all cases.}
 
@@ -38,7 +38,7 @@ computeMemory(
 \item{drivers}{a character string or vector of character strings with variables to be used as predictors in the model (i.e. c("Suitability", "Driver.A")). \strong{Important:} \code{drivers} names must not have the character "_".}
 }
 \value{
-A list with three 4 slots:
+A list with 4 slots:
  \itemize{
  \item \code{memory} dataframe with five columns:
     \itemize{
