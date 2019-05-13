@@ -4,7 +4,8 @@
 \alias{runExperiment}
 \title{Computes ecological memory patterns on a large set of results of \code{\link[virtualPollen]{simulatePopulation}}.}
 \usage{
-runExperiment(simulations.file = NULL,
+runExperiment(
+ simulations.file = NULL,
  selected.rows = 1,
  selected.columns,
  parameters.file, = 1

@@ -3,7 +3,8 @@
 #' @description It takes the output of \code{\link[virtualPollen]{simulatePopulation}}, and applies on it the functions \code{\link{prepareLaggedData}} and \code{\link{computeMemory}} to assess ecological memory on a large set of virtual pollen curves.
 #'
 #'
-#'@usage runExperiment(simulations.file = NULL,
+#'@usage runExperiment(
+#'  simulations.file = NULL,
 #'  selected.rows = 1,
 #'  selected.columns,
 #'  parameters.file, = 1

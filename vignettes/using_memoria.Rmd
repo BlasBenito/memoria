@@ -10,30 +10,30 @@ vignette: >
   \usepackage[utf8]{inputenc}
 ---
 
----
-title: Quantifying ecological memory in palaeoecological datasets and other long time-series with the \emph{memoria} package.
-author: "Blas M. Benito"
-output:
-  pdf_document:
-    fig_caption: yes
-    fig_width: 9
-    highlight: tango
-    includes:
-      in_header: header.tex
-    keep_tex: yes
-    latex_engine: xelatex
-    number_sections: yes
-    toc: yes
-    toc_depth: 2
-    df_print: kable
-  html_notebook:
-    fig_caption: yes
-    highlight: haddock
-    toc: yes
-    toc_depth: 3
-code_folding: show
-citation_package: natbib
----
+<!-- --- -->
+<!-- title: Quantifying ecological memory in palaeoecological datasets and other long time-series with the \emph{memoria} package. -->
+<!-- author: "Blas M. Benito" -->
+<!-- output: -->
+<!--   pdf_document: -->
+<!--     fig_caption: yes -->
+<!--     fig_width: 9 -->
+<!--     highlight: tango -->
+<!--     includes: -->
+<!--       in_header: header.tex -->
+<!--     keep_tex: yes -->
+<!--     latex_engine: xelatex -->
+<!--     number_sections: yes -->
+<!--     toc: yes -->
+<!--     toc_depth: 2 -->
+<!--     df_print: kable -->
+<!--   html_notebook: -->
+<!--     fig_caption: yes -->
+<!--     highlight: haddock -->
+<!--     toc: yes -->
+<!--     toc_depth: 3 -->
+<!-- code_folding: show -->
+<!-- citation_package: natbib -->
+<!-- --- -->
 
 <!-- knit_hooks$set(document  =  function(x) {sub('\\usepackage[]{color}', '\\usepackage{xcolor}', x, fixed = TRUE)}) -->
 
@@ -69,7 +69,19 @@ list.of.packages <- c("ggplot2", "cowplot", "knitr", "viridis", "tidyr", "format
 new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
 if(length(new.packages)) install.packages(new.packages, dep = TRUE)
 
-source("ecological_memory_functions.R")
+#install virtualPollen if not installed
+if(!("virtualPollen" %in% installed.packages())){
+  library(devtools)
+  install_github("blasbenito/virtualPollen")
+}
+
+#install virtualPollen if not installed
+if(!("memoria" %in% installed.packages())){
+  library(devtools)
+  install_github("blasbenito/memoria")
+}
+
+# source("ecological_memory_functions.R")
 library(ggplot2) #plotting library
 library(cowplot) #plotting library
 library(knitr)   #report generation in R
