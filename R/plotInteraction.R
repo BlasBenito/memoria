@@ -27,6 +27,7 @@ plotInteraction <- function(model = NULL,
                             data = NULL,
                             x = NULL,
                             y = NULL,
+                            z = NULL,
                             grid = 100,
                             point.size.range=c(0.1, 1)
                             ){
@@ -95,7 +96,6 @@ plotInteraction <- function(model = NULL,
       labs(fill="Predicted", size="Observed")
   }
 
-  print(p1)
   return(p1)
 
 }

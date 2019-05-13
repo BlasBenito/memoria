@@ -49,6 +49,7 @@ runExperiment(
 }
 \value{
 A list with 2 slots:
+ \itemize{
  \item \code{names} matrix of character strings, with as many rows and columns as \code{simulations.file}. Each cell holds a simulation name to be used afterwards, when plotting the results of the ecological memory analysis.
  \item \code{output} a list with as many columns and columns as \code{simulations.file}. Each slot holds a an output of \link{\code{computeMemory}}.
  \itemize{
@@ -62,6 +63,7 @@ A list with 2 slots:
  \item \code{R2} vector, values of pseudo R-squared value obtained for the Random Forest model fitted on each repetition. Pseudo R-squared is the Pearson correlation beteween the observed and predicted data.
  \item \code{prediction} dataframe, with the same columns as the dataframe in the slot \code{memory}, with the median and confidence intervals of the predictions of all random forest models fitted.
  \item \code{multicollinearity} multicollinearity analysis on the input data performed with \link[HH]{vif}. A vif value higher than 5 indicates that the given variable is highly correlated with other variables.
+}
 }
 }
 \description{

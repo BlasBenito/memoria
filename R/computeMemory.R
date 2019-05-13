@@ -1,4 +1,4 @@
-#' Quantifies ecological memory with Random Forest
+#' Quantifies ecological memory with Random Forest.
 #'
 #' @description Takes the oputput of \code{\link{prepareLaggedData}} to fit the following model with Random Forest:
 #'

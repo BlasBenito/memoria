@@ -9,7 +9,7 @@
 #'
 #'
 #'@usage extractMemoryFeatures(
-#'  analysis.output = NULL,
+#'  memory.pattern = NULL,
 #'  exogenous.component = NULL,
 #'  endogenous.component = NULL,
 #'  sampling.subset = NULL

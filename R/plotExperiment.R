@@ -74,14 +74,14 @@ plotExperiment <- function(experiment.output = NULL,
     xlab("Lag (years)") +
     ylab("Relative importance") +
     theme(strip.text.x = element_text(size = strip.text.size),
-          legend.position = legend.position,
           axis.text.x = element_text(size = axis.x.text.size),
           axis.text.y = element_text(size = axis.y.text.size),
           axis.title.x = element_text(size = axis.x.title.size),
           axis.title.y = element_text(size = axis.y.title.size),
           plot.title = element_text(size = title.size)) +
     ggtitle(experiment.title) +
-    cowplot::theme_cowplot()
+    cowplot::theme_cowplot() +
+    theme(legend.position = legend.position)
 
   if(!is.null(filename) & is.character(filename)){
     ggsave(filename = paste(filename, ".pdf", sep = ""), width = length(unique(simulation.df$sampling))*4, height = 1.5*nrow(experiment.output$output))
