@@ -5,12 +5,12 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Quantifying ecological memory in palaeoecological datasets and other long time-series • memoria</title>
+<title>Quantifying Ecological Memory in Palaeoecological Datasets and Other Long Time-Series • memoria</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
-<script src="pkgdown.js"></script><meta property="og:title" content="Quantifying ecological memory in palaeoecological datasets and other long time-series">
-<meta property="og:description" content="Tools to quantify ecological memory with the Random Forest algorithm in long time-series. Particularly oriented to palaeoecological datasets and simulated pollen curves produced by the virtualPollen package, but also applicable to other long time-series involving a set of environmental drivers and a biotic response.">
+<script src="pkgdown.js"></script><meta property="og:title" content="Quantifying Ecological Memory in Palaeoecological Datasets and Other Long Time-Series">
+<meta property="og:description" content="Tools to quantify ecological memory in long time-series. Particularly oriented to palaeoecological datasets and simulated pollen curves produced by the virtualPollen package, but also applicable to other long time-series involving a set of environmental drivers and a biotic response.">
 <meta name="twitter:card" content="summary">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -53,7 +53,7 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="articles/memoria_vignette.html">virtualPollen</a>
+      <a href="articles/using_memoria.html">virtualPollen</a>
     </li>
   </ul>
 </li>
@@ -118,7 +118,8 @@
 <a class="sourceLine" id="cb2-4" data-line-number="4"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(ggplot2)</a>
 <a class="sourceLine" id="cb2-5" data-line-number="5"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(cowplot)</a>
 <a class="sourceLine" id="cb2-6" data-line-number="6"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(viridis)</a>
-<a class="sourceLine" id="cb2-7" data-line-number="7"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(tidyr)</a></code></pre></div>
+<a class="sourceLine" id="cb2-7" data-line-number="7"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(tidyr)</a>
+<a class="sourceLine" id="cb2-8" data-line-number="8"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(kableExtra)</a></code></pre></div>
 </div>
 <div id="workflow" class="section level2">
 <h2 class="hasAnchor">
@@ -170,8 +171,8 @@
 <a class="sourceLine" id="cb5-9" data-line-number="9"> <span class="dt">interpolation.interval =</span> <span class="fl">0.2</span></a>
 <a class="sourceLine" id="cb5-10" data-line-number="10"> )</a>
 <a class="sourceLine" id="cb5-11" data-line-number="11"><span class="co">#&gt; Argument interpolation.interval is set to 0.2</span></a>
-<a class="sourceLine" id="cb5-12" data-line-number="12"><span class="co">#&gt; The average temporal resolution of pollen is 1.27; resolution increase factor is 6.35</span></a>
-<a class="sourceLine" id="cb5-13" data-line-number="13"><span class="co">#&gt; The average temporal resolution of climate is 1; resolution increase factor is 5</span></a>
+<a class="sourceLine" id="cb5-12" data-line-number="12"><span class="co">#&gt; The average temporal resolution of pollen is 1.27; you are incrementing data resolution by a factor of 6.35</span></a>
+<a class="sourceLine" id="cb5-13" data-line-number="13"><span class="co">#&gt; The average temporal resolution of climate is 1; you are incrementing data resolution by a factor of 5</span></a>
 <a class="sourceLine" id="cb5-14" data-line-number="14"></a>
 <a class="sourceLine" id="cb5-15" data-line-number="15"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/str">str</a></span>(pollen.climate)</a>
 <a class="sourceLine" id="cb5-16" data-line-number="16"><span class="co">#&gt; 'data.frame':    3993 obs. of  10 variables:</span></a>
@@ -245,7 +246,7 @@
 <a class="sourceLine" id="cb7-6" data-line-number="6"> <span class="dt">response =</span> <span class="st">"Response"</span>,</a>
 <a class="sourceLine" id="cb7-7" data-line-number="7"> <span class="dt">add.random =</span> <span class="ot">TRUE</span>,</a>
 <a class="sourceLine" id="cb7-8" data-line-number="8"> <span class="dt">random.mode =</span> <span class="st">"white.noise"</span>,</a>
-<a class="sourceLine" id="cb7-9" data-line-number="9"> <span class="dt">repetitions =</span> <span class="dv">10</span> <span class="co">#recommended value is 300</span></a>
+<a class="sourceLine" id="cb7-9" data-line-number="9"> <span class="dt">repetitions =</span> <span class="dv">100</span></a>
 <a class="sourceLine" id="cb7-10" data-line-number="10">)</a>
 <a class="sourceLine" id="cb7-11" data-line-number="11"></a>
 <a class="sourceLine" id="cb7-12" data-line-number="12"><span class="co">#the output is a list with 4 slots</span></a>
@@ -253,12 +254,12 @@
 <a class="sourceLine" id="cb7-14" data-line-number="14"><span class="co">#the memory dataframe</span></a>
 <a class="sourceLine" id="cb7-15" data-line-number="15"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(memory.output<span class="op">$</span>memory)</a>
 <a class="sourceLine" id="cb7-16" data-line-number="16"><span class="co">#&gt;                                median        sd      min      max</span></a>
-<a class="sourceLine" id="cb7-17" data-line-number="17"><span class="co">#&gt; Response_0.2                 63.70958 0.7979777 62.42972 64.63732</span></a>
-<a class="sourceLine" id="cb7-18" data-line-number="18"><span class="co">#&gt; Response_0.4                 51.30396 0.8046049 50.09370 52.05768</span></a>
-<a class="sourceLine" id="cb7-19" data-line-number="19"><span class="co">#&gt; Response_0.6                 40.53351 0.7165037 39.55891 41.47158</span></a>
-<a class="sourceLine" id="cb7-20" data-line-number="20"><span class="co">#&gt; Response_0.8                 36.43639 1.6811384 34.63485 39.26145</span></a>
-<a class="sourceLine" id="cb7-21" data-line-number="21"><span class="co">#&gt; Response_1                   43.45599 1.0467204 41.65774 44.48112</span></a>
-<a class="sourceLine" id="cb7-22" data-line-number="22"><span class="co">#&gt; climate.temperatureAverage_0 40.58965 3.5571451 35.40922 45.53301</span></a>
+<a class="sourceLine" id="cb7-17" data-line-number="17"><span class="co">#&gt; Response_0.2                 63.61527 0.7151604 62.50245 64.77453</span></a>
+<a class="sourceLine" id="cb7-18" data-line-number="18"><span class="co">#&gt; Response_0.4                 51.21211 0.7201503 49.88524 52.28927</span></a>
+<a class="sourceLine" id="cb7-19" data-line-number="19"><span class="co">#&gt; Response_0.6                 40.84627 0.7042492 39.77028 41.86628</span></a>
+<a class="sourceLine" id="cb7-20" data-line-number="20"><span class="co">#&gt; Response_0.8                 35.62020 1.0648440 33.79373 37.20767</span></a>
+<a class="sourceLine" id="cb7-21" data-line-number="21"><span class="co">#&gt; Response_1                   42.70615 0.9097858 41.11638 44.03142</span></a>
+<a class="sourceLine" id="cb7-22" data-line-number="22"><span class="co">#&gt; climate.temperatureAverage_0 41.70892 3.1702363 34.92331 46.06424</span></a>
 <a class="sourceLine" id="cb7-23" data-line-number="23"><span class="co">#&gt;                                                Variable Lag</span></a>
 <a class="sourceLine" id="cb7-24" data-line-number="24"><span class="co">#&gt; Response_0.2                                   Response 0.2</span></a>
 <a class="sourceLine" id="cb7-25" data-line-number="25"><span class="co">#&gt; Response_0.4                                   Response 0.4</span></a>
@@ -269,17 +270,17 @@
 <a class="sourceLine" id="cb7-30" data-line-number="30"></a>
 <a class="sourceLine" id="cb7-31" data-line-number="31"><span class="co">#predicted values</span></a>
 <a class="sourceLine" id="cb7-32" data-line-number="32"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(memory.output<span class="op">$</span>prediction)</a>
-<a class="sourceLine" id="cb7-33" data-line-number="33"><span class="co">#&gt;       median         sd       min       max</span></a>
-<a class="sourceLine" id="cb7-34" data-line-number="34"><span class="co">#&gt; X1  4.852753 0.16432026  4.683842  5.099536</span></a>
-<a class="sourceLine" id="cb7-35" data-line-number="35"><span class="co">#&gt; X2  5.582414 0.10570040  5.478376  5.758457</span></a>
-<a class="sourceLine" id="cb7-36" data-line-number="36"><span class="co">#&gt; X3  7.572608 0.11119926  7.470712  7.764649</span></a>
-<a class="sourceLine" id="cb7-37" data-line-number="37"><span class="co">#&gt; X4 11.169750 0.14146394 10.965653 11.343223</span></a>
-<a class="sourceLine" id="cb7-38" data-line-number="38"><span class="co">#&gt; X5 13.498086 0.07172942 13.382998 13.576770</span></a>
-<a class="sourceLine" id="cb7-39" data-line-number="39"><span class="co">#&gt; X6 14.286142 0.10028357 14.137130 14.396098</span></a>
+<a class="sourceLine" id="cb7-33" data-line-number="33"><span class="co">#&gt;       median        sd       min       max</span></a>
+<a class="sourceLine" id="cb7-34" data-line-number="34"><span class="co">#&gt; X1  4.844538 0.1449956  4.593124  5.087978</span></a>
+<a class="sourceLine" id="cb7-35" data-line-number="35"><span class="co">#&gt; X2  5.605779 0.1342637  5.417310  5.860284</span></a>
+<a class="sourceLine" id="cb7-36" data-line-number="36"><span class="co">#&gt; X3  7.627052 0.1353810  7.446132  7.867851</span></a>
+<a class="sourceLine" id="cb7-37" data-line-number="37"><span class="co">#&gt; X4 11.115592 0.1467788 10.893127 11.284286</span></a>
+<a class="sourceLine" id="cb7-38" data-line-number="38"><span class="co">#&gt; X5 13.484208 0.1193776 13.321445 13.722469</span></a>
+<a class="sourceLine" id="cb7-39" data-line-number="39"><span class="co">#&gt; X6 14.270726 0.1235772 14.100845 14.491880</span></a>
 <a class="sourceLine" id="cb7-40" data-line-number="40"></a>
 <a class="sourceLine" id="cb7-41" data-line-number="41"><span class="co">#pseudo R-squared of the predictions</span></a>
 <a class="sourceLine" id="cb7-42" data-line-number="42"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(memory.output<span class="op">$</span>R2)</a>
-<a class="sourceLine" id="cb7-43" data-line-number="43"><span class="co">#&gt; [1] 0.9877413 0.9877097 0.9878173 0.9876420 0.9877126 0.9876723</span></a>
+<a class="sourceLine" id="cb7-43" data-line-number="43"><span class="co">#&gt; [1] 0.9877075 0.9876640 0.9877261 0.9877467 0.9878652 0.9877381</span></a>
 <a class="sourceLine" id="cb7-44" data-line-number="44"></a>
 <a class="sourceLine" id="cb7-45" data-line-number="45"><span class="co">#VIF test on the input data</span></a>
 <a class="sourceLine" id="cb7-46" data-line-number="46"><span class="co">#VIF &gt; 5 indicates significant multicollinearity</span></a>
@@ -308,7 +309,7 @@ Ecological memory pattern of Pinus. The intrinsic memory is represented by the v
 <a class="sourceLine" id="cb8-6" data-line-number="6"> <span class="dt">response =</span> <span class="st">"Response"</span>,</a>
 <a class="sourceLine" id="cb8-7" data-line-number="7"> <span class="dt">add.random =</span> <span class="ot">TRUE</span>,</a>
 <a class="sourceLine" id="cb8-8" data-line-number="8"> <span class="dt">random.mode =</span> <span class="st">"autocorrelated"</span>,</a>
-<a class="sourceLine" id="cb8-9" data-line-number="9"> <span class="dt">repetitions =</span> <span class="dv">10</span></a>
+<a class="sourceLine" id="cb8-9" data-line-number="9"> <span class="dt">repetitions =</span> <span class="dv">100</span></a>
 <a class="sourceLine" id="cb8-10" data-line-number="10">)</a>
 <a class="sourceLine" id="cb8-11" data-line-number="11"></a>
 <a class="sourceLine" id="cb8-12" data-line-number="12"><span class="co">#plotting the memory pattern </span></a>
@@ -318,6 +319,78 @@ Ecological memory pattern of Pinus. The intrinsic memory is represented by the v
 Same as above, but observe that the yellow strip representing the random term in the model has much higher values than when the random time-series is generated without temporal autocorrelation, and therefore the exogenous component seem to have importance scores that are below the median of the random expectation.
 </p>
 </div>
+<p>Finally, the <em>features</em> of the ecological memory pattern can be extracted. These features are:</p>
+<ul>
+<li><p><strong>memory strength</strong>: Maximum difference in relative importance between each component (endogenous, exogenous, and concurrent) and the median of the random component. This is computed for exogenous, endogenous, and concurrent effect.</p></li>
+<li><p><strong>memory length</strong>: Proportion of lags over which the importance of a memory component is above the median of the random component. This is only computed for endogenous and exogenous memory.</p></li>
+<li><p><strong>dominance</strong>: Proportion of the lags above the median of the random term over which a memory component has a higher importance than the other component. This is only computed for endogenous and exogenous memory.</p></li>
+</ul>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1">memory.features &lt;-<span class="st"> </span><span class="kw"><a href="reference/extractMemoryFeatures.html">extractMemoryFeatures</a></span>(</a>
+<a class="sourceLine" id="cb9-2" data-line-number="2">  <span class="dt">memory.pattern =</span> memory.output.autocor,</a>
+<a class="sourceLine" id="cb9-3" data-line-number="3">  <span class="dt">exogenous.component =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(</a>
+<a class="sourceLine" id="cb9-4" data-line-number="4">  <span class="st">"climate.temperatureAverage"</span>,</a>
+<a class="sourceLine" id="cb9-5" data-line-number="5">  <span class="st">"climate.rainfallAverage"</span></a>
+<a class="sourceLine" id="cb9-6" data-line-number="6">  ),</a>
+<a class="sourceLine" id="cb9-7" data-line-number="7">  <span class="dt">endogenous.component =</span> <span class="st">"Response"</span>,</a>
+<a class="sourceLine" id="cb9-8" data-line-number="8">  <span class="dt">sampling.subset =</span> <span class="ot">NULL</span>,</a>
+<a class="sourceLine" id="cb9-9" data-line-number="9">  <span class="dt">scale.strength =</span> <span class="ot">TRUE</span></a>
+<a class="sourceLine" id="cb9-10" data-line-number="10">  )</a>
+<a class="sourceLine" id="cb9-11" data-line-number="11"></a>
+<a class="sourceLine" id="cb9-12" data-line-number="12"><span class="kw"><a href="https://www.rdocumentation.org/packages/kableExtra/topics/reexports">kable</a></span>(memory.features)</a></code></pre></div>
+<table class="table table">
+<thead><tr>
+<th style="text-align:left;">
+label
+</th>
+<th style="text-align:right;">
+strength.endogenous
+</th>
+<th style="text-align:right;">
+strength.exogenous
+</th>
+<th style="text-align:right;">
+strength.concurrent
+</th>
+<th style="text-align:right;">
+length.endogenous
+</th>
+<th style="text-align:right;">
+length.exogenous
+</th>
+<th style="text-align:right;">
+dominance.endogenous
+</th>
+<th style="text-align:right;">
+dominance.exogenous
+</th>
+</tr></thead>
+<tbody><tr>
+<td style="text-align:left;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+NaN
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.4
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0.4
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr></tbody>
+</table>
 </div>
 </div>
   </div>

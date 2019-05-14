@@ -29,9 +29,6 @@ Takes the output of \code{\link{runExperiment}}, extracts the dataframes contain
 \details{
 This function is used internally by \code{\link{plotExperiment}}, but it is also available to users in case they want to do other kinds of analyses or plots with the data.
 }
-\examples{
-
-}
 \seealso{
 \code{\link{runExperiment}}, \code{\link{plotExperiment}}
 }

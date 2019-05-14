@@ -24,10 +24,13 @@
 #'  add.random = TRUE,
 #'  random.mode = "autocorrelated",
 #'  repetitions = 10,
-#'  subset.response = "none"
-#')
+#'  subset.response = "none",
+#'  min.node.size = 5,
+#'  num.trees = 2000,
+#'  mtry = 2
+#'  )
 #'
-#' @param lagged.data a lagged dataset resulting from \code{\link{prepareLaggedData}}. See \code{\link{laggedSimData}} as example.
+#' @param lagged.data a lagged dataset resulting from \code{\link{prepareLaggedData}}. See \code{\link{palaeodataLagged}} as example.
 #' @param drivers a string or vector of strings with variables to be used as predictors in the model (i.e. c("Suitability", "Driver.A"))
 #' @param drivers  a character string or vector of character strings with variables to be used as predictors in the model (i.e. c("Suitability", "Driver.A")). \strong{Important:} \code{drivers} names must not have the character "_".
 #' @param add.random if TRUE, adds a random term to the model, useful to assess the significance of the variable importance scores.
@@ -61,6 +64,7 @@
 #' @seealso \code{\link{plotMemory}}, \code{\link{extractMemoryFeatures}}
 #'
 #' @examples
+#' \donttest{
 #'#loading data
 #'data(palaeodataLagged)
 #'
@@ -79,6 +83,7 @@
 #'
 #'#plotting output
 #'plotMemory(memory.output = memory.output)
+#'}
 #'
 #' @export
 computeMemory <- function(lagged.data = NULL,

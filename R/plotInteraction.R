@@ -7,6 +7,7 @@
 #'   data = NULL,
 #'   x = NULL,
 #'   y = NULL,
+#'   z = NULL,
 #'   grid = 100,
 #'   point.size.range = (0.1, 1)
 #'   )
@@ -15,6 +16,7 @@
 #' @param data dataframe used to fit the model.
 #' @param x character string, name of column in \code{data} to be plotted in the x axis.
 #' @param y character string, name of column in \code{data} to be plotted in the y axis.
+#' @param Z character string, name of column in \code{data} to be plotted as a surface. Generally, the name of the response variable in \code{model}.
 #' @param grid numeric, resolution of the x and y axes.
 #' @param point.size.range numeric vector with two values defining the range size of the points representing the observed data.
 #'

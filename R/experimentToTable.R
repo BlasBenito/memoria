@@ -24,8 +24,6 @@
 #'
 #' @seealso \code{\link{runExperiment}}, \code{\link{plotExperiment}}
 #'
-#' @examples
-#'
 #' @export
 experimentToTable <- function(experiment.output = NULL,
                              parameters.file = NULL,
@@ -85,7 +83,7 @@ experimentToTable <- function(experiment.output = NULL,
         #getting R2
         if(R2 == TRUE){
 
-          temp.data$name <- paste(experiment.output$names[[current.row]], "; R2 ", round(mean(experiment.output$output[[current.row]]$R2), 2), "±", round(sd(experiment.output$output[[current.row]]$R2), 2), sep="")
+          temp.data$name <- paste(experiment.output$names[[current.row]], "; R2 ", round(mean(experiment.output$output[[current.row]]$R2), 2), "sd", round(sd(experiment.output$output[[current.row]]$R2), 2), sep="")
 
         } else {
 

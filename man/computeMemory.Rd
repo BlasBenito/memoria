@@ -2,7 +2,7 @@
 % Please edit documentation in R/computeMemory.R
 \name{computeMemory}
 \alias{computeMemory}
-\title{Quantifies ecological memory with Random Forest}
+\title{Quantifies ecological memory with Random Forest.}
 \usage{
 computeMemory(
  lagged.data = NULL,
@@ -11,11 +11,14 @@ computeMemory(
  add.random = TRUE,
  random.mode = "autocorrelated",
  repetitions = 10,
- subset.response = "none"
-)
+ subset.response = "none",
+ min.node.size = 5,
+ num.trees = 2000,
+ mtry = 2
+ )
 }
 \arguments{
-\item{lagged.data}{a lagged dataset resulting from \code{\link{prepareLaggedData}}. See \code{\link{laggedSimData}} as example.}
+\item{lagged.data}{a lagged dataset resulting from \code{\link{prepareLaggedData}}. See \code{\link{palaeodataLagged}} as example.}
 
 \item{drivers}{a string or vector of strings with variables to be used as predictors in the model (i.e. c("Suitability", "Driver.A"))}
 
@@ -73,6 +76,7 @@ Takes the oputput of \code{\link{prepareLaggedData}} to fit the following model 
 This function uses the \link[ranger]{ranger} package to fit Random Forest models. It fits the model explained above as many times as defined in the argument \code{repetitions}. To test the statistical significance of the variable importance scores returned by random forest, on each repetition the model is fitted with a different \code{r} (random) term. If \code{random.mode} equals "autocorrelated", the random term will have a temporal autocorrelation, and if it equals "white.noise", it will be a pseudo-random sequence of numbers generated with \code{\link{rnorm}}, with no temporal autocorrelation. The importance of the random sequence (as computed by random forest) is stored for each model run, and used as a benchmark to assess the importance of the other predictors used in the models. Importance values of other predictors that are above the median of the importance of the random term should be interpreted as non-random, and therefore, significant.
 }
 \examples{
+\donttest{
 #loading data
 data(palaeodataLagged)
 
@@ -91,6 +95,7 @@ str(memory.output$memory)
 
 #plotting output
 plotMemory(memory.output = memory.output)
+}
 
 }
 \seealso{

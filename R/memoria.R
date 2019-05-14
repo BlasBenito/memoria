@@ -64,7 +64,7 @@
 
 #' Dataframe with pollen and climate data.
 #'
-#' A dataframe with a regular time grid of 0.2 ky resolution resulting from applying \link{\code{mergePalaeoData}} to the datasets \link{\code{climate}} and \link{\code{pollen}}:
+#' A dataframe with a regular time grid of 0.2 ky resolution resulting from applying \code{\link{mergePalaeoData}} to the datasets \code{\link{climate}} and \code{\link{pollen}}:
 #'
 #' \itemize{
 #'   \item \emph{age} in ky before present (ky BP).
@@ -113,3 +113,6 @@
 
 #' @import ggplot2 viridis zoo stringr ranger HH
 NULL
+
+#' @import utils
+utils::globalVariables(c("prediction", "Lag", "median", "Variable", "sd"))

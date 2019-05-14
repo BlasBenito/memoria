@@ -10,9 +10,9 @@ prepareLaggedData(
   drivers = NULL,
   time = NULL,
   oldest.sample = "first",
-  lags = seq(0, 200, by=20),
-  time.zoom=NULL,
-  scale=FALSE
+  lags = NULL,
+  time.zoom = NULL,
+  scale = FALSE
   )
 }
 \arguments{

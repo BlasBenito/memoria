@@ -57,6 +57,7 @@ library(ggplot2)
 library(cowplot)
 library(viridis)
 library(tidyr)
+library(kableExtra)
 ```
 
 ## Workflow
@@ -215,3 +216,27 @@ memory.output.autocor <- computeMemory(
 #plotting the memory pattern 
 plotMemory(memory.output.autocor)
 ```
+
+Finally, the *features* of the ecological memory pattern can be extracted. These features are:
+
+  +  **memory strength**: Maximum difference in relative importance between each component (endogenous, exogenous, and concurrent) and the median of the random component. This is computed for exogenous, endogenous, and concurrent effect.
+
+  +  **memory length**: Proportion of lags over which the importance of a memory component is above the median of the random component. This is only computed for endogenous and exogenous memory.
+
+  +  **dominance**: Proportion of the lags above the median of the random term over which a memory component has a higher importance than the other component. This is only computed for endogenous and exogenous memory.
+  
+```{r}
+memory.features <- extractMemoryFeatures(
+  memory.pattern = memory.output.autocor,
+  exogenous.component = c(
+  "climate.temperatureAverage",
+  "climate.rainfallAverage"
+  ),
+  endogenous.component = "Response",
+  sampling.subset = NULL,
+  scale.strength = TRUE
+  )
+
+kable(memory.features)
+```
+

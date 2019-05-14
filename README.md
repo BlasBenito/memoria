@@ -64,6 +64,7 @@ library(ggplot2)
 library(cowplot)
 library(viridis)
 library(tidyr)
+library(kableExtra)
 ```
 
 ## Workflow
@@ -147,8 +148,8 @@ pollen.climate <- mergePalaeoData(
  interpolation.interval = 0.2
  )
 #> Argument interpolation.interval is set to 0.2
-#> The average temporal resolution of pollen is 1.27; resolution increase factor is 6.35
-#> The average temporal resolution of climate is 1; resolution increase factor is 5
+#> The average temporal resolution of pollen is 1.27; you are incrementing data resolution by a factor of 6.35
+#> The average temporal resolution of climate is 1; you are incrementing data resolution by a factor of 5
 
 str(pollen.climate)
 #> 'data.frame':    3993 obs. of  10 variables:
@@ -287,7 +288,7 @@ memory.output <- computeMemory(
  response = "Response",
  add.random = TRUE,
  random.mode = "white.noise",
- repetitions = 10 #recommended value is 300
+ repetitions = 100
 )
 
 #the output is a list with 4 slots
@@ -295,12 +296,12 @@ memory.output <- computeMemory(
 #the memory dataframe
 head(memory.output$memory)
 #>                                median        sd      min      max
-#> Response_0.2                 63.63869 0.6186407 62.83261 64.55494
-#> Response_0.4                 51.48406 0.6118534 50.20021 51.60151
-#> Response_0.6                 40.56765 1.0034066 39.51050 42.16111
-#> Response_0.8                 35.98546 1.2320258 34.12530 37.33388
-#> Response_1                   42.93720 0.2374047 42.67142 43.27974
-#> climate.temperatureAverage_0 42.02096 1.4490266 39.13793 42.72892
+#> Response_0.2                 63.72511 0.7163610 62.51069 64.80383
+#> Response_0.4                 51.16831 0.7463974 50.01752 52.44615
+#> Response_0.6                 40.96195 0.6979277 39.82137 41.95080
+#> Response_0.8                 35.68578 1.1570548 33.91781 37.52504
+#> Response_1                   42.84917 0.9537612 41.14918 44.09713
+#> climate.temperatureAverage_0 41.88860 3.4182192 34.03551 45.14606
 #>                                                Variable Lag
 #> Response_0.2                                   Response 0.2
 #> Response_0.4                                   Response 0.4
@@ -312,16 +313,16 @@ head(memory.output$memory)
 #predicted values
 head(memory.output$prediction)
 #>       median         sd       min       max
-#> X1  4.821376 0.09548737  4.644510  4.901006
-#> X2  5.609641 0.09269140  5.459728  5.705286
-#> X3  7.636397 0.07627134  7.544553  7.759453
-#> X4 11.108246 0.12033693 10.970683 11.289932
-#> X5 13.496888 0.14044944 13.279694 13.636473
-#> X6 14.287608 0.08005545 14.132303 14.345607
+#> X1  4.855762 0.13624378  4.603849  5.050147
+#> X2  5.588746 0.12595703  5.411583  5.831361
+#> X3  7.616612 0.12654352  7.407159  7.799427
+#> X4 11.107384 0.14786080 10.908995 11.413256
+#> X5 13.472921 0.11391455 13.313259 13.666736
+#> X6 14.252521 0.09672598 14.105857 14.398320
 
 #pseudo R-squared of the predictions
 head(memory.output$R2)
-#> [1] 0.9877042 0.9877262 0.9876998 0.9877194 0.9877357 0.9877516
+#> [1] 0.9877769 0.9877619 0.9875986 0.9876862 0.9877391 0.9878348
 
 #VIF test on the input data
 #VIF > 5 indicates significant multicollinearity
@@ -352,7 +353,7 @@ memory.output.autocor <- computeMemory(
  response = "Response",
  add.random = TRUE,
  random.mode = "autocorrelated",
- repetitions = 10
+ repetitions = 100
 )
 
 #plotting the memory pattern 
@@ -360,3 +361,153 @@ plotMemory(memory.output.autocor)
 ```
 
 <img src="man/figures/README-unnamed-chunk-8-1.png" title="Same as above, but observe that the yellow strip representing the random term in the model has much higher values than when the random time-series is generated without temporal autocorrelation, and therefore the exogenous component seem to have importance scores that are below the median of the random expectation." alt="Same as above, but observe that the yellow strip representing the random term in the model has much higher values than when the random time-series is generated without temporal autocorrelation, and therefore the exogenous component seem to have importance scores that are below the median of the random expectation." width="100%" />
+
+Finally, the *features* of the ecological memory pattern can be
+extracted. These features are:
+
+  - **memory strength**: Maximum difference in relative importance
+    between each component (endogenous, exogenous, and concurrent) and
+    the median of the random component. This is computed for exogenous,
+    endogenous, and concurrent effect.
+
+  - **memory length**: Proportion of lags over which the importance of a
+    memory component is above the median of the random component. This
+    is only computed for endogenous and exogenous memory.
+
+  - **dominance**: Proportion of the lags above the median of the random
+    term over which a memory component has a higher importance than the
+    other component. This is only computed for endogenous and exogenous
+    memory.
+
+<!-- end list -->
+
+``` r
+memory.features <- extractMemoryFeatures(
+  memory.pattern = memory.output.autocor,
+  exogenous.component = c(
+  "climate.temperatureAverage",
+  "climate.rainfallAverage"
+  ),
+  endogenous.component = "Response",
+  sampling.subset = NULL,
+  scale.strength = TRUE
+  )
+
+kable(memory.features)
+```
+
+<table>
+
+<thead>
+
+<tr>
+
+<th style="text-align:left;">
+
+label
+
+</th>
+
+<th style="text-align:right;">
+
+strength.endogenous
+
+</th>
+
+<th style="text-align:right;">
+
+strength.exogenous
+
+</th>
+
+<th style="text-align:right;">
+
+strength.concurrent
+
+</th>
+
+<th style="text-align:right;">
+
+length.endogenous
+
+</th>
+
+<th style="text-align:right;">
+
+length.exogenous
+
+</th>
+
+<th style="text-align:right;">
+
+dominance.endogenous
+
+</th>
+
+<th style="text-align:right;">
+
+dominance.exogenous
+
+</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td style="text-align:left;">
+
+1
+
+</td>
+
+<td style="text-align:right;">
+
+1
+
+</td>
+
+<td style="text-align:right;">
+
+NaN
+
+</td>
+
+<td style="text-align:right;">
+
+1
+
+</td>
+
+<td style="text-align:right;">
+
+0.4
+
+</td>
+
+<td style="text-align:right;">
+
+0
+
+</td>
+
+<td style="text-align:right;">
+
+0.4
+
+</td>
+
+<td style="text-align:right;">
+
+0
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>

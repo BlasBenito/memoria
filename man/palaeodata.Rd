@@ -9,7 +9,7 @@
 data(palaeodata)
 }
 \description{
-A dataframe with a regular time grid of 0.2 ky resolution resulting from applying \link{\code{mergePalaeoData}} to the datasets \link{\code{climate}} and \link{\code{pollen}}:
+A dataframe with a regular time grid of 0.2 ky resolution resulting from applying \code{\link{mergePalaeoData}} to the datasets \code{\link{climate}} and \code{\link{pollen}}:
 }
 \details{
 \itemize{

@@ -1,11 +1,12 @@
 #' Plots output of \code{\link{computeMemory}}
 #'
-#' @description
+#' @description Plots the ecological memory pattern yielded by \code{\link{computeMemory}}.
 #'
 #' @usage plotMemory(
 #'   memory.output = NULL,
 #'   title = "Ecological memory pattern",
-#'   legend.position = "right"
+#'   legend.position = "right",
+#'   filename = NULL
 #' )
 #'
 #' @param memory.output a dataframe with one time series per column.

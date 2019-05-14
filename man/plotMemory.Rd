@@ -7,7 +7,8 @@
 plotMemory(
   memory.output = NULL,
   title = "Ecological memory pattern",
-  legend.position = "right"
+  legend.position = "right",
+  filename = NULL
 )
 }
 \arguments{
@@ -23,7 +24,7 @@ plotMemory(
 A ggplot object.
 }
 \description{
-
+Plots the ecological memory pattern yielded by \code{\link{computeMemory}}.
 }
 \examples{
 #loading data

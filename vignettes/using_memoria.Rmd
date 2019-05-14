@@ -1,45 +1,36 @@
 ---
-output:
-  pdf_document: default
-  html_document: default
----
-
-<!-- --- -->
-<!-- title: 'virtualPollen' -->
-<!-- subtitle: 'Generation of virtual pollen curves' -->
-<!-- author: "Blas M. Benito" -->
-<!-- fig_width: 6 -->
-<!-- output: rmarkdown::html_vignette -->
-<!-- vignette: > -->
-<!--   %\VignetteIndexEntry{Using virtualPollen} -->
-<!--   %\VignetteEngine{knitr::rmarkdown} -->
-<!--   \usepackage[utf8]{inputenc} -->
-<!-- --- -->
-
----
-title: Using "memoria" and "virtualPollen" together.
+title: 'virtualPollen'
+subtitle: 'Generation of virtual pollen curves'
 author: "Blas M. Benito"
-output:
-  pdf_document:
-    fig_caption: yes
-    fig_width: 9
-    highlight: tango
-    includes:
-      in_header: header.tex
-    keep_tex: yes
-    latex_engine: xelatex
-    number_sections: yes
-    toc: yes
-    toc_depth: 2
-    df_print: kable
-  html_notebook:
-    fig_caption: yes
-    highlight: haddock
-    toc: yes
-    toc_depth: 3
-code_folding: show
-citation_package: natbib
+fig_width: 6
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Using virtualPollen}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
 ---
+
+<!-- --- -->
+<!-- title: 'Using "memoria" and "virtualPollen" together' -->
+<!-- subtitle: 'Quantifying ecological memory of virtual pollen curves' -->
+<!-- author: "Blas M. Benito" -->
+<!-- output: -->
+<!--   pdf_document:  -->
+<!--     df_print: kable -->
+<!--     fig_caption: yes -->
+<!--     fig_width: 9 -->
+<!--     highlight: tango -->
+<!--     includes: -->
+<!--       in_header: header.tex -->
+<!--     keep_tex: yes -->
+<!--     latex_engine: xelatex -->
+<!--     number_sections: yes -->
+<!--     toc: yes -->
+<!--     toc_depth: 2 -->
+<!-- code_folding: show -->
+<!-- --- -->
+
+
 
 <!-- knit_hooks$set(document  =  function(x) {sub('\\usepackage[]{color}', '\\usepackage{xcolor}', x, fixed = TRUE)}) -->
 
@@ -87,7 +78,6 @@ library(virtualPollen)
 library(memoria)
 library(ggplot2) #plotting library
 library(cowplot) #plotting library
-library(knitr)   #report generation in R
 library(viridis) #pretty plotting colors
 library(grid)    #plotting 
 library(tidyr)
@@ -101,6 +91,7 @@ library(ranger)  #fast Random Forest implementation
 library(rpart)   #recursive partitions trees
 library(rpart.plot) #fancy plotting of rpart models
 library(stringr) #to parse variable names
+library(knitr)
 
 options(scipen = 999)
 
@@ -133,9 +124,9 @@ This document describes in detail how to analyze ecological memory patterns pres
    
 \pagebreak
 
-##The target model##
+# The model
 
-The aim is to fit a model of the form shown in **Equation 1**: 
+Analyzing ecological memory requires to fit a model of the form: 
 
 **Equation 1** (simplified from the one in the paper): \Large $$p_{t} = p_{t-1} +...+ p_{t-n} + d_{t} + d_{t-1} +...+ d_{t-n}$$ \normalsize
 
@@ -149,9 +140,9 @@ Where:
 +  $d_{t-1} +...+ d_{t-n}$ represents the exogenous component of ecological memory.
 +  $d_{t}$ represents the concurrent effect of the driver over the response.
 
-To organize the data in **Figure 1** as required to fit **Equation 1** it is necessary to define a set of *time lags*. The function *prepareLaggedData* shown below organizes the data in such a format. It requires to identify what columns in the original data should act as response, drivers, and time, and what lags are to be computed.
+The function *prepareLaggedData* shown below organizes the input data in *lags*. It requires to identify what columns in the original data should act as response, drivers, and time, and what lags are to be generated.
 
-```{r, size = "small"}
+```{r, size="small"}
 #loading data
 data(simulation) #from virtualPollen
 sim <- simulation[[1]]
@@ -160,12 +151,14 @@ sim <- simulation[[1]]
 lags <- seq(20, 240, by = 20)
 
 #organizing data in lags
-sim.lags <- prepareLaggedData(input.data = sim,
-                            response = "Pollen",
-                            drivers = c("Driver.A", "Suitability"),
-                            time = "Time",
-                            lags = lags,
-                            scale = FALSE)
+sim.lags <- prepareLaggedData(
+  input.data = sim,
+  response = "Pollen",
+  drivers = c("Driver.A", "Suitability"),
+  time = "Time",
+  lags = lags,
+  scale = FALSE
+  )
 ```
 
 This function returns the data shown in **Table 1**. This kind of data structure is known as *lagged data* or *time delayed data*. Note that the function can use a *scale* argument (set to FALSE above) to standardize the data before generating the lags. Random Forest does not generally require standardization to fit accurate models of the data, but computing variable importance with variables having large differences in range (i.e. [1, 10] vs. [1, 10000]) might yield biased results, making standardization a recommended step in data preparation. In this appendix all data are shown without any standardization to let the reader to keep track of the different variables across analyses and have a sense of their magnitude, but note that all analyses presented in the paper were based on standardized data.
@@ -187,7 +180,11 @@ rm(sim.lags.table)
 
 The data in **Table 1** are organized to fit the model described by **Equation 1**, but to select a proper method to fit the model, three main features of the data have to be considered first: **temporal autocorrelation**, **multicollinearity**, and **non-linearity**.
 
-###Temporal autocorrelation###
+# The data
+
+The simulations produced by *virtualPollen* have some key properties that justify the use of Random Forest as analytical tool.
+
+## Temporal autocorrelation
 
 Temporal autocorrelation (also *serial correlation*) refers to the relationship between successive values of the same variable present in most time series. Temporal autocorrelation generates autocorrelated residuals in regression analysis, violating the assumption of "independence of errors" required to correctly interpret regression coefficients. Several methods can be used to address temporal autocorrelation in regression analysis, such as increasing time intervals between consecutive samples, or incorporating an auto-regressive structure into the model.
 
@@ -245,13 +242,13 @@ rm(p.driver, p.response, p.suitability)
 
 ```
 
-###Multicollinearity###
+## Multicollinearity
 
 Multicollinearity occurs when there is a high correlation between predictors in a model definition. It increases the standard error of the coefficients, meaning that their estimates for important predictors can become statistically insignificant, wildly impacting model interpretation. 
 
 Adding consecutive time-lags of the same variables to the data, as required by the model expressed in **Equation 1** largely increases multicollinearity. 
 
-```{r , echo = FALSE, cache=FALSE, message=FALSE, warning=FALSE, error=FALSE}
+```{r , echo = FALSE, message=FALSE, warning=FALSE, error=FALSE, cache=FALSE}
 
 #generates a list to save vif results
 vif.list <- list()
@@ -302,13 +299,15 @@ kable(vif.df, caption = "Variance inflation factor (VIF) of the predictors used 
 rm(vif.df, vif.list, sim.temp, sim.temp.lags)
 ```
 
-###Non-linearity###
+\newpage
+
+## Non-linearity
 
 The function *virtualPollen::simulatePopulation* has the ability to produce pollen abundances variably decoupled from environmental conditions depending on the life-traits and niche features of the virtual taxa considered. This model property increases the chance of finding non-linear relationships between time-lagged predictors and the response (see **Figure 3**), hindering the detection of meaningful relationships with methods not able to account for non-nonlinearity.
 
 
 
-```{r, fig.height = 9, fig.width = 9, echo = FALSE, fig.cap = "Linear and non-linear relationships arising from lagged data in the annual dataset."}
+```{r, fig.height = 8, fig.width = 9, echo = FALSE, fig.cap = "Linear and non-linear relationships arising from lagged data in the annual dataset.", cache=FALSE}
 
 #creating copy of sim.lags
 sim.lags.plot <- sim.lags
@@ -340,9 +339,9 @@ ggplot(data = sim.lags.plot.long, aes(y = Pollen_0, x = value, group = variable,
 rm(sim.lags.plot, sim.lags.plot.long)
 ```
 
-#The logics behind Random Forest# 
+# The logics behind Random Forest 
 
-##The trees##
+## The trees
 
 The fundamental units of a Random Forest model are **regression trees**. A regression tree grows through **binary recursive partition**. Considering a *response* variable, and a set of *predictive variables* (also named *features* in the machine learning language), the following steps grow a regression tree:
 
@@ -355,19 +354,25 @@ The code below shows how to fit a recursive partition tree with the *rpart* libr
 
 
    
-```{r, fig.height = 3, fig.width = 9, fig.cap = "Recursive partition tree (also regression tree) of pollen abundance (noted as Response_0 in the model) as a function of Response_20 (antecedent pollen abundance at lag 20) and Driver_20 (antecedent driver values at lag 20). Numbers in branches represent split values, while numbers in terminal nodes represent the predicted average for that particular node. Percentages represent the relative number of cases included in each terminal node.", message = FALSE, error = FALSE, warning = FALSE, size="small"}
+```{r, fig.height = 3, fig.width = 9, fig.cap = "Recursive partition tree (also regression tree) of pollen abundance (noted as Response_0 in the model) as a function of Response_20 (antecedent pollen abundance at lag 20) and Driver_20 (antecedent driver values at lag 20). Numbers in branches represent split values, while numbers in terminal nodes represent the predicted average for that particular node. Percentages represent the relative number of cases included in each terminal node.", message = FALSE, error = FALSE, warning = FALSE, cache=FALSE, size="small"}
 
 #fitting model (only two predictors)
-rpart.model <- rpart(formula = Response_0 ~ Response_20 + Driver.A_20, 
-                     data = sim.lags, 
-                     control = rpart.control(minbucket = 5))
+rpart.model <- rpart(
+  formula = Response_0 ~ Response_20 + Driver.A_20,
+  data = sim.lags,
+  control = rpart.control(minbucket = 5)
+  )
 
 #plotting tree
-rpart.plot(rpart.model, type = 0, box.palette = viridis(10, alpha = 0.2))
+rpart.plot(
+  rpart.model, 
+  type = 0, 
+  box.palette = viridis(10, alpha = 0.2)
+  )
 ```
 
 
-```{r , fig.height = 5, fig.width = 9, size = "footnotesize", fig.cap = "Recursive partition surface generated by the model fitted above. Dots represent observed data, and colours identify partitions shown in the recursive partition tree. Note that this partition surface can be generalized to any number of predictors/dimensions.", message = FALSE, error = FALSE, warning = FALSE, echo=FALSE}
+```{r , fig.height = 5, fig.width = 9, size = "footnotesize", fig.cap = "Recursive partition surface generated by the model fitted above. Dots represent observed data, and colours identify partitions shown in the recursive partition tree. Note that this partition surface can be generalized to any number of predictors/dimensions.", message = FALSE, error = FALSE, warning = FALSE, echo=FALSE, cache=FALSE}
 
 #plotting binary partition
 plotInteraction(model = rpart.model, 
@@ -390,7 +395,7 @@ The tree has grown until data in the terminal nodes cannot be separated further 
 
 As a drawback, the splits of a recursive partition trees are highly sensitive to small changes in the input data, specially when sample size is small. This instability has led to the development of more sophisticated methods to fit recursive partition trees, such as *conditional inference trees* (see function *ctree* in library *partykit*), or ensemble methods such as Random Forest.
 
-##The forest##
+## The forest
 
 A Random Forest model is composed by a large number of individual regression trees (500 or more) generated on random subsamples of the predictors and the cases. For a random set of cases, each tree is fitted as follows:
 
@@ -413,7 +418,8 @@ Random Forest does not require any assumptions to be fulfilled by the data or th
 To fit Random Forest models on the simulated data we selected the package *ranger* over the more traditional *randomForest* because the former allows multithread computing (uses all available cores in a computer while fitting the forest), achieving a better performance for large datasets than the later. The code below shows how to use *ranger* to fit a Random Forest model.
 
 
-```{r , fig.height = 4, fig.cap = "Random Forest output for the interaction between Pollen_20 and Driver_20, to allow the comparison with the recursive partition tree shown in Figure 4. To compute this interaction surface, all other variables in the model are centered in their mean.", message = FALSE, error = FALSE, warning = FALSE, size="small", results="hide"}
+```{r , fig.height = 4, fig.cap = "Random Forest output for the interaction between Pollen_20 and Driver_20, to allow the comparison with the recursive partition tree shown in Figure 4. To compute this interaction surface, all other variables in the model are centered in their mean.", message = FALSE, error = FALSE, warning = FALSE, results="hide", cache=FALSE, size="small"}
+
 #getting columns containing "Response" or "Driver"
 sim.lags.rf <- sim.lags[, grepl("Driver|Response", colnames(sim.lags))]
 
@@ -458,7 +464,7 @@ The relationship between the response variable and the predictors can be examine
 
 
     
-```{r , fig.width = 9, fig.height = 3, size = "footnotesize", fig.cap = "Partial dependence plots of the lags 20, of Pollen (A) and Driver (B), and the concurrent effect (Driver_0, panel C).", message = FALSE, error = FALSE, warning = FALSE, echo = FALSE}
+```{r , fig.width = 9, fig.height = 3, size = "footnotesize", fig.cap = "Partial dependence plots of the lags 20, of Pollen (A) and Driver (B), and the concurrent effect (Driver_0, panel C).", message = FALSE, error = FALSE, warning = FALSE, echo = FALSE, cache=FALSE}
 #partial dependence plots
 
 #some things for the plots
@@ -484,7 +490,7 @@ rm(plot.Driver_20, plot.Response_20, plot.Driver_0, no.y.axis, gg.scale)
 Interactions among predictors can be represented in the same way done before for recursive partition trees (see **Figure 7**). Again, all variables not represented in the plot are set to their average to generate the prediction.
 
     
-```{r, fig.height=5, fig.width=9, size = "footnotesize" , fig.cap = "Interaction between Pollen_20 (first lag of the endogenous memory) and Suitability_0 (concurrent effect).", message = FALSE, error = FALSE, warning = FALSE, echo = FALSE}
+```{r, fig.height=5, fig.width=9, size = "footnotesize" , fig.cap = "Interaction between Pollen_20 (first lag of the endogenous memory) and Suitability_0 (concurrent effect).", message = FALSE, error = FALSE, warning = FALSE, echo = FALSE, cache=FALSE}
 plotInteraction(model = rf.model,
                 data = sim.lags.rf,
                 x = "Driver.A_20",
@@ -493,16 +499,16 @@ plotInteraction(model = rf.model,
                 point.size.range = c(0.1, 5))
 ```
     
-##Variable importance##
+## Variable importance
     
 Random forest variable importance computation works under the assumption that if a given variable is not important, then permuting its values does not degrade the prediction accuracy. Variable importance scores are extracted with the *importance* function (see code below and **Table 4**), and are interpreted as "how much model fit degrades when the given variable is removed from the model".
 
     
-```{r, eval = FALSE, size="small"}
+```{r, eval = FALSE, cache=FALSE}
 importance(rf.model)
 ```
     
-```{r table4, echo = FALSE}
+```{r table4, echo = FALSE, cache=FALSE}
 
 #importance to dataframe
 rf.importance <- data.frame(importance(rf.model))
@@ -523,13 +529,13 @@ rf.importance$Importance <- round(rf.importance$Importance, 2)
 rownames(rf.importance)<-NULL
 
 #to kable
-kable(rf.importance, caption = "Importance scores of a Random Forest model ordered from higher to lower importance. Importance scores are interpreted as increase in model error when the given variable is removed from the model.", booktabs = T)  %>%
-  kableExtra::kable_styling(latex_options = c("hold_position", "striped"))
+kable(rf.importance, caption = "Importance scores of a Random Forest model ordered from higher to lower importance. Importance scores are interpreted as increase in model error when the given variable is removed from the model.", booktabs = T, format="latex")  %>%
+  kableExtra::kable_styling(latex_options = c("striped"))
 ```
 
 Values shown in **Table 4** are the result of one particular Random Forest run. For variables with small differences in importance, the ranking shown in the table could change in a different model run. This situation can be addressed by running the model several times, and computing the average and confidence intervals of the importance scores of each predictor across runs. This is shown in the code below (see output in **Figure 8**).
 
-```{r, cache = FALSE, message = FALSE, error = FALSE, warning = FALSE, size="small"}
+```{r, cache = FALSE, message = FALSE, error = FALSE, warning = FALSE , cache=FALSE, size="footnotesize"}
 
 #number of repetitions
 repetitions <- 10
@@ -546,7 +552,8 @@ for(i in 1:repetitions){
     dependent.variable.name = "Response_0",
     mtry = 2,
     importance = "permutation", 
-    scale.permutation.importance = TRUE)
+    scale.permutation.importance = TRUE
+    )
 
   #extracting importance
   importance.list[[i]] <- data.frame(t(importance(rf.model)))
@@ -557,8 +564,9 @@ importance.df <- do.call("rbind", importance.list)
 ```
 
 
+\newpage
 
-```{r, fig.height = 9, fig.width=9, fig.cap = "Importance scores of predictors in Random Forest model after 100 repetitions. Note that Response_X predictor refers to the endogenous memory, and Driver_X predictors from lag 20 refer to exogenous memory. Driver_0 represents the concurrent effect.", message = FALSE, error = FALSE, warning = FALSE, echo = FALSE}
+```{r, fig.height = 9, fig.width=9, fig.cap = "Importance scores of predictors in Random Forest model after 100 repetitions. Note that Response_X predictor refers to the endogenous memory, and Driver_X predictors from lag 20 refer to exogenous memory. Driver_0 represents the concurrent effect.", message = FALSE, error = FALSE, warning = FALSE, echo = FALSE, cache=FALSE}
 #boxplot
 par(mar = c(5, 10, 4, 2) + 0.1)
 boxplot(importance.df, 
@@ -571,17 +579,15 @@ boxplot(importance.df,
         col = c(rep(colorendo, 12), rep(colorexo, 13)))
 ```
 
+\newpage
 
-
-###Testing the significance of variable importance scores###
+## Testing the significance of variable importance scores
 
 Random Forest does not provide any tool to assess the significance of these importance scores, and it is therefore impossible to know at what point they become irrelevant. A simple solution is to add a random variable as an additional predictor to the model and compute its importance. If the importance of other variables is equal or lower than the importance of the random variable, it can be assumed that these variables do not have a meaningful effect on the response, and can therefore be considered irrelevant. 
 
 Two types of random variables can be considered to be used as benchmarks to test variable importance scores provided by Random Forest: **white noise** (without any temporal structure), and **random walk with temporal structure** (as explained in Appendix I). In both cases the idea is to generate a *null model* providing a baseline to assess to what extent importance scores are higher than what is expected by chance. To test the suitability of both methods, the code below generates 10 Random Forest models, each one with two additional random variables: *random.white* representing white noise, and *random.autocor* representing an autocorrelated random walk. The length of the autocorrelation period of *random.autocor* is changed for every iteration.
 
-
-
-```{r}
+```{r, cache=FALSE, size="footnotesize"}
 
 #number of repetitions
 repetitions <- 10
@@ -600,10 +606,11 @@ for(i in 1:repetitions){
   
   #adding/replacing random.autocor column
   #different filter length on each run = different temporal structure
-  sim.lags.rf$random.autocor <- as.vector(filter(rnorm(n.rows), 
-                      filter = rep(1, sample(1:floor(n.rows/4), 1)), 
-                      method = "convolution", 
-                      circular = TRUE))
+  sim.lags.rf$random.autocor <- as.vector(
+    filter(rnorm(n.rows),
+           filter = rep(1, sample(1:floor(n.rows/4), 1)),
+           method = "convolution",
+           circular = TRUE))
 
   #fitting a Random Forest model
   rf.model <- ranger(
@@ -623,7 +630,7 @@ importance.df <- do.call("rbind", importance.list)
 ```
 
 
-```{r, fig.height = 9, fig.width=9, fig.cap = "Importance of predictors in relation to the importance of a white noise variable (gray), and a temporally structured random variable (yellow). Solid lines represent the medians of the random variables, while dashed lines represent their maximum importance across 100 model runs.", message = FALSE, error = FALSE, warning = FALSE, echo=FALSE} 
+```{r, fig.height = 9, fig.width=9, fig.cap = "Importance of predictors in relation to the importance of a white noise variable (gray), and a temporally structured random variable (yellow). Solid lines represent the medians of the random variables, while dashed lines represent their maximum importance across 100 model runs.", message = FALSE, error = FALSE, warning = FALSE, echo=FALSE, cache=FALSE} 
 
 #boxplot
 par(mar = c(5, 10, 4, 2) + 0.1)
@@ -640,7 +647,7 @@ abline(v = quantile(importance.df$random.white, probs = c(0.5, 1)), col = "gray8
 
 ```
 
-```{r, echo=FALSE, message=FALSE, warning=FALSE, error=FALSE, results="hide"}
+```{r, echo=FALSE, message=FALSE, warning=FALSE, error=FALSE, results="hide", cache=FALSE}
 rm(importance.df, importance.list, rf.importance, rf.model, i, n.rows, repetitions, sim.lags.rf)
 # gc()
 ```
@@ -648,7 +655,7 @@ rm(importance.df, importance.list, rf.importance, rf.model, i, n.rows, repetitio
 
 The boxplot in **Figure 9** shows the relative importance of the random variables, and suggests that the variable representing random noise is not useful to identify importance scores arising by chance. On the other hand, the variable based on autocorrelated random walks (marked in yellow in the plot) tells a different story. Importance values below the yellow solid line have a probability higher than 0.5 of being the result of chance. Importance values between the yellow solid and dashed lines have probabilities between 0.5 and 0 and are the result of a random association between a predictor and the response, while beyond the dashed line the results can be confidently defined as non-random. Note that **Figure 8**, when compared with **Figure 7**, also shows that adding random variables to a Random Forest model does not change the importance scores of other variables in the model.
 
-#Analyzing ecological memory with Random Forest#
+# Analyzing ecological memory with Random Forest and the *memoria* library
 
 So far we have explained how to organize the simulated pollen curves in lags, and how to fit Random Forest models on the lagged data to evaluate variable importance. However, further steps are required to quantify ecological memory patterns:
 
@@ -659,49 +666,56 @@ So far we have explained how to organize the simulated pollen curves in lags, an
 
 The function **computeMemory** fits as many Random Forest models as indicated by the argument *repetitions* on a lagged dataset, and on each iteration includes a random variable in the model. The function **plotMemory** gets the output of **computeMemory** and plots it, while the function *extractMemoryFeatures* computes the features of each ecological memory component. The simplified workflow is shown below.
 
-```{r, fig.height = 4, fig.width=9, fig.cap = "Example of ecological memory pattern. Note that the model was only run for 30 repetitions, and therefore the position of the median of the Random component is not reliable.", message = FALSE, error = FALSE, warning = FALSE, results="asis"} 
+```{r, fig.height = 4, fig.width=9, fig.cap = "Example of ecological memory pattern. Note that the model was only run for 30 repetitions, and therefore the position of the median of the Random component is not reliable.", message = FALSE, error = FALSE, warning = FALSE, results="asis", cache=FALSE} 
 
 #computes ecological memory pattern
-memory.pattern <- computeMemory(lagged.data = sim.lags, 
-                               drivers = "Driver.A", 
-                               random.mode="autocorrelated", 
-                               repetitions=30, 
-                               response="Response")
+memory.pattern <- computeMemory(
+  lagged.data = sim.lags, 
+  drivers = "Driver.A", 
+  random.mode="autocorrelated",
+  repetitions=30, 
+  response="Response"
+  )
 
 #computing memory features
-memory.features <- extractMemoryFeatures(memory.pattern=memory.pattern,
-                                         exogenous.component="Driver.A",
-                                         endogenous.component="Response")
+memory.features <- extractMemoryFeatures(
+  memory.pattern=memory.pattern,
+  exogenous.component="Driver.A",
+  endogenous.component="Response"
+  )
 
 #plotting the ecological memory pattern
 plotMemory(memory.pattern)
 ```
 
-```{r, echo=FALSE}
+```{r, echo=FALSE, cache=FALSE}
 #Table of memory features
 memory.features.t <- round(t(memory.features[, 2:8]), 2)
-kable(memory.features.t, caption = "Features of the ecological memory pattern shown in Figure 10 by using the extractMemoryFeatures function.", booktabs = T)  %>%
+kable(memory.features.t, caption = "Features of the ecological memory pattern shown in Figure 10 by using the extractMemoryFeatures function.", booktabs = T, format="latex")  %>%
   kableExtra::kable_styling(latex_options = c("hold_position", "striped"))
 ```
 
 In order to analyze the ecological memory patterns of 16 virtual taxa across the 5 levels of data quality (Annual, 1cm, 2cm, 6cm, and 10cm), we integrated the functions above into a larger function named *runExperiment*. The code below runs an artificial simple example with only two virtual taxa (1 and 6 in *parameters*), and two dataset types ("1cm" and "10cm"). Only 30 repetitions are generated to quicken execution, which is not nearly enough to achieve consistent results.
 
-```{r, results="hide", cache=FALSE, size="small", warning=FALSE, message=FALSE, error=FALSE}
+```{r, results="hide", cache=FALSE, warning=FALSE, message=FALSE, error=FALSE, cache=FALSE}
+
 #running experiment
-E1 <- runExperiment(simulations.file = simulation,
-              selected.rows = 1:4, 
-              selected.columns = 1,
-              parameters.file = parameters,
-              parameters.names = c("maximum.age", 
-                                   "fecundity", 
-                                   "niche.A.mean", 
-                                   "niche.A.sd"),
-              sampling.names = "1cm",
-              driver.column = "Driver.A",
-              response.column = "Pollen",
-              time.column = "Time",
-              lags = lags,
-              repetitions = 30)
+E1 <- runExperiment(
+  simulations.file = simulation,
+  selected.rows = 1:4,
+  selected.columns = 1,
+  parameters.file = parameters,
+  parameters.names = c("maximum.age",
+                       "fecundity",
+                       "niche.A.mean",
+                       "niche.A.sd"),
+  sampling.names = "1cm",
+  driver.column = "Driver.A",
+  response.column = "Pollen",
+  time.column = "Time",
+  lags = lags,
+  repetitions = 30
+  )
 
 #E1 is a list of lists
 #first list: names of experiment output
@@ -711,10 +725,13 @@ E1$names
 i <- 1 #change to see other elements
 #ecological memory pattern
 E1$output[[i]]$memory
+
 #pseudo R-squared across repetitions
 E1$output[[i]]$R2
+
 #predicted pollen across repetitions
 E1$output[[i]]$prediction
+
 #variance inflation factor of input data
 E1$output[[i]]$multicollinearity
 
@@ -722,27 +739,31 @@ E1$output[[i]]$multicollinearity
 
 Experiment results can be plotted with the function *plotExperiment* shown below.
 
-```{r, fig.height = 8, fig.width=9, cache = FALSE, fig.cap = "Ecological memory patterns of four virtual taxa. Note that the number of repetitions (30) is too low to obtain a reliable median of the Random component. Abbreviations in plot title: ma - maximum age, f - fecundity, Am - niche mean, Asd - niche breadth, smp - sampling resolution, R2 - pseudo R-squared.", message = FALSE, error = FALSE, warning = FALSE}
-plotExperiment(experiment.output=E1, 
-               parameters.file=parameters, 
-               experiment.title="Toy experiment", 
-               sampling.names=c("1cm", "10cm"), 
-               legend.position="bottom", 
-               R2=TRUE)
+```{r, fig.height = 8, fig.width=9, cache = FALSE, fig.cap = "Ecological memory patterns of four virtual taxa. Note that the number of repetitions (30) is too low to obtain a reliable median of the Random component. Abbreviations in plot title: ma - maximum age, f - fecundity, Am - niche mean, Asd - niche breadth, smp - sampling resolution, R2 - pseudo R-squared.", message = FALSE, error = FALSE, warning = FALSE, cache=FALSE}
+plotExperiment(
+  experiment.output=E1,
+  parameters.file=parameters,
+  experiment.title="Toy experiment",
+  sampling.names=c("1cm", "10cm"),
+  legend.position="bottom",
+  R2=TRUE
+  )
 ```
 
 The experiment data can be organizes as a single table, joined with the data available in the *parameters* dataframe to facilitate further analyses.
 
-```{r}
-E1.df <- experimentToTable(experiment.output=E1, 
-                           parameters.file=parameters, 
-                           sampling.names=c("1cm", "10cm"), 
-                           R2=TRUE)
+```{r, cache=FALSE}
+E1.df <- experimentToTable(
+  experiment.output=E1,
+  parameters.file=parameters,
+  sampling.names=c("1cm", "10cm"),
+  R2=TRUE
+  )
 ```
 
 
 
-```{r , echo = FALSE}
+```{r , echo = FALSE, cache=FALSE}
 #removing a useless column
 E1.df$name <- NULL
 E1.df$autocorrelation.length.A <- NULL
@@ -763,7 +784,7 @@ rownames(E1.df) <- NULL
 
 #printing table
 
-kable(E1.df[1:40, ], caption="First rows of the experiments table.", booktabs = T) %>% 
+kable(E1.df[1:40, ], caption="First rows of the experiments table.", booktabs = T, format="latex") %>% 
   kable_styling(latex_options = c("scale_down", "hold_position", "striped"))  %>%  
   column_spec(1:ncol(E1.df), color="#38598C") %>%
   row_spec(0, col="#585858")
@@ -776,13 +797,15 @@ kable(E1.df[1:40, ], caption="First rows of the experiments table.", booktabs = 
 Finally, ecological memory features can be extracted from the experiment with *extractMemoryFeatures* in order to facilitate further analyses, as shown below.
 
 
-```{r, size="small"}
-E1.features <- extractMemoryFeatures(memory.pattern = E1.df,
-                                     exogenous.component = "Driver.A",
-                                     endogenous.component = "Response")
+```{r, cache=FALSE}
+E1.features <- extractMemoryFeatures(
+  memory.pattern = E1.df,
+  exogenous.component = "Driver.A",
+  endogenous.component = "Response"
+  )
 ```
 
-```{r, echo=FALSE}
+```{r, echo=FALSE, cache=FALSE}
 #rounding some columns
 E1.features$length.endogenous <- round(E1.features$length.endogenous, 3)
 E1.features$length.exogenous <- round(E1.features$length.exogenous, 3)
@@ -791,13 +814,7 @@ E1.features$dominance.exogenous <- round(E1.features$dominance.exogenous, 3)
   
   
 E1.features.t <- t(E1.features)
-kable(E1.features.t, caption = "Features of the ecological memory patterns produced by the example experiment. Features with value NA result from ecological memory components that fall below the median of the random component across all lags.", booktabs = T)  %>%
-  kableExtra::kable_styling(latex_options = c("hold_position", "striped")) %>%  
-  column_spec(1:(ncol(E1.features.t)+1), color="#38598C") %>%
-  row_spec(1, col="#585858")
-```
-
-```{r, echo=FALSE}
-#EXECUTE EVERYTHING FROM HERE
+kable(E1.features.t, caption = "Features of the ecological memory patterns produced by the example experiment. Features with value NA result from ecological memory components that fall below the median of the random component across all lags.", booktabs = T, format="latex")  %>%
+  kableExtra::kable_styling(latex_options = c("hold_position", "striped"))
 ```
 

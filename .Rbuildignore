@@ -10,3 +10,4 @@
 ^\virtualPollen_1.0.0\.tar.gz$
 ^\virtualPollen\.Rcheck
 ^CRAN-RELEASE$
+^docs$

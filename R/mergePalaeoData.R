@@ -3,9 +3,9 @@
 #' @description It merges palaeoecological datasets with different time intervals between consecutive samples into a single dataset with samples separated by regular time intervals defined by the user
 #'
 #'
-#' @usage mergePalaeoData<-function(
-#' datasets.list = NULL,
-#'   time.column = NULL,
+#' @usage mergePalaeoData(
+#'  datasets.list = NULL,
+#'  time.column = NULL,
 #'  interpolation.interval = NULL
 #'  )
 #'
@@ -13,7 +13,7 @@
 #' @param time.column character string, name of the time/age column of the datasets provided in \code{datasets.list}.
 #' @param interpolation.interval temporal resolution of the output data, in the same units as the age/time columns of the input data
 #'
-#' @details This function fits a \code{\link{loess}} model of the form \code{y ~ x}, where \code{y} is any column given by \code{columns.to.interpolate} and \code{x} is the column given by the \code{time.column} argument. The model is used to interpolate column \code{y} on a regular time series of intervals equal to \code{interpolation.interval}. All columns in every provided dataset go through this process to generate the final data with samples separated by regular time intervals. This function follows the same principles as \code{\link{toRegularTime}}. Non-numeric columns are ignored, and absent from the output dataframe.
+#' @details This function fits a \code{\link{loess}} model of the form \code{y ~ x}, where \code{y} is any column given by \code{columns.to.interpolate} and \code{x} is the column given by the \code{time.column} argument. The model is used to interpolate column \code{y} on a regular time series of intervals equal to \code{interpolation.interval}. All columns in every provided dataset go through this process to generate the final data with samples separated by regular time intervals. Non-numeric columns are ignored, and absent from the output dataframe.
 #'
 #' @author Blas M. Benito  <blasbenito@gmail.com>
 #'

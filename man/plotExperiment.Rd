@@ -9,9 +9,9 @@ plotExperiment(
  parameters.file = NULL,
  experiment.title = NULL,
  sampling.names = NULL,
+ legend.position = "bottom",
  R2 = NULL,
  filename = NULL,
- legend.position = "bottom",
  strip.text.size = 12,
  axis.x.text.size = 8,
  axis.y.text.size = 12,
@@ -30,6 +30,8 @@ plotExperiment(
 \item{sampling.names}{vector of character strings with the names of the columns used in the argument \code{simulations.file} of \code{\link{runExperiment}}. If \code{NULL}, no pdf plot is produced.}
 
 \item{legend.position}{legend position in ggplot object. One of "bottom", "right", "none".}
+
+\item{R2}{boolean. If \code{TRUE}, pseudo R-squared values are printed along with the traits of the virtual taxa.}
 
 \item{filename}{character string, path and name (without extension) of the output pdf file.}
 
