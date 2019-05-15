@@ -13,8 +13,10 @@ VignetteBuilder: knitr
 Depends: R (>= 2.10)
 Imports: 
   ggplot2,
+  ranger,
   cowplot,
   viridis, 
+  viridisLite,
   zoo, 
   stringr, 
   ranger, 
@@ -29,4 +31,5 @@ Suggests:
   knitr,
   rmarkdown,
   rpart,
-  rpart.plot
+  rpart.plot,
+  randomForest

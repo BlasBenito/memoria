@@ -4,10 +4,10 @@
 ^doc$
 ^.*\.Rproj$
 ^\.Rproj\.user$
-^virtualPollen.Rproj
+^memoria.Rproj
 ^README\.Rmd$
 ^cran-comments\.md$
-^\virtualPollen_1.0.0\.tar.gz$
-^\virtualPollen\.Rcheck
+^\memoria_1.0.0\.tar.gz$
+^\memorian\.Rcheck
 ^CRAN-RELEASE$
 ^docs$

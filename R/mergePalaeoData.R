@@ -21,6 +21,8 @@
 #'
 #'
 #' @examples
+#'
+#' \donttest{
 #'#loading data
 #'data(pollen)
 #'data(climate)
@@ -33,6 +35,8 @@
 #'  time.column = "age",
 #'  interpolation.interval = 0.2
 #'  )
+#'
+#'  }
 #'
 #'@export
 mergePalaeoData<-function(datasets.list = NULL,

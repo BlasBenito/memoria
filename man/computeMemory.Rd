@@ -20,7 +20,7 @@ computeMemory(
 \arguments{
 \item{lagged.data}{a lagged dataset resulting from \code{\link{prepareLaggedData}}. See \code{\link{palaeodataLagged}} as example.}
 
-\item{drivers}{a string or vector of strings with variables to be used as predictors in the model (i.e. c("Suitability", "Driver.A"))}
+\item{drivers}{a character string or vector of character strings with variables to be used as predictors in the model (i.e. c("Suitability", "Driver.A")). \strong{Important:} \code{drivers} names must not have the character "_".}
 
 \item{response}{character string, name of the response variable (typically, "Response_0").}
 
@@ -37,8 +37,6 @@ computeMemory(
 \item{num.trees}{integer, argument of the \link[ranger]{ranger} function. Number of regression trees to be fitted (size of the forest). Default is 2000.}
 
 \item{mtry}{integer, argument of the \link[ranger]{ranger} function. Number of variables to possibly split at in each node. Default is 2.}
-
-\item{drivers}{a character string or vector of character strings with variables to be used as predictors in the model (i.e. c("Suitability", "Driver.A")). \strong{Important:} \code{drivers} names must not have the character "_".}
 }
 \value{
 A list with 4 slots:

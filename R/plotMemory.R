@@ -36,10 +36,6 @@ plotMemory <- function(
   filename = NULL
   ){
 
-  #loading cowplot
-  library(cowplot)
-  library(viridis)
-
   #to dataframe
   memory.output.df <- memory.output$memory
 

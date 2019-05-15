@@ -111,7 +111,7 @@
 #' @format List with four slots.
 "palaeodataMemory"
 
-#' @import ggplot2 viridis zoo stringr ranger HH tidyr pdp
+#' @import ggplot2 viridis viridisLite zoo stringr ranger HH tidyr
 NULL
 
 #' @import utils

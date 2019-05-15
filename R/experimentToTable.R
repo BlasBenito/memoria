@@ -58,7 +58,7 @@ experimentToTable <- function(experiment.output = NULL,
         #adding R2 to name if required
         if(R2 == TRUE){
 
-          temp.data$name = paste(experiment.output$names[[current.row,current.column]], "; R2 ", round(mean(experiment.output$output[[current.row,current.column]]$R2), 2), "±", round(sd(experiment.output$output[[current.row,current.column]]$R2), 2), sep = "")
+          temp.data$name = paste(experiment.output$names[[current.row,current.column]], "; R2 ", round(mean(experiment.output$output[[current.row,current.column]]$R2), 2), "sd ", round(sd(experiment.output$output[[current.row,current.column]]$R2), 2), sep = "")
 
         } else {
 
@@ -83,7 +83,7 @@ experimentToTable <- function(experiment.output = NULL,
         #getting R2
         if(R2 == TRUE){
 
-          temp.data$name <- paste(experiment.output$names[[current.row]], "; R2 ", round(mean(experiment.output$output[[current.row]]$R2), 2), "sd", round(sd(experiment.output$output[[current.row]]$R2), 2), sep="")
+          temp.data$name <- paste(experiment.output$names[[current.row]], "; R2 ", round(mean(experiment.output$output[[current.row]]$R2), 2), "sd ", round(sd(experiment.output$output[[current.row]]$R2), 2), sep="")
 
         } else {
 

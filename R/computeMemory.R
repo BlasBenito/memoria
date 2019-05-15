@@ -31,7 +31,6 @@
 #'  )
 #'
 #' @param lagged.data a lagged dataset resulting from \code{\link{prepareLaggedData}}. See \code{\link{palaeodataLagged}} as example.
-#' @param drivers a string or vector of strings with variables to be used as predictors in the model (i.e. c("Suitability", "Driver.A"))
 #' @param drivers  a character string or vector of character strings with variables to be used as predictors in the model (i.e. c("Suitability", "Driver.A")). \strong{Important:} \code{drivers} names must not have the character "_".
 #' @param add.random if TRUE, adds a random term to the model, useful to assess the significance of the variable importance scores.
 #' @param random.mode either "white.noise" or "autocorrelated". See details.

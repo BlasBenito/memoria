@@ -11,7 +11,7 @@ plotInteraction(
   y = NULL,
   z = NULL,
   grid = 100,
-  point.size.range = (0.1, 1)
+  point.size.range = c(0.1, 1)
   )
 }
 \arguments{
@@ -23,11 +23,11 @@ plotInteraction(
 
 \item{y}{character string, name of column in \code{data} to be plotted in the y axis.}
 
+\item{z}{character string, name of column in \code{data} to be plotted as a surface. Generally, the name of the response variable in \code{model}.}
+
 \item{grid}{numeric, resolution of the x and y axes.}
 
 \item{point.size.range}{numeric vector with two values defining the range size of the points representing the observed data.}
-
-\item{Z}{character string, name of column in \code{data} to be plotted as a surface. Generally, the name of the response variable in \code{model}.}
 }
 \value{
 A ggplot object.

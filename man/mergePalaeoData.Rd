@@ -27,6 +27,8 @@ It merges palaeoecological datasets with different time intervals between consec
 This function fits a \code{\link{loess}} model of the form \code{y ~ x}, where \code{y} is any column given by \code{columns.to.interpolate} and \code{x} is the column given by the \code{time.column} argument. The model is used to interpolate column \code{y} on a regular time series of intervals equal to \code{interpolation.interval}. All columns in every provided dataset go through this process to generate the final data with samples separated by regular time intervals. Non-numeric columns are ignored, and absent from the output dataframe.
 }
 \examples{
+
+\donttest{
 #loading data
 data(pollen)
 data(climate)
@@ -40,9 +42,8 @@ x <- mergePalaeoData(
  interpolation.interval = 0.2
  )
 
-}
-\seealso{
-\code{\link{toRegularTime}}
+ }
+
 }
 \author{
 Blas M. Benito  <blasbenito@gmail.com>
