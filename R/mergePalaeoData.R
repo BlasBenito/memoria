@@ -19,7 +19,6 @@
 #'
 #' @return A dataframe with every column of the initial dataset interpolated to a regular time grid of resolution defined by \code{interpolation.interval}. Column names follow the form datasetName.columnName, so the origin of columns can be tracked.
 #'
-#' @seealso \code{\link{toRegularTime}}
 #'
 #' @examples
 #'#loading data

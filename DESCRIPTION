@@ -18,7 +18,9 @@ Imports:
   zoo, 
   stringr, 
   ranger, 
-  HH
+  HH,
+  tidyr,
+  pdp
 Suggests: 
   devtools,
   formatR,

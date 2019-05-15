@@ -9,7 +9,7 @@
 #'   y = NULL,
 #'   z = NULL,
 #'   grid = 100,
-#'   point.size.range = (0.1, 1)
+#'   point.size.range = c(0.1, 1)
 #'   )
 #'
 #' @param model a model object produced by the functions \code{\link[ranger]{ranger}}, \code{\link[randomForest]{randomForest}}, or \code{\link[rpart]{rpart}}.
@@ -31,7 +31,7 @@ plotInteraction <- function(model = NULL,
                             y = NULL,
                             z = NULL,
                             grid = 100,
-                            point.size.range=c(0.1, 1)
+                            point.size.range = c(0.1, 1)
                             ){
 
   #from https://stackoverflow.com/a/49167211
