@@ -12,7 +12,8 @@ RoxygenNote: 6.1.1
 VignetteBuilder: knitr
 Depends: R (>= 2.10)
 Imports: 
-  ggplot2, 
+  ggplot2,
+  cowplot,
   viridis, 
   zoo, 
   stringr, 
@@ -26,5 +27,4 @@ Suggests:
   knitr,
   rmarkdown,
   rpart,
-  rpart.plot,
-  virtualPollen
+  rpart.plot

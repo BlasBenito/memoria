@@ -115,4 +115,4 @@
 NULL
 
 #' @import utils
-utils::globalVariables(c("prediction", "Lag", "median", "Variable", "sd"))
+utils::globalVariables(c("prediction", "Lag", "median", "Variable", "sd", "parameters"))
