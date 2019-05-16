@@ -17,7 +17,8 @@ plotExperiment(
  axis.y.text.size = 12,
  axis.x.title.size = 14,
  axis.y.title.size = 14,
- title.size = 18
+ title.size = 18,
+ caption = ""
  )
 }
 \arguments{
@@ -46,6 +47,8 @@ plotExperiment(
 \item{axis.y.title.size}{size of the title of the y axis.}
 
 \item{title.size}{size of the plot title.}
+
+\item{caption}{character string, caption of the output figure.}
 }
 \value{
 A ggplot2 object.
