@@ -16,7 +16,8 @@
 #'  axis.y.text.size = 12,
 #'  axis.x.title.size = 14,
 #'  axis.y.title.size = 14,
-#'  title.size = 18
+#'  title.size = 18,
+#'  caption = ""
 #'  )
 #'
 #' @param experiment.output list, output of  \code{\link{runExperiment}}.
@@ -32,6 +33,7 @@
 #' @param axis.x.title.size size of the title of the x axis.
 #' @param axis.y.title.size size of the title of the y axis.
 #' @param title.size size of the plot title.
+#' @param caption character string, caption of the output figure.
 #'
 #'
 #' @author Blas M. Benito  <blasbenito@gmail.com>
@@ -53,7 +55,8 @@ plotExperiment <- function(experiment.output = NULL,
                           axis.y.text.size = 12,
                           axis.x.title.size = 14,
                           axis.y.title.size = 14,
-                          title.size = 18){
+                          title.size = 18,
+                          caption = ""){
 
   #output of experiment.output to long table
   simulation.df <- experimentToTable(experiment.output = experiment.output,
@@ -82,7 +85,8 @@ plotExperiment <- function(experiment.output = NULL,
           plot.title = element_text(size = title.size)) +
     ggtitle(experiment.title) +
     cowplot::theme_cowplot() +
-    theme(legend.position = legend.position)
+    theme(legend.position = legend.position) +
+    labs(caption=caption)
 
   if(!is.null(filename) & is.character(filename)){
     ggsave(filename = paste(filename, ".pdf", sep = ""), width = length(unique(simulation.df$sampling))*4, height = 1.5*nrow(experiment.output$output))
