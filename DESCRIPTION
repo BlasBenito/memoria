@@ -4,7 +4,7 @@ Title: Quantifying Ecological Memory in Palaeoecological Datasets and Other Long
 Version: 1.0.0
 Author: Blas M. Benito
 Maintainer: Blas M. Benito <blasbenito@gmail.com>
-Description: Tools to quantify ecological memory in long time-series. Particularly oriented to palaeoecological datasets and simulated pollen curves produced by the virtualPollen package, but also applicable to other long time-series involving a set of environmental drivers and a biotic response.
+Description: Tools to quantify ecological memory in long time-series with Random Forest models (Breiman 2001 <doi:10.1023/A:1010933404324>) fitted with the 'ranger' library (Wright and Ziegler 2017 <doi:10.18637/jss.v077.i01>). Particularly oriented to palaeoecological datasets and simulated pollen curves produced by the 'virtualPollen' package, but also applicable to other long time-series involving a set of environmental drivers and a biotic response.
 License: GPL (>= 2)
 Encoding: UTF-8
 LazyData: true
