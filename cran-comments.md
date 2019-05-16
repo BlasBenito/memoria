@@ -13,7 +13,13 @@
 ## R CMD check results
 0 ERRORs | 0 WARNINGs | 1 NOTE.
 
-"* checking CRAN incoming feasibility ... NOTE
-Maintainer: 'Blas M. Benito <blasbenito@gmail.com>'
+* checking CRAN incoming feasibility ... NOTE
 
-New submission"
+Maintainer: 'Blas M. Benito <blasbenito@gmail.com>'
+New submission
+
+Possibly mis-spelled words in DESCRIPTION:
+  Palaeoecological (3:41)
+  biotic (8:282)
+  palaeoecological (8:96)
+  virtualPollen (8:166)
