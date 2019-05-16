@@ -31,4 +31,5 @@ Suggests:
   rmarkdown,
   rpart,
   rpart.plot,
-  randomForest
+  randomForest,
+  virtualPollen

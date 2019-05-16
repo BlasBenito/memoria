@@ -53,7 +53,7 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="articles/using_memoria.html">virtualPollen</a>
+      <a href="articles/using_memoria.html">Using "memoria" and "virtualPollen" together</a>
     </li>
   </ul>
 </li>
@@ -254,12 +254,12 @@
 <a class="sourceLine" id="cb7-14" data-line-number="14"><span class="co">#the memory dataframe</span></a>
 <a class="sourceLine" id="cb7-15" data-line-number="15"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(memory.output<span class="op">$</span>memory)</a>
 <a class="sourceLine" id="cb7-16" data-line-number="16"><span class="co">#&gt;                                median        sd      min      max</span></a>
-<a class="sourceLine" id="cb7-17" data-line-number="17"><span class="co">#&gt; Response_0.2                 63.75380 0.8244113 62.49809 64.98748</span></a>
-<a class="sourceLine" id="cb7-18" data-line-number="18"><span class="co">#&gt; Response_0.4                 51.28421 0.7282665 49.98503 52.25951</span></a>
-<a class="sourceLine" id="cb7-19" data-line-number="19"><span class="co">#&gt; Response_0.6                 40.80998 0.8532489 39.37119 42.43428</span></a>
-<a class="sourceLine" id="cb7-20" data-line-number="20"><span class="co">#&gt; Response_0.8                 35.56758 1.0768447 33.81770 37.37325</span></a>
-<a class="sourceLine" id="cb7-21" data-line-number="21"><span class="co">#&gt; Response_1                   42.74661 0.8187259 41.32457 43.91385</span></a>
-<a class="sourceLine" id="cb7-22" data-line-number="22"><span class="co">#&gt; climate.temperatureAverage_0 41.07218 3.4589395 36.13118 45.62033</span></a>
+<a class="sourceLine" id="cb7-17" data-line-number="17"><span class="co">#&gt; Response_0.2                 63.81444 0.7921677 62.43370 64.90422</span></a>
+<a class="sourceLine" id="cb7-18" data-line-number="18"><span class="co">#&gt; Response_0.4                 51.25143 0.6413946 50.19051 52.34172</span></a>
+<a class="sourceLine" id="cb7-19" data-line-number="19"><span class="co">#&gt; Response_0.6                 40.81810 0.7154098 39.70734 41.91385</span></a>
+<a class="sourceLine" id="cb7-20" data-line-number="20"><span class="co">#&gt; Response_0.8                 35.79642 1.0849390 34.29438 37.70234</span></a>
+<a class="sourceLine" id="cb7-21" data-line-number="21"><span class="co">#&gt; Response_1                   42.72616 0.8899763 41.37881 44.20580</span></a>
+<a class="sourceLine" id="cb7-22" data-line-number="22"><span class="co">#&gt; climate.temperatureAverage_0 41.70325 2.8078202 36.26788 44.99081</span></a>
 <a class="sourceLine" id="cb7-23" data-line-number="23"><span class="co">#&gt;                                                Variable Lag</span></a>
 <a class="sourceLine" id="cb7-24" data-line-number="24"><span class="co">#&gt; Response_0.2                                   Response 0.2</span></a>
 <a class="sourceLine" id="cb7-25" data-line-number="25"><span class="co">#&gt; Response_0.4                                   Response 0.4</span></a>
@@ -271,16 +271,16 @@
 <a class="sourceLine" id="cb7-31" data-line-number="31"><span class="co">#predicted values</span></a>
 <a class="sourceLine" id="cb7-32" data-line-number="32"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(memory.output<span class="op">$</span>prediction)</a>
 <a class="sourceLine" id="cb7-33" data-line-number="33"><span class="co">#&gt;       median        sd       min       max</span></a>
-<a class="sourceLine" id="cb7-34" data-line-number="34"><span class="co">#&gt; X1  4.873571 0.1262276  4.639036  5.058925</span></a>
-<a class="sourceLine" id="cb7-35" data-line-number="35"><span class="co">#&gt; X2  5.606250 0.1327943  5.429202  5.848193</span></a>
-<a class="sourceLine" id="cb7-36" data-line-number="36"><span class="co">#&gt; X3  7.633198 0.1446950  7.430611  7.843977</span></a>
-<a class="sourceLine" id="cb7-37" data-line-number="37"><span class="co">#&gt; X4 11.103646 0.1119647 10.937960 11.321834</span></a>
-<a class="sourceLine" id="cb7-38" data-line-number="38"><span class="co">#&gt; X5 13.476965 0.1266341 13.318962 13.710075</span></a>
-<a class="sourceLine" id="cb7-39" data-line-number="39"><span class="co">#&gt; X6 14.240521 0.1247648 14.040604 14.426070</span></a>
+<a class="sourceLine" id="cb7-34" data-line-number="34"><span class="co">#&gt; X1  4.849039 0.1344479  4.633556  5.101790</span></a>
+<a class="sourceLine" id="cb7-35" data-line-number="35"><span class="co">#&gt; X2  5.593233 0.1454061  5.376101  5.817425</span></a>
+<a class="sourceLine" id="cb7-36" data-line-number="36"><span class="co">#&gt; X3  7.620329 0.1315752  7.437042  7.916433</span></a>
+<a class="sourceLine" id="cb7-37" data-line-number="37"><span class="co">#&gt; X4 11.083289 0.1317914 10.881575 11.305364</span></a>
+<a class="sourceLine" id="cb7-38" data-line-number="38"><span class="co">#&gt; X5 13.507586 0.1052823 13.365397 13.672637</span></a>
+<a class="sourceLine" id="cb7-39" data-line-number="39"><span class="co">#&gt; X6 14.261598 0.1359103 14.089601 14.432448</span></a>
 <a class="sourceLine" id="cb7-40" data-line-number="40"></a>
 <a class="sourceLine" id="cb7-41" data-line-number="41"><span class="co">#pseudo R-squared of the predictions</span></a>
 <a class="sourceLine" id="cb7-42" data-line-number="42"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(memory.output<span class="op">$</span>R2)</a>
-<a class="sourceLine" id="cb7-43" data-line-number="43"><span class="co">#&gt; [1] 0.9877311 0.9877906 0.9877199 0.9876545 0.9876611 0.9877088</span></a>
+<a class="sourceLine" id="cb7-43" data-line-number="43"><span class="co">#&gt; [1] 0.9877218 0.9877091 0.9877761 0.9876859 0.9877674 0.9877492</span></a>
 <a class="sourceLine" id="cb7-44" data-line-number="44"></a>
 <a class="sourceLine" id="cb7-45" data-line-number="45"><span class="co">#VIF test on the input data</span></a>
 <a class="sourceLine" id="cb7-46" data-line-number="46"><span class="co">#VIF &gt; 5 indicates significant multicollinearity</span></a>

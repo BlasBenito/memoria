@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Computes ecological memory patterns on a large set of results of <code><a href='https://www.rdocumentation.org/packages/virtualPollen/topics/simulatePopulation'>simulatePopulation</a></code>. — runExperiment • memoria</title>
+<title>Computes ecological memory patterns on simulated pollen curves produced by the <code>virtualPollen</code> library. — runExperiment • memoria</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,9 +30,9 @@
 
 
 
-<meta property="og:title" content="Computes ecological memory patterns on a large set of results of <code><a href='https://www.rdocumentation.org/packages/virtualPollen/topics/simulatePopulation'>simulatePopulation</a></code>. — runExperiment" />
+<meta property="og:title" content="Computes ecological memory patterns on simulated pollen curves produced by the <code>virtualPollen</code> library. — runExperiment" />
 
-<meta property="og:description" content="It takes the output of simulatePopulation, and applies on it the functions prepareLaggedData and computeMemory to assess ecological memory on a large set of virtual pollen curves." />
+<meta property="og:description" content="Applies computeMemory to assess ecological memory on a large set of virtual pollen curves." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -86,7 +86,7 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/using_memoria.html">virtualPollen</a>
+      <a href="../articles/using_memoria.html">Using "memoria" and "virtualPollen" together</a>
     </li>
   </ul>
 </li>
@@ -109,14 +109,14 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Computes ecological memory patterns on a large set of results of <code><a href='https://www.rdocumentation.org/packages/virtualPollen/topics/simulatePopulation'>simulatePopulation</a></code>.</h1>
+    <h1>Computes ecological memory patterns on simulated pollen curves produced by the <code>virtualPollen</code> library.</h1>
     
     <div class="hidden name"><code>runExperiment.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>It takes the output of <code><a href='https://www.rdocumentation.org/packages/virtualPollen/topics/simulatePopulation'>simulatePopulation</a></code>, and applies on it the functions <code><a href='prepareLaggedData.html'>prepareLaggedData</a></code> and <code><a href='computeMemory.html'>computeMemory</a></code> to assess ecological memory on a large set of virtual pollen curves.</p>
+    <p>Applies <code><a href='computeMemory.html'>computeMemory</a></code> to assess ecological memory on a large set of virtual pollen curves.</p>
     
     </div>
 
@@ -141,7 +141,7 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>simulations.file</th>
-      <td><p>list of dataframes, output of  <code><a href='https://www.rdocumentation.org/packages/virtualPollen/topics/simulatePopulation'>simulatePopulation</a></code>.</p></td>
+      <td><p>list of dataframes, output of  the function <code>simulatePopulation</code> of the <code>virtualPollen</code> library.</p></td>
     </tr>
     <tr>
       <th>selected.rows</th>
@@ -153,7 +153,7 @@
     </tr>
     <tr>
       <th>parameters.file</th>
-      <td><p>dataframe of simulation parameters for <code><a href='https://www.rdocumentation.org/packages/virtualPollen/topics/simulatePopulation'>simulatePopulation</a></code>. Generally produced by <code><a href='https://www.rdocumentation.org/packages/virtualPollen/topics/parametersDataframe'>parametersDataframe</a></code>.</p></td>
+      <td><p>dataframe of simulation parameters.</p></td>
     </tr>
     <tr>
       <th>parameters.names</th>

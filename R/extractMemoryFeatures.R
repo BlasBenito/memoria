@@ -179,8 +179,10 @@ extractMemoryFeatures <- function(memory.pattern = NULL,
 
       #getting medians of exogenous components
       max.exogenous <- x.temp[x.temp$Variable == exogenous.component[1], "median"]
-      for(j in exogenous.component[2:length(exogenous.component)]){
-        max.exogenous <- pmax(max.exogenous, x.temp[x.temp$Variable == j, "median"])
+      if(length(exogenous.component) > 1){
+        for(j in exogenous.component[2:length(exogenous.component)]){
+          max.exogenous <- pmax(max.exogenous, x.temp[x.temp$Variable == j, "median"])
+        }
       }
       length.exogenous <- sum(max.exogenous > random.median) / length(lags)
 
@@ -236,10 +238,12 @@ extractMemoryFeatures <- function(memory.pattern = NULL,
   }
 
   #rescaling strength components
-  if(scale.strength == TRUE){
-    output.df$strength.concurrent <- output.df$strength.concurrent / max(output.df$strength.concurrent)
-    output.df$strength.exogenous <- output.df$strength.exogenous / max(output.df$strength.exogenous)
-    output.df$strength.endogenous <- output.df$strength.endogenous / max(output.df$strength.endogenous)
+  if(length(taxa) > 1 | !("this" %in% sampling)){
+    if(scale.strength == TRUE){
+      output.df$strength.concurrent <- output.df$strength.concurrent / max(output.df$strength.concurrent)
+      output.df$strength.exogenous <- output.df$strength.exogenous / max(output.df$strength.exogenous)
+      output.df$strength.endogenous <- output.df$strength.endogenous / max(output.df$strength.endogenous)
+    }
   }
 
   return(output.df)
