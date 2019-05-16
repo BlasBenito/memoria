@@ -57,16 +57,13 @@ plotInteraction <- function(model = NULL,
 
   #predicting different types of models
   if(class(model)=="ranger"){
-    require(ranger)
     newdata$prediction <- predict(model, newdata)$predictions
   }
   if(class(model)=="rpart"){
-    require(rpart)
     newdata$prediction <- predict(model, newdata, type="vector")
 
   }
   if(!(class(model) %in% c("ranger", "rpart"))){
-    require(randomForest)
     newdata$prediction <- predict(model, newdata, type="response")
   }
 

@@ -254,12 +254,12 @@
 <a class="sourceLine" id="cb7-14" data-line-number="14"><span class="co">#the memory dataframe</span></a>
 <a class="sourceLine" id="cb7-15" data-line-number="15"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(memory.output<span class="op">$</span>memory)</a>
 <a class="sourceLine" id="cb7-16" data-line-number="16"><span class="co">#&gt;                                median        sd      min      max</span></a>
-<a class="sourceLine" id="cb7-17" data-line-number="17"><span class="co">#&gt; Response_0.2                 63.61527 0.7151604 62.50245 64.77453</span></a>
-<a class="sourceLine" id="cb7-18" data-line-number="18"><span class="co">#&gt; Response_0.4                 51.21211 0.7201503 49.88524 52.28927</span></a>
-<a class="sourceLine" id="cb7-19" data-line-number="19"><span class="co">#&gt; Response_0.6                 40.84627 0.7042492 39.77028 41.86628</span></a>
-<a class="sourceLine" id="cb7-20" data-line-number="20"><span class="co">#&gt; Response_0.8                 35.62020 1.0648440 33.79373 37.20767</span></a>
-<a class="sourceLine" id="cb7-21" data-line-number="21"><span class="co">#&gt; Response_1                   42.70615 0.9097858 41.11638 44.03142</span></a>
-<a class="sourceLine" id="cb7-22" data-line-number="22"><span class="co">#&gt; climate.temperatureAverage_0 41.70892 3.1702363 34.92331 46.06424</span></a>
+<a class="sourceLine" id="cb7-17" data-line-number="17"><span class="co">#&gt; Response_0.2                 63.75380 0.8244113 62.49809 64.98748</span></a>
+<a class="sourceLine" id="cb7-18" data-line-number="18"><span class="co">#&gt; Response_0.4                 51.28421 0.7282665 49.98503 52.25951</span></a>
+<a class="sourceLine" id="cb7-19" data-line-number="19"><span class="co">#&gt; Response_0.6                 40.80998 0.8532489 39.37119 42.43428</span></a>
+<a class="sourceLine" id="cb7-20" data-line-number="20"><span class="co">#&gt; Response_0.8                 35.56758 1.0768447 33.81770 37.37325</span></a>
+<a class="sourceLine" id="cb7-21" data-line-number="21"><span class="co">#&gt; Response_1                   42.74661 0.8187259 41.32457 43.91385</span></a>
+<a class="sourceLine" id="cb7-22" data-line-number="22"><span class="co">#&gt; climate.temperatureAverage_0 41.07218 3.4589395 36.13118 45.62033</span></a>
 <a class="sourceLine" id="cb7-23" data-line-number="23"><span class="co">#&gt;                                                Variable Lag</span></a>
 <a class="sourceLine" id="cb7-24" data-line-number="24"><span class="co">#&gt; Response_0.2                                   Response 0.2</span></a>
 <a class="sourceLine" id="cb7-25" data-line-number="25"><span class="co">#&gt; Response_0.4                                   Response 0.4</span></a>
@@ -271,16 +271,16 @@
 <a class="sourceLine" id="cb7-31" data-line-number="31"><span class="co">#predicted values</span></a>
 <a class="sourceLine" id="cb7-32" data-line-number="32"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(memory.output<span class="op">$</span>prediction)</a>
 <a class="sourceLine" id="cb7-33" data-line-number="33"><span class="co">#&gt;       median        sd       min       max</span></a>
-<a class="sourceLine" id="cb7-34" data-line-number="34"><span class="co">#&gt; X1  4.844538 0.1449956  4.593124  5.087978</span></a>
-<a class="sourceLine" id="cb7-35" data-line-number="35"><span class="co">#&gt; X2  5.605779 0.1342637  5.417310  5.860284</span></a>
-<a class="sourceLine" id="cb7-36" data-line-number="36"><span class="co">#&gt; X3  7.627052 0.1353810  7.446132  7.867851</span></a>
-<a class="sourceLine" id="cb7-37" data-line-number="37"><span class="co">#&gt; X4 11.115592 0.1467788 10.893127 11.284286</span></a>
-<a class="sourceLine" id="cb7-38" data-line-number="38"><span class="co">#&gt; X5 13.484208 0.1193776 13.321445 13.722469</span></a>
-<a class="sourceLine" id="cb7-39" data-line-number="39"><span class="co">#&gt; X6 14.270726 0.1235772 14.100845 14.491880</span></a>
+<a class="sourceLine" id="cb7-34" data-line-number="34"><span class="co">#&gt; X1  4.873571 0.1262276  4.639036  5.058925</span></a>
+<a class="sourceLine" id="cb7-35" data-line-number="35"><span class="co">#&gt; X2  5.606250 0.1327943  5.429202  5.848193</span></a>
+<a class="sourceLine" id="cb7-36" data-line-number="36"><span class="co">#&gt; X3  7.633198 0.1446950  7.430611  7.843977</span></a>
+<a class="sourceLine" id="cb7-37" data-line-number="37"><span class="co">#&gt; X4 11.103646 0.1119647 10.937960 11.321834</span></a>
+<a class="sourceLine" id="cb7-38" data-line-number="38"><span class="co">#&gt; X5 13.476965 0.1266341 13.318962 13.710075</span></a>
+<a class="sourceLine" id="cb7-39" data-line-number="39"><span class="co">#&gt; X6 14.240521 0.1247648 14.040604 14.426070</span></a>
 <a class="sourceLine" id="cb7-40" data-line-number="40"></a>
 <a class="sourceLine" id="cb7-41" data-line-number="41"><span class="co">#pseudo R-squared of the predictions</span></a>
 <a class="sourceLine" id="cb7-42" data-line-number="42"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(memory.output<span class="op">$</span>R2)</a>
-<a class="sourceLine" id="cb7-43" data-line-number="43"><span class="co">#&gt; [1] 0.9877075 0.9876640 0.9877261 0.9877467 0.9878652 0.9877381</span></a>
+<a class="sourceLine" id="cb7-43" data-line-number="43"><span class="co">#&gt; [1] 0.9877311 0.9877906 0.9877199 0.9876545 0.9876611 0.9877088</span></a>
 <a class="sourceLine" id="cb7-44" data-line-number="44"></a>
 <a class="sourceLine" id="cb7-45" data-line-number="45"><span class="co">#VIF test on the input data</span></a>
 <a class="sourceLine" id="cb7-46" data-line-number="46"><span class="co">#VIF &gt; 5 indicates significant multicollinearity</span></a>

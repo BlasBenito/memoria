@@ -16,10 +16,9 @@ Imports:
   ranger,
   cowplot,
   viridis, 
-  viridisLite,
+  viridisLite,  
   zoo, 
   stringr, 
-  ranger, 
   HH,
   tidyr,
   pdp

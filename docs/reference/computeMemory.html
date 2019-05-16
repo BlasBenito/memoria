@@ -149,19 +149,22 @@ where:
  <span class='kw'>add.random</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
  <span class='kw'>random.mode</span> <span class='kw'>=</span> <span class='st'>"autocorrelated"</span>,
  <span class='kw'>repetitions</span> <span class='kw'>=</span> <span class='fl'>10</span>,
- <span class='kw'>subset.response</span> <span class='kw'>=</span> <span class='st'>"none"</span>
-)</pre>
+ <span class='kw'>subset.response</span> <span class='kw'>=</span> <span class='st'>"none"</span>,
+ <span class='kw'>min.node.size</span> <span class='kw'>=</span> <span class='fl'>5</span>,
+ <span class='kw'>num.trees</span> <span class='kw'>=</span> <span class='fl'>2000</span>,
+ <span class='kw'>mtry</span> <span class='kw'>=</span> <span class='fl'>2</span>
+ )</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>lagged.data</th>
-      <td><p>a lagged dataset resulting from <code><a href='prepareLaggedData.html'>prepareLaggedData</a></code>. See <code>laggedSimData</code> as example.</p></td>
+      <td><p>a lagged dataset resulting from <code><a href='prepareLaggedData.html'>prepareLaggedData</a></code>. See <code><a href='palaeodataLagged.html'>palaeodataLagged</a></code> as example.</p></td>
     </tr>
     <tr>
       <th>drivers</th>
-      <td><p>a string or vector of strings with variables to be used as predictors in the model (i.e. c("Suitability", "Driver.A"))</p></td>
+      <td><p>a character string or vector of character strings with variables to be used as predictors in the model (i.e. c("Suitability", "Driver.A")). <strong>Important:</strong> <code>drivers</code> names must not have the character "_".</p></td>
     </tr>
     <tr>
       <th>response</th>
@@ -195,10 +198,6 @@ where:
       <th>mtry</th>
       <td><p>integer, argument of the <a href='https://www.rdocumentation.org/packages/ranger/topics/ranger'>ranger</a> function. Number of variables to possibly split at in each node. Default is 2.</p></td>
     </tr>
-    <tr>
-      <th>drivers</th>
-      <td><p>a character string or vector of character strings with variables to be used as predictors in the model (i.e. c("Suitability", "Driver.A")). <strong>Important:</strong> <code>drivers</code> names must not have the character "_".</p></td>
-    </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
@@ -218,11 +217,16 @@ where:
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>This function uses the <a href='https://www.rdocumentation.org/packages/ranger/topics/ranger'>ranger</a> package to fit Random Forest models. It fits the model explained above as many times as defined in the argument <code>repetitions</code>. To test the statistical significance of the variable importance scores returned by random forest, on each repetition the model is fitted with a different <code>r</code> (random) term. If <code>random.mode</code> equals "autocorrelated", the random term will have a temporal autocorrelation, and if it equals "white.noise", it will be a pseudo-random sequence of numbers generated with <code><a href='https://www.rdocumentation.org/packages/stats/topics/Normal'>rnorm</a></code>, with no temporal autocorrelation. The importance of the random sequence (as computed by random forest) is stored for each model run, and used as a benchmark to assess the importance of the other predictors used in the models. Importance values of other predictors that are above the median of the importance of the random term should be interpreted as non-random, and therefore, significant.</p>
+    <p>This function uses the <a href='https://www.rdocumentation.org/packages/ranger/topics/ranger'>ranger</a> package to fit Random Forest models. Please, check the help of the <a href='https://www.rdocumentation.org/packages/ranger/topics/ranger'>ranger</a> function to better understand how Random Forest is parameterized in this library. This function fits the model explained above as many times as defined in the argument <code>repetitions</code>. To test the statistical significance of the variable importance scores returned by random forest, on each repetition the model is fitted with a different <code>r</code> (random) term. If <code>random.mode</code> equals "autocorrelated", the random term will have a temporal autocorrelation, and if it equals "white.noise", it will be a pseudo-random sequence of numbers generated with <code><a href='https://www.rdocumentation.org/packages/stats/topics/Normal'>rnorm</a></code>, with no temporal autocorrelation. The importance of the random sequence (as computed by random forest) is stored for each model run, and used as a benchmark to assess the importance of the other predictors used in the models. Importance values of other predictors that are above the median of the importance of the random term should be interpreted as non-random, and therefore, significant.</p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='plotMemory.html'>plotMemory</a></code>, <code><a href='extractMemoryFeatures.html'>extractMemoryFeatures</a></code></p></div>
+    <div class='dont-index'><p><code><a href='plotMemory.html'>plotMemory</a></code>, <code><a href='extractMemoryFeatures.html'>extractMemoryFeatures</a></code></p>
+<p>##'</p><ul>
+<li><p>Wright, M. N. &amp; Ziegler, A. (2017). ranger: A fast implementation of random forests for high dimensional data in C++ and R. J Stat Softw 77:1-17. <a href='https://doi.org/10.18637/jss.v077.i01'>https://doi.org/10.18637/jss.v077.i01</a>.</p></li>
+<li><p>Breiman, L. (2001). Random forests. Mach Learn, 45:5-32. <a href='https://doi.org/10.1023/A:1010933404324'>https://doi.org/10.1023/A:1010933404324</a>.</p></li>
+<li><p>Hastie, T., Tibshirani, R., Friedman, J. (2009). The Elements of Statistical Learning. Springer, New York. 2nd edition.</p></li>
+</ul></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -263,10 +267,7 @@ where:
 #&gt;  $ Variable: Factor w/ 4 levels "Response","climate.temperatureAverage",..: 1 1 1 1 1 2 2 2 2 2 ...
 #&gt;  $ Lag     : num  0.2 0.4 0.6 0.8 1 0 0.2 0.4 0.6 0.8 ...</div><div class='input'>
 <span class='co'>#plotting output</span>
-<span class='fu'><a href='plotMemory.html'>plotMemory</a></span>(<span class='kw'>memory.output</span> <span class='kw'>=</span> <span class='no'>memory.output</span>)</div><div class='output co'>#&gt; <span class='message'>Loading required package: ggplot2</span></div><div class='output co'>#&gt; <span class='message'></span>
-#&gt; <span class='message'>Attaching package: ‘cowplot’</span></div><div class='output co'>#&gt; <span class='message'>The following object is masked from ‘package:ggplot2’:</span>
-#&gt; <span class='message'></span>
-#&gt; <span class='message'>    ggsave</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: viridisLite</span></div><div class='img'><img src='computeMemory-1.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='fu'><a href='plotMemory.html'>plotMemory</a></span>(<span class='kw'>memory.output</span> <span class='kw'>=</span> <span class='no'>memory.output</span>)</div><div class='img'><img src='computeMemory-1.png' alt='' width='700' height='433' /></div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

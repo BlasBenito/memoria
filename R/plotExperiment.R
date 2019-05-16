@@ -20,7 +20,7 @@
 #'  )
 #'
 #' @param experiment.output list, output of  \code{\link{runExperiment}}.
-#' @param parameters.file dataframe of simulation parameters for \code{\link[virtualPollen]{simulatePopulation}}. Generally produced by \code{\link[virtualPollen]{parametersDataframe}}.
+#' @param parameters.file dataframe of simulation parameters.
 #' @param experiment.title character string, title of the plot.
 #' @param sampling.names vector of character strings with the names of the columns used in the argument \code{simulations.file} of \code{\link{runExperiment}}. If \code{NULL}, no pdf plot is produced.
 #' @param filename character string, path and name (without extension) of the output pdf file.

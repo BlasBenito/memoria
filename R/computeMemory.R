@@ -41,7 +41,7 @@
 #' @param num.trees integer, argument of the \link[ranger]{ranger} function. Number of regression trees to be fitted (size of the forest). Default is 2000.
 #' @param mtry  integer, argument of the \link[ranger]{ranger} function. Number of variables to possibly split at in each node. Default is 2.
 #'
-#' @details This function uses the \link[ranger]{ranger} package to fit Random Forest models. It fits the model explained above as many times as defined in the argument \code{repetitions}. To test the statistical significance of the variable importance scores returned by random forest, on each repetition the model is fitted with a different \code{r} (random) term. If \code{random.mode} equals "autocorrelated", the random term will have a temporal autocorrelation, and if it equals "white.noise", it will be a pseudo-random sequence of numbers generated with \code{\link{rnorm}}, with no temporal autocorrelation. The importance of the random sequence (as computed by random forest) is stored for each model run, and used as a benchmark to assess the importance of the other predictors used in the models. Importance values of other predictors that are above the median of the importance of the random term should be interpreted as non-random, and therefore, significant.
+#' @details This function uses the \link[ranger]{ranger} package to fit Random Forest models. Please, check the help of the \link[ranger]{ranger} function to better understand how Random Forest is parameterized in this library. This function fits the model explained above as many times as defined in the argument \code{repetitions}. To test the statistical significance of the variable importance scores returned by random forest, on each repetition the model is fitted with a different \code{r} (random) term. If \code{random.mode} equals "autocorrelated", the random term will have a temporal autocorrelation, and if it equals "white.noise", it will be a pseudo-random sequence of numbers generated with \code{\link{rnorm}}, with no temporal autocorrelation. The importance of the random sequence (as computed by random forest) is stored for each model run, and used as a benchmark to assess the importance of the other predictors used in the models. Importance values of other predictors that are above the median of the importance of the random term should be interpreted as non-random, and therefore, significant.
 #'
 #' @author Blas M. Benito  <blasbenito@gmail.com>
 #'
@@ -61,6 +61,12 @@
 #'
 #'
 #' @seealso \code{\link{plotMemory}}, \code{\link{extractMemoryFeatures}}
+#'
+#' ##' \itemize{
+##'   \item Wright, M. N. & Ziegler, A. (2017). ranger: A fast implementation of random forests for high dimensional data in C++ and R. J Stat Softw 77:1-17. \url{https://doi.org/10.18637/jss.v077.i01}.
+##'   \item Breiman, L. (2001). Random forests. Mach Learn, 45:5-32. \url{https://doi.org/10.1023/A:1010933404324}.
+##'   \item Hastie, T., Tibshirani, R., Friedman, J. (2009). The Elements of Statistical Learning. Springer, New York. 2nd edition.
+##'   }
 #'
 #' @examples
 #' \donttest{

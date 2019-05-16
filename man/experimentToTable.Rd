@@ -14,7 +14,7 @@ experimentToTable(
 \arguments{
 \item{experiment.output}{list, output of  \code{\link{runExperiment}}.}
 
-\item{parameters.file}{dataframe of simulation parameters for \code{\link[virtualPollen]{simulatePopulation}}. Generally produced by \code{\link[virtualPollen]{parametersDataframe}}.}
+\item{parameters.file}{dataframe of simulation parameters.}
 
 \item{sampling.names}{vector of character strings with the names of the columns of \code{simulations.file}.}
 

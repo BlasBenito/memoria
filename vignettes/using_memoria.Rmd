@@ -1,11 +1,11 @@
 ---
-title: 'virtualPollen'
-subtitle: 'Generation of virtual pollen curves'
+title: 'Using "memoria" and "virtualPollen" together'
+subtitle: 'Quantifying ecological memory of virtual pollen curves'
 author: "Blas M. Benito"
 fig_width: 6
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Using virtualPollen}
+  %\VignetteIndexEntry{Using memoria}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---
@@ -58,9 +58,9 @@ vignette: >
 ```{r, echo = FALSE, warning = FALSE, message = FALSE}
 
 #checking if required packages are installed, and installing them if not
-list.of.packages <- c("ggplot2", "cowplot", "knitr", "viridis", "tidyr", "formatR", "grid", "zoo", "ranger", "rpart", "rpart.plot", "partykit", "HH", "pdp", "kableExtra", "magrittr", "stringr", "dplyr")
+list.of.packages <- c("ggplot2", "cowplot", "knitr", "viridis", "tidyr", "formatR", "grid", "zoo", "ranger", "rpart", "rpart.plot", "partykit", "HH", "pdp", "kableExtra", "magrittr", "stringr", "dplyr", "devtools")
 new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
-if(length(new.packages)) install.packages(new.packages, dep = TRUE)
+if(length(new.packages)) install.packages(new.packages, dep = TRUE ,repos = "http://cran.us.r-project.org")
 
 #install virtualPollen if not installed
 if(!("virtualPollen" %in% installed.packages())){
@@ -70,6 +70,7 @@ if(!("virtualPollen" %in% installed.packages())){
 
 #install memoria if not installed
 if(!("memoria" %in% installed.packages())){
+  library(devtools)
   install_github("blasbenito/memoria")
 }
 

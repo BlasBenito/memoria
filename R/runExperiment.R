@@ -1,6 +1,6 @@
-#' Computes ecological memory patterns on a large set of results of \code{\link[virtualPollen]{simulatePopulation}}.
+#' Computes ecological memory patterns on simulated pollen curves produced by the \code{virtualPollen} library.
 #'
-#' @description It takes the output of \code{\link[virtualPollen]{simulatePopulation}}, and applies on it the functions \code{\link{prepareLaggedData}} and \code{\link{computeMemory}} to assess ecological memory on a large set of virtual pollen curves.
+#' @description Applies \code{\link{computeMemory}} to assess ecological memory on a large set of virtual pollen curves.
 #'
 #'
 #'@usage runExperiment(
@@ -19,10 +19,10 @@
 #'  repetitions = 10
 #'  )
 #'
-#' @param simulations.file list of dataframes, output of  \code{\link[virtualPollen]{simulatePopulation}}.
+#' @param simulations.file list of dataframes, output of  the function \code{simulatePopulation} of the \code{virtualPollen} library.
 #' @param selected.rows numeric vector, rows (virtual taxa) of \code{simulations.file} to be analyzed.
 #' @param selected.columns numeric.vector, columns (experiment treatments) of \code{simulations.file} to be analyzed.
-#' @param parameters.file dataframe of simulation parameters for \code{\link[virtualPollen]{simulatePopulation}}. Generally produced by \code{\link[virtualPollen]{parametersDataframe}}.
+#' @param parameters.file dataframe of simulation parameters.
 #' @param parameters.names vector of character strings with names of traits and niche features from \code{parameters.file} to be included in the analysis (i.e. c("maximum.age", "fecundity", "niche.A.mean", "niche.A.sd"))
 #' @param sampling.names vector of character strings with the names of the columns of \code{simulations.file}.
 #' @param driver.column vector of character strings, names of the columns to be considered as drivers (generally, one of "Suitability", "Driver.A", "Driver.B).

@@ -168,7 +168,7 @@ The model is then repeated a number of times defined by the user (check the *rep
 
 The output can be easily plotted with the *plotMemory* function. The example below is done with a low number of repetitions to reduce runtime, but note that the recommended number of *iterations* should be higher (300 gives stable results for time series with around 500 samples).
 
-```{r, fig.width = 9, fig.height=4, fig.cap="Ecological memory pattern of Pinus. The intrinsic memory is represented by the violet curve, the extrinsic components (temperature and rainfall) are represented by blue and green, and the random component is represented in yellow. The lag 0 of rainfall and precipitation represents the concurrent effect."}
+```{r, fig.width = 5, fig.height=2, fig.cap="Ecological memory pattern of Pinus. The intrinsic memory is represented by the violet curve, the extrinsic components (temperature and rainfall) are represented by blue and green, and the random component is represented in yellow. The lag 0 of rainfall and precipitation represents the concurrent effect."}
 #computing memory
 memory.output <- computeMemory(
  lagged.data = pollen.climate.lagged,
@@ -201,7 +201,7 @@ plotMemory(memory.output)
 
 Below the model is repeated by using "auatocorrelated" in the argument *random.mode*.
 
-```{r, fig.width = 9, fig.height=4, fig.cap="Same as above, but observe that the yellow strip representing the random term in the model has much higher values than when the random time-series is generated without temporal autocorrelation, and therefore the exogenous component seem to have importance scores that are below the median of the random expectation."}
+```{r, fig.width = 5, fig.height=2, fig.cap="Same as above, but observe that the yellow strip representing the random term in the model has much higher values than when the random time-series is generated without temporal autocorrelation, and therefore the exogenous component seem to have importance scores that are below the median of the random expectation."}
 #computing memory
 memory.output.autocor <- computeMemory(
  lagged.data = pollen.climate.lagged,
