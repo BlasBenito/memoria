@@ -1,6 +1,9 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
+[![DOI](https://zenodo.org/badge/179102027.svg)](https://zenodo.org/badge/latestdoi/179102027)
+
+
 # memoria
 
 [![CRAN\_Release\_Badge](http://www.r-pkg.org/badges/version-ago/memoria)](https://CRAN.R-project.org/package=memoria)
