@@ -15,6 +15,9 @@ knitr::opts_chunk$set(
 
 # memoria
 
+[![CRAN_Release_Badge](http://www.r-pkg.org/badges/version-ago/memoria)](https://CRAN.R-project.org/package=memoria)
+[![CRAN_Download_Badge](http://cranlogs.r-pkg.org/badges/memoria)](https://CRAN.R-project.org/package=memoria)
+
 The goal of memoria is to provide the tools to quantify **ecological memory** in long time-series involving environmental drivers and biotic responses, including palaeoecological datasets. 
 
 Ecological memory has two main components: the *endogenous* component, which represents the effect of antecedent values of the response on itself, and *endogenous* component, which represents the effect of antecedent values of the driver or drivers on the current state of the biotic response. Additionally, the *concurrent effect*, which represents the synchronic effect of the environmental drivers over the response is measured. The functions in the package allow the user 
@@ -40,8 +43,8 @@ Random Forest returns an importance score for each model term, and the functions
 You can install the released version of memoria from [GitHub](https://github.com/BlasBenito/memoria) or soon from [CRAN](https://CRAN.R-project.org) with:
 
 
-```{r, eval=FALSE}
-#from GitHub
+```{r, eval=FALSE, results = "hide", message = FALSE, error = FALSE}
+#from GitHub (development  version)
 library(devtools)
 install_github("blasbenito/memoria")
 

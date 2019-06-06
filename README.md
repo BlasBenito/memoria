@@ -3,6 +3,9 @@
 
 # memoria
 
+[![CRAN\_Release\_Badge](http://www.r-pkg.org/badges/version-ago/memoria)](https://CRAN.R-project.org/package=memoria)
+[![CRAN\_Download\_Badge](http://cranlogs.r-pkg.org/badges/memoria)](https://CRAN.R-project.org/package=memoria)
+
 The goal of memoria is to provide the tools to quantify **ecological
 memory** in long time-series involving environmental drivers and biotic
 responses, including palaeoecological datasets.
@@ -48,7 +51,7 @@ You can install the released version of memoria from
 [CRAN](https://CRAN.R-project.org) with:
 
 ``` r
-#from GitHub
+#from GitHub (devel version)
 library(devtools)
 install_github("blasbenito/memoria")
 
@@ -296,12 +299,12 @@ memory.output <- computeMemory(
 #the memory dataframe
 head(memory.output$memory)
 #>                                median        sd      min      max
-#> Response_0.2                 63.72511 0.7163610 62.51069 64.80383
-#> Response_0.4                 51.16831 0.7463974 50.01752 52.44615
-#> Response_0.6                 40.96195 0.6979277 39.82137 41.95080
-#> Response_0.8                 35.68578 1.1570548 33.91781 37.52504
-#> Response_1                   42.84917 0.9537612 41.14918 44.09713
-#> climate.temperatureAverage_0 41.88860 3.4182192 34.03551 45.14606
+#> Response_0.2                 63.67252 0.7376923 62.70484 64.96015
+#> Response_0.4                 51.17356 0.7761249 49.68273 52.67473
+#> Response_0.6                 40.99832 0.8151736 39.71604 42.05783
+#> Response_0.8                 35.80101 1.2192520 33.90301 37.69965
+#> Response_1                   42.68582 0.9433457 41.11222 44.03464
+#> climate.temperatureAverage_0 41.40032 2.8833746 36.37473 46.08029
 #>                                                Variable Lag
 #> Response_0.2                                   Response 0.2
 #> Response_0.4                                   Response 0.4
@@ -312,17 +315,17 @@ head(memory.output$memory)
 
 #predicted values
 head(memory.output$prediction)
-#>       median         sd       min       max
-#> X1  4.855762 0.13624378  4.603849  5.050147
-#> X2  5.588746 0.12595703  5.411583  5.831361
-#> X3  7.616612 0.12654352  7.407159  7.799427
-#> X4 11.107384 0.14786080 10.908995 11.413256
-#> X5 13.472921 0.11391455 13.313259 13.666736
-#> X6 14.252521 0.09672598 14.105857 14.398320
+#>       median        sd       min       max
+#> X1  4.834416 0.1487545  4.655847  5.111118
+#> X2  5.597916 0.1386821  5.430704  5.873239
+#> X3  7.610392 0.1260106  7.421913  7.815250
+#> X4 11.101815 0.1328251 10.897932 11.342196
+#> X5 13.498129 0.1267919 13.297637 13.680961
+#> X6 14.252795 0.1092111 14.081635 14.413254
 
 #pseudo R-squared of the predictions
 head(memory.output$R2)
-#> [1] 0.9877769 0.9877619 0.9875986 0.9876862 0.9877391 0.9878348
+#> [1] 0.9877010 0.9876715 0.9876807 0.9876498 0.9877665 0.9876993
 
 #VIF test on the input data
 #VIF > 5 indicates significant multicollinearity
@@ -466,19 +469,19 @@ dominance.exogenous
 
 <td style="text-align:right;">
 
-1
+17.0399
 
 </td>
 
 <td style="text-align:right;">
 
-NaN
+0
 
 </td>
 
 <td style="text-align:right;">
 
-1
+\-3.626817
 
 </td>
 
