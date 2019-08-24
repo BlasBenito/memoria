@@ -68,4 +68,6 @@ plotMemory <- function(
   #plots to pdf
   if(!is.null(filename)){ggsave(filename = paste(filename, ".pdf", sep = ""))}
 
+  return(plot.memory)
+
 }
