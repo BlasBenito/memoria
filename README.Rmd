@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 # memoria
 
 [![CRAN_Release_Badge](http://www.r-pkg.org/badges/version-ago/memoria)](https://CRAN.R-project.org/package=memoria)
-[![CRAN_Download_Badge](http://cranlogs.r-pkg.org/badges/memoria)](https://CRAN.R-project.org/package=memoria)
+[![CRAN_Download_Badge](http://cranlogs.r-pkg.org/badges/grand-total/memoria)](https://CRAN.R-project.org/package=memoria)
 
 The goal of memoria is to provide the tools to quantify **ecological memory** in long time-series involving environmental drivers and biotic responses, including palaeoecological datasets. 
 

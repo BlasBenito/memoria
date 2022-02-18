@@ -1,13 +1,10 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-[![DOI](https://zenodo.org/badge/179102027.svg)](https://zenodo.org/badge/latestdoi/179102027)
-
-
 # memoria
 
 [![CRAN\_Release\_Badge](http://www.r-pkg.org/badges/version-ago/memoria)](https://CRAN.R-project.org/package=memoria)
-[![CRAN\_Download\_Badge](http://cranlogs.r-pkg.org/badges/memoria)](https://CRAN.R-project.org/package=memoria)
+[![CRAN\_Download\_Badge](http://cranlogs.r-pkg.org/badges/grand-total/memoria)](https://CRAN.R-project.org/package=memoria)
 
 The goal of memoria is to provide the tools to quantify **ecological
 memory** in long time-series involving environmental drivers and biotic
@@ -26,20 +23,20 @@ available in the [ranger](https://CRAN.R-project.org/package=ranger)
 package to fit a model of the form shown in **Equation 1**:
 
 **Equation 1** (simplified from the one in the paper):
-\[p_{t} = p_{t-1} +...+ p_{t-n} + d_{t} + d_{t-1} +...+ d_{t-n}\] 
+*p*<sub>*t*</sub> = *p*<sub>*t* − 1</sub> + ... + *p*<sub>*t* − *n*</sub> + *d*<sub>*t*</sub> + *d*<sub>*t* − 1</sub> + ... + *d*<sub>*t* − *n*</sub>
 
 Where:
 
-  - \(p\) is *Pollen*.
-  - \(d\) is *Driver*.
-  - \(t\) is the time of any given value of the response \(p\).
-  - \(t-1\) is the lag 1.
-  - \(p_{t-1} +...+ p_{t-n}\) represents the endogenous component of
-    ecological memory.
-  - \(d_{t-1} +...+ d_{t-n}\) represents the exogenous component of
-    ecological memory.
-  - \(d_{t}\) represents the concurrent effect of the driver over the
-    response.
+-   *p* is *Pollen*.
+-   *d* is *Driver*.
+-   *t* is the time of any given value of the response *p*.
+-   *t* − 1 is the lag 1.
+-   *p*<sub>*t* − 1</sub> + ... + *p*<sub>*t* − *n*</sub> represents the
+    endogenous component of ecological memory.
+-   *d*<sub>*t* − 1</sub> + ... + *d*<sub>*t* − *n*</sub> represents the
+    exogenous component of ecological memory.
+-   *d*<sub>*t*</sub> represents the concurrent effect of the driver
+    over the response.
 
 Random Forest returns an importance score for each model term, and the
 functions in *memoria* let the user to plot the importance scores across
@@ -54,7 +51,7 @@ You can install the released version of memoria from
 [CRAN](https://CRAN.R-project.org) with:
 
 ``` r
-#from GitHub (devel version)
+#from GitHub (development  version)
 library(devtools)
 install_github("blasbenito/memoria")
 
@@ -88,14 +85,12 @@ data into a regular time grid using *loess*.
 
 In this scenario we consider two datasets:
 
-  - *pollen*, with 639 samples dated in ky BP and four pollen types:
+-   *pollen*, with 639 samples dated in ky BP and four pollen types:
     Pinus, Quercus, Poaceae, and Artemisia.
 
-  - *climate*, with 800 samples dated in ky BP, and five climate
+-   *climate*, with 800 samples dated in ky BP, and five climate
     variables: average temperature and rainfall, temperature of the
     warmest and coldest month, and oxigen isotope.
-
-<!-- end list -->
 
 ``` r
 #loading and plotting pollen data
@@ -195,7 +190,6 @@ Pinus as response varaible, and average temperature and rainfall as
 drivers/predictors.
 
 ``` r
-
 pollen.climate.lagged <- prepareLaggedData(
  input.data = pollen.climate,
  response = "pollen.pinus",
@@ -302,12 +296,12 @@ memory.output <- computeMemory(
 #the memory dataframe
 head(memory.output$memory)
 #>                                median        sd      min      max
-#> Response_0.2                 63.67252 0.7376923 62.70484 64.96015
-#> Response_0.4                 51.17356 0.7761249 49.68273 52.67473
-#> Response_0.6                 40.99832 0.8151736 39.71604 42.05783
-#> Response_0.8                 35.80101 1.2192520 33.90301 37.69965
-#> Response_1                   42.68582 0.9433457 41.11222 44.03464
-#> climate.temperatureAverage_0 41.40032 2.8833746 36.37473 46.08029
+#> Response_0.2                 63.65888 0.8364578 62.31013 65.15675
+#> Response_0.4                 51.30263 0.7037971 50.22688 52.46269
+#> Response_0.6                 40.81448 0.9309109 39.35845 42.29928
+#> Response_0.8                 35.59843 1.0926171 33.75890 37.32521
+#> Response_1                   42.74597 0.9461560 41.15155 43.93038
+#> climate.temperatureAverage_0 41.87832 3.8001165 34.04238 45.63635
 #>                                                Variable Lag
 #> Response_0.2                                   Response 0.2
 #> Response_0.4                                   Response 0.4
@@ -319,16 +313,16 @@ head(memory.output$memory)
 #predicted values
 head(memory.output$prediction)
 #>       median        sd       min       max
-#> X1  4.834416 0.1487545  4.655847  5.111118
-#> X2  5.597916 0.1386821  5.430704  5.873239
-#> X3  7.610392 0.1260106  7.421913  7.815250
-#> X4 11.101815 0.1328251 10.897932 11.342196
-#> X5 13.498129 0.1267919 13.297637 13.680961
-#> X6 14.252795 0.1092111 14.081635 14.413254
+#> X1  4.828722 0.1353357  4.642276  5.079762
+#> X2  5.604695 0.1451653  5.430713  5.883581
+#> X3  7.624770 0.1486040  7.424911  7.869421
+#> X4 11.116681 0.1221821 10.898352 11.315278
+#> X5 13.469770 0.1326564 13.255327 13.680632
+#> X6 14.264494 0.1059167 14.073003 14.434560
 
 #pseudo R-squared of the predictions
 head(memory.output$R2)
-#> [1] 0.9877010 0.9876715 0.9876807 0.9876498 0.9877665 0.9876993
+#> [1] 0.9877071 0.9877670 0.9877652 0.9876750 0.9877499 0.9876827
 
 #VIF test on the input data
 #VIF > 5 indicates significant multicollinearity
@@ -345,7 +339,18 @@ head(memory.output$multicollinearity)
 plotMemory(memory.output)
 ```
 
-<img src="man/figures/README-unnamed-chunk-7-1.png" title="Ecological memory pattern of Pinus. The intrinsic memory is represented by the violet curve, the extrinsic components (temperature and rainfall) are represented by blue and green, and the random component is represented in yellow. The lag 0 of rainfall and precipitation represents the concurrent effect." alt="Ecological memory pattern of Pinus. The intrinsic memory is represented by the violet curve, the extrinsic components (temperature and rainfall) are represented by blue and green, and the random component is represented in yellow. The lag 0 of rainfall and precipitation represents the concurrent effect." width="100%" />
+<div class="figure">
+
+<img src="man/figures/README-unnamed-chunk-7-1.png" alt="Ecological memory pattern of Pinus. The intrinsic memory is represented by the violet curve, the extrinsic components (temperature and rainfall) are represented by blue and green, and the random component is represented in yellow. The lag 0 of rainfall and precipitation represents the concurrent effect." width="100%" />
+<p class="caption">
+Ecological memory pattern of Pinus. The intrinsic memory is represented
+by the violet curve, the extrinsic components (temperature and rainfall)
+are represented by blue and green, and the random component is
+represented in yellow. The lag 0 of rainfall and precipitation
+represents the concurrent effect.
+</p>
+
+</div>
 
 Below the model is repeated by using “auatocorrelated” in the argument
 *random.mode*.
@@ -366,26 +371,35 @@ memory.output.autocor <- computeMemory(
 plotMemory(memory.output.autocor)
 ```
 
-<img src="man/figures/README-unnamed-chunk-8-1.png" title="Same as above, but observe that the yellow strip representing the random term in the model has much higher values than when the random time-series is generated without temporal autocorrelation, and therefore the exogenous component seem to have importance scores that are below the median of the random expectation." alt="Same as above, but observe that the yellow strip representing the random term in the model has much higher values than when the random time-series is generated without temporal autocorrelation, and therefore the exogenous component seem to have importance scores that are below the median of the random expectation." width="100%" />
+<div class="figure">
+
+<img src="man/figures/README-unnamed-chunk-8-1.png" alt="Same as above, but observe that the yellow strip representing the random term in the model has much higher values than when the random time-series is generated without temporal autocorrelation, and therefore the exogenous component seem to have importance scores that are below the median of the random expectation." width="100%" />
+<p class="caption">
+Same as above, but observe that the yellow strip representing the random
+term in the model has much higher values than when the random
+time-series is generated without temporal autocorrelation, and therefore
+the exogenous component seem to have importance scores that are below
+the median of the random expectation.
+</p>
+
+</div>
 
 Finally, the *features* of the ecological memory pattern can be
 extracted. These features are:
 
-  - **memory strength**: Maximum difference in relative importance
+-   **memory strength**: Maximum difference in relative importance
     between each component (endogenous, exogenous, and concurrent) and
     the median of the random component. This is computed for exogenous,
     endogenous, and concurrent effect.
 
-  - **memory length**: Proportion of lags over which the importance of a
+-   **memory length**: Proportion of lags over which the importance of a
     memory component is above the median of the random component. This
     is only computed for endogenous and exogenous memory.
 
-  - **dominance**: Proportion of the lags above the median of the random
+-   **dominance**: Proportion of the lags above the median of the random
     term over which a memory component has a higher importance than the
     other component. This is only computed for endogenous and exogenous
     memory.
-
-<!-- end list -->
 
 ``` r
 memory.features <- extractMemoryFeatures(
@@ -403,117 +417,60 @@ kable(memory.features)
 ```
 
 <table>
-
 <thead>
-
 <tr>
-
 <th style="text-align:left;">
-
 label
-
 </th>
-
 <th style="text-align:right;">
-
 strength.endogenous
-
 </th>
-
 <th style="text-align:right;">
-
 strength.exogenous
-
 </th>
-
 <th style="text-align:right;">
-
 strength.concurrent
-
 </th>
-
 <th style="text-align:right;">
-
 length.endogenous
-
 </th>
-
 <th style="text-align:right;">
-
 length.exogenous
-
 </th>
-
 <th style="text-align:right;">
-
 dominance.endogenous
-
 </th>
-
 <th style="text-align:right;">
-
 dominance.exogenous
-
 </th>
-
 </tr>
-
 </thead>
-
 <tbody>
-
 <tr>
-
 <td style="text-align:left;">
-
 1
-
 </td>
-
 <td style="text-align:right;">
-
-17.0399
-
+18.20904
 </td>
-
 <td style="text-align:right;">
-
 0
-
 </td>
-
 <td style="text-align:right;">
-
-\-3.626817
-
+-2.561041
 </td>
-
 <td style="text-align:right;">
-
 0.4
-
 </td>
-
 <td style="text-align:right;">
-
 0
-
 </td>
-
 <td style="text-align:right;">
-
 0.4
-
 </td>
-
 <td style="text-align:right;">
-
 0
-
 </td>
-
 </tr>
-
 </tbody>
-
 </table>
