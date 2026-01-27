@@ -150,7 +150,7 @@ mergePalaeoData <- function(
     for (column.to.interpolate in colnames.temp) {
       #do not interpolate non-numeric columns
       if (
-        !is.numeric(temp[, column.to.interpolate]) |
+        !is.numeric(temp[, column.to.interpolate]) ||
           column.to.interpolate == time.column
       ) {
         next

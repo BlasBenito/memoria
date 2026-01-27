@@ -263,7 +263,10 @@ extractMemoryFeatures <- function(
   }
 
   #rescaling strength components
-  if (length(taxa) > 1 | !("this" %in% sampling)) {
+  if (
+    length(taxa) > 1 ||
+      !("this" %in% sampling)
+  ) {
     if (scale.strength) {
       output.df$strength.concurrent <- output.df$strength.concurrent /
         max(output.df$strength.concurrent)

@@ -147,8 +147,8 @@ prepareLaggedData <- function(
 
   #if the first sample is the oldest one, lags have to be negative
   if (
-    oldest.sample == "first" |
-      oldest.sample == "First" |
+    oldest.sample == "first" ||
+      oldest.sample == "First" ||
       oldest.sample == "FIRST"
   ) {
     lags.to.rows <- -lags.to.rows
@@ -156,7 +156,9 @@ prepareLaggedData <- function(
 
   #if the last sample is the oldest one, lags have to be positive
   if (
-    oldest.sample == "last" | oldest.sample == "Last" | oldest.sample == "LAST"
+    oldest.sample == "last" ||
+      oldest.sample == "Last" ||
+      oldest.sample == "LAST"
   ) {
     lags.to.rows <- abs(lags.to.rows)
   }

@@ -284,7 +284,7 @@ computeMemory <- function(
     if (subset.response == "down") {
       lagged.data.model <- lagged.data[subset.vector == "down", ]
     }
-    if (subset.response == "none" | is.null(subset.response)) {
+    if (subset.response == "none" || is.null(subset.response)) {
       lagged.data.model <- lagged.data
     }
     lagged.data.model <- na.omit(lagged.data.model)
@@ -346,7 +346,7 @@ computeMemory <- function(
       rbind,
       strsplit(as.character(importance.df$Variable), '_', fixed = TRUE)
     ),
-    stringsAsFactors = F
+    stringsAsFactors = FALSE
   )
   importance.df$Variable <- NULL
   names(importance.df)[5:6] <- c("Variable", "Lag")
@@ -375,7 +375,7 @@ computeMemory <- function(
 
   #setting the median of random to 0 if it is negative (only important when white.noise is selected)
   if (
-    random.mode == "white.noise" &
+    random.mode == "white.noise" &&
       importance.df[importance.df$Variable == "Random", "median"][1] < 0
   ) {
     importance.df[importance.df$Variable == "Random", "median"] <- 0

@@ -109,7 +109,7 @@ plotExperiment <- function(
     theme(legend.position = legend.position) +
     labs(caption = caption)
 
-  if (!is.null(filename) & is.character(filename)) {
+  if (!is.null(filename) && is.character(filename)) {
     ggsave(
       filename = paste(filename, ".pdf", sep = ""),
       width = length(unique(simulation.df$sampling)) * 4,
