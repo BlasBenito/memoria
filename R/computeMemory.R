@@ -92,66 +92,100 @@
 #'}
 #'
 #' @export
-computeMemory <- function(lagged.data = NULL,
-                         drivers = NULL,
-                         response = "Response",
-                         add.random = TRUE,
-                         random.mode = "autocorrelated",
-                         repetitions = 10,
-                         subset.response = "none",
-                         min.node.size = 5,
-                         num.trees = 2000,
-                         mtry = 2
-                         ){
-
+computeMemory <- function(
+  lagged.data = NULL,
+  drivers = NULL,
+  response = "Response",
+  add.random = TRUE,
+  random.mode = "autocorrelated",
+  repetitions = 10,
+  subset.response = "none",
+  min.node.size = 5,
+  num.trees = 2000,
+  mtry = 2
+) {
   #checking data
-  if(inherits(lagged.data, "data.frame") == FALSE){stop("The input data must be a dataframe produced by prepareLaggedData.")}
+  if (inherits(lagged.data, "data.frame") == FALSE) {
+    stop("The input data must be a dataframe produced by prepareLaggedData.")
+  }
 
   #checking drivers
-  if(is.character(drivers) == FALSE){stop("Argument drivers should be a character vector with column names of lagged.data to be used as predictors in the model.")}
+  if (is.character(drivers) == FALSE) {
+    stop(
+      "Argument drivers should be a character vector with column names of lagged.data to be used as predictors in the model."
+    )
+  }
 
   #checking response
-  if(is.character(response) == FALSE){stop("Argument response should be a character vector with a column name of lagged.data to be used as response in the model. If lagged.data was prepared with prepareLaggedData, the response column is likely named 'Response'.")}
+  if (is.character(response) == FALSE) {
+    stop(
+      "Argument response should be a character vector with a column name of lagged.data to be used as response in the model. If lagged.data was prepared with prepareLaggedData, the response column is likely named 'Response'."
+    )
+  }
 
   #checking random.mode
-  if(!(random.mode %in% c("autocorrelated", "correlated", "autocor", "white.noise", "white", "noise"))){
+  if (
+    !(random.mode %in%
+      c(
+        "autocorrelated",
+        "correlated",
+        "autocor",
+        "white.noise",
+        "white",
+        "noise"
+      ))
+  ) {
     message("Setting random.mode to 'autocorrelated'.")
     random.mode <- "autocorrelated"
   }
 
   #checking repetitions
-  if(is.numeric(repetitions) == FALSE){repetitions <- 10}
-  if(is.integer(repetitions) == FALSE){repetitions <- as.integer(repetitions)}
+  if (is.numeric(repetitions) == FALSE) {
+    repetitions <- 10
+  }
+  if (is.integer(repetitions) == FALSE) {
+    repetitions <- as.integer(repetitions)
+  }
 
   #checking min.node.size
-  if(min.node.size < 5){
-    message("Argument min.node.size should be equal or higher than 5, I am setting it to 5.")
+  if (min.node.size < 5) {
+    message(
+      "Argument min.node.size should be equal or higher than 5, I am setting it to 5."
+    )
     min.node.size <- 5
   }
 
-  if(num.trees < 500){
-    message("Argument num.trees should be equal or higher than 500, I am setting it to 500.")
+  if (num.trees < 500) {
+    message(
+      "Argument num.trees should be equal or higher than 500, I am setting it to 500."
+    )
     num.trees <- 500
   }
 
-  if(mtry < 2){
-    message("Argument mtry should be equal or higher than 2, I am setting it to 2")
+  if (mtry < 2) {
+    message(
+      "Argument mtry should be equal or higher than 2, I am setting it to 2"
+    )
     mtry <- 2
   }
 
   #function to add random columns to a dataframe for testing purposes
-  addRandomColumn <- function(x, random.mode = "autocorrelated"){
-
-    if(random.mode %in% c("autocorrelated", "correlated", "autocor")){
-
+  addRandomColumn <- function(x, random.mode = "autocorrelated") {
+    if (random.mode %in% c("autocorrelated", "correlated", "autocor")) {
       #generating the data
-      x$Random = as.vector(rescaleVector(filter(rnorm(nrow(x)),
-                                                filter=rep(1, sample(1:floor(nrow(x)/4), 1)),
-                                                method="convolution",
-                                                circular=TRUE), new.max = 1, new.min=0))
+      x$Random = as.vector(rescaleVector(
+        filter(
+          rnorm(nrow(x)),
+          filter = rep(1, sample(1:floor(nrow(x) / 4), 1)),
+          method = "convolution",
+          circular = TRUE
+        ),
+        new.max = 1,
+        new.min = 0
+      ))
     }
 
-    if(random.mode %in% c("white.noise", "white", "noise")){
+    if (random.mode %in% c("white.noise", "white", "noise")) {
       x$Random = rnorm(nrow(x))
     }
 
@@ -159,40 +193,41 @@ computeMemory <- function(lagged.data = NULL,
   }
 
   #function to rescale vectors between given bounds
-  rescaleVector <- function(x = rnorm(100),
-                            new.min = 0,
-                            new.max = 100,
-                            integer = FALSE){
-
-
+  rescaleVector <- function(
+    x = rnorm(100),
+    new.min = 0,
+    new.max = 100,
+    integer = FALSE
+  ) {
     #data extremes
     old.min = min(x)
     old.max = max(x)
-
 
     #SCALING VECTOR
     #----------------------
 
     x = ((x - old.min) / (old.max - old.min)) * (new.max - new.min) + new.min
 
-
     #FORCES VECTOR INTO INTEGER
     #----------------------
 
-    if(integer == TRUE){
+    if (integer == TRUE) {
       x = floor(x)
     }
 
     return(x)
-
   }
 
   #removing age column
   lagged.data$time = NULL
 
   #removing variables not in drivers
-  if(length(drivers)>1){driver.string <- paste(drivers, collapse="|")} else {driver.string <- drivers}
-  string.pattern <- paste(response, "|", driver.string, sep="")
+  if (length(drivers) > 1) {
+    driver.string <- paste(drivers, collapse = "|")
+  } else {
+    driver.string <- drivers
+  }
+  string.pattern <- paste(response, "|", driver.string, sep = "")
   lagged.data <- lagged.data[, grepl(string.pattern, colnames(lagged.data))]
 
   #multicollinearity
@@ -200,7 +235,9 @@ computeMemory <- function(lagged.data = NULL,
     df = lagged.data,
     predictors = colnames(lagged.data)[2:ncol(lagged.data)]
   )
-  colnames(multicollinearity)[colnames(multicollinearity) == "predictor"] <- "variable"
+  colnames(multicollinearity)[
+    colnames(multicollinearity) == "predictor"
+  ] <- "variable"
 
   #object to store outputs
   importance.list <- list()
@@ -211,14 +248,24 @@ computeMemory <- function(lagged.data = NULL,
   lagged.data$subset.column <- NA
 
   #response string (checking if there is a 0 or not in the response)
-  if(stringr::str_detect(response, "_0") == FALSE){response <- paste(response, "_0", sep="")}
-  if(!(response %in% colnames(lagged.data))){stop("Response variable not found in the input data.")}
+  if (stringr::str_detect(response, "_0") == FALSE) {
+    response <- paste(response, "_0", sep = "")
+  }
+  if (!(response %in% colnames(lagged.data))) {
+    stop("Response variable not found in the input data.")
+  }
 
   #adding labels
-  for(i in 1:(nrow(lagged.data)-1)){
-    if(lagged.data[i+1, response] > lagged.data[i, response]){lagged.data[i, "subset.column"] <- "up"}
-    if(lagged.data[i+1, response] < lagged.data[i, response]){lagged.data[i, "subset.column"] <- "down"}
-    if(lagged.data[i+1, response] == lagged.data[i, response]){lagged.data[i, "subset.column"] <- "stable"}
+  for (i in 1:(nrow(lagged.data) - 1)) {
+    if (lagged.data[i + 1, response] > lagged.data[i, response]) {
+      lagged.data[i, "subset.column"] <- "up"
+    }
+    if (lagged.data[i + 1, response] < lagged.data[i, response]) {
+      lagged.data[i, "subset.column"] <- "down"
+    }
+    if (lagged.data[i + 1, response] == lagged.data[i, response]) {
+      lagged.data[i, "subset.column"] <- "stable"
+    }
   }
 
   subset.vector <- lagged.data$subset.column
@@ -227,20 +274,28 @@ computeMemory <- function(lagged.data = NULL,
   # cat("Repetition: ")
 
   #iterating through repetitions
-  for(i in 1:repetitions){
-
+  for (i in 1:repetitions) {
     # cat(i, " ")
 
     #subsetting according to user choice
-    if(subset.response == "up"){lagged.data.model <- lagged.data[subset.vector == "up", ]}
-    if(subset.response == "down"){lagged.data.model <- lagged.data[subset.vector == "down", ]}
-    if(subset.response == "none" | is.null(subset.response)){lagged.data.model <- lagged.data}
+    if (subset.response == "up") {
+      lagged.data.model <- lagged.data[subset.vector == "up", ]
+    }
+    if (subset.response == "down") {
+      lagged.data.model <- lagged.data[subset.vector == "down", ]
+    }
+    if (subset.response == "none" | is.null(subset.response)) {
+      lagged.data.model <- lagged.data
+    }
     lagged.data.model <- na.omit(lagged.data.model)
 
     #adding random column
-    if(add.random == TRUE){
-      lagged.data.model <- addRandomColumn(x=lagged.data.model, random.mode = random.mode)
-    }#end of adding random column
+    if (add.random == TRUE) {
+      lagged.data.model <- addRandomColumn(
+        x = lagged.data.model,
+        random.mode = random.mode
+      )
+    } #end of adding random column
 
     #fitting random forest
     model.output <- ranger::ranger(
@@ -260,12 +315,15 @@ computeMemory <- function(lagged.data = NULL,
     importance.list[[i]] <- data.frame(t(ranger::importance(model.output)))
 
     #prediction
-    prediction <- predict(object=model.output, data=lagged.data.model, type="response")$predictions
+    prediction <- predict(
+      object = model.output,
+      data = lagged.data.model,
+      type = "response"
+    )$predictions
     predictions.list[[i]] <- data.frame(t(prediction))
 
     #pseudo R.squared
     pseudo.R2[i] <- cor(lagged.data.model[, response], prediction)^2
-
   } #end of repetitions
 
   #computing stats of repetitions
@@ -273,37 +331,67 @@ computeMemory <- function(lagged.data = NULL,
   importance.df <- do.call("rbind", importance.list)
 
   #processing output for plotting
-  importance.df <- data.frame(Variable=colnames(importance.df),
-                              median=apply(importance.df, 2, median),
-                              sd=apply(importance.df, 2, sd),
-                              min=apply(importance.df, 2, quantile, probs=0.05),
-                              max=apply(importance.df, 2, quantile, probs=0.95))
+  importance.df <- data.frame(
+    Variable = colnames(importance.df),
+    median = apply(importance.df, 2, median),
+    sd = apply(importance.df, 2, sd),
+    min = apply(importance.df, 2, quantile, probs = 0.05),
+    max = apply(importance.df, 2, quantile, probs = 0.95)
+  )
 
   #separating variable name from lag
-  importance.df <- transform(importance.df, test=do.call(rbind, strsplit(as.character(importance.df$Variable),'_',fixed=TRUE)), stringsAsFactors=F)
-  importance.df$Variable=NULL
+  importance.df <- transform(
+    importance.df,
+    test = do.call(
+      rbind,
+      strsplit(as.character(importance.df$Variable), '_', fixed = TRUE)
+    ),
+    stringsAsFactors = F
+  )
+  importance.df$Variable = NULL
   names(importance.df)[5:6] <- c("Variable", "Lag")
 
   #removing the word "Random" fromt he lag column
   importance.df[importance.df$Variable == importance.df$Lag, "Lag"] <- 0
 
   #repeating the random variable
-  if(add.random == TRUE){
-    importance.df <- rbind(importance.df, importance.df[rep(which(importance.df$Variable == "Random"), each=length(na.omit(unique(importance.df$Lag)))-1),])
-    importance.df[importance.df$Variable == "Random", "Lag"] <- na.omit(unique(importance.df$Lag))
+  if (add.random == TRUE) {
+    importance.df <- rbind(
+      importance.df,
+      importance.df[
+        rep(
+          which(importance.df$Variable == "Random"),
+          each = length(na.omit(unique(importance.df$Lag))) - 1
+        ),
+      ]
+    )
+    importance.df[importance.df$Variable == "Random", "Lag"] <- na.omit(unique(
+      importance.df$Lag
+    ))
   }
 
   #setting the floor of random at 0
   importance.df[importance.df$Variable == "Random", "min"] <- 0
 
   #setting the median of random to 0 if it is negative (only important when white.noise is selected)
-  if(random.mode == "white.noise" & importance.df[importance.df$Variable == "Random", "median"][1] < 0){importance.df[importance.df$Variable == "Random", "median"] <- 0}
+  if (
+    random.mode == "white.noise" &
+      importance.df[importance.df$Variable == "Random", "median"][1] < 0
+  ) {
+    importance.df[importance.df$Variable == "Random", "median"] <- 0
+  }
 
   #variable as factor
-  if(add.random == TRUE){
-    importance.df$Variable <- factor(importance.df$Variable, levels=c("Response", drivers, "Random"))
+  if (add.random == TRUE) {
+    importance.df$Variable <- factor(
+      importance.df$Variable,
+      levels = c("Response", drivers, "Random")
+    )
   } else {
-    importance.df$Variable <- factor(importance.df$Variable, levels=c("Response", drivers))
+    importance.df$Variable <- factor(
+      importance.df$Variable,
+      levels = c("Response", drivers)
+    )
   }
 
   #lag to numeric
@@ -311,11 +399,13 @@ computeMemory <- function(lagged.data = NULL,
 
   #aggregating predictions
   predictions.aggregated <- do.call("rbind", predictions.list)
-  predictions.aggregated <- data.frame(variable=colnames(predictions.aggregated),
-                                       median=apply(predictions.aggregated, 2, median),
-                                       sd=apply(predictions.aggregated, 2, sd),
-                                       min=apply(predictions.aggregated, 2, quantile, probs=0.05),
-                                       max=apply(predictions.aggregated, 2, quantile, probs=0.95))
+  predictions.aggregated <- data.frame(
+    variable = colnames(predictions.aggregated),
+    median = apply(predictions.aggregated, 2, median),
+    sd = apply(predictions.aggregated, 2, sd),
+    min = apply(predictions.aggregated, 2, quantile, probs = 0.05),
+    max = apply(predictions.aggregated, 2, quantile, probs = 0.95)
+  )
   predictions.aggregated$variable <- NULL
 
   #output

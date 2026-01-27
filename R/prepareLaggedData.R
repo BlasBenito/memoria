@@ -50,101 +50,154 @@
 #'str(lagged.data)
 #'
 #' @export
-prepareLaggedData = function(input.data = NULL,
-                             response = NULL,
-                             drivers = NULL,
-                             time = NULL,
-                             oldest.sample = "first",
-                             lags = NULL,
-                             time.zoom = NULL,
-                             scale = FALSE){
-
+prepareLaggedData = function(
+  input.data = NULL,
+  response = NULL,
+  drivers = NULL,
+  time = NULL,
+  oldest.sample = "first",
+  lags = NULL,
+  time.zoom = NULL,
+  scale = FALSE
+) {
   #testing input data
-  if(inherits(input.data, "data.frame") == FALSE){stop("Argument input.data must be a dataframe.")}
-  if(is.character(response) == FALSE){
+  if (inherits(input.data, "data.frame") == FALSE) {
+    stop("Argument input.data must be a dataframe.")
+  }
+  if (is.character(response) == FALSE) {
     stop("Argument response must be a character string.")
   } else {
-      if(!(response %in% colnames(input.data))){stop("The response column does not exist in input.data.")}
-  }
-
-  if(is.character(drivers) == FALSE){
-    stop("Argument drivers must be a character string or character vector.")
-  } else {
-    for(driver in drivers){
-    if(!(driver %in% colnames(input.data))){stop(paste("The driver ", driver,  " column does not exist in input.data.", sep=""))}
+    if (!(response %in% colnames(input.data))) {
+      stop("The response column does not exist in input.data.")
     }
   }
 
-  if(is.character(time) == FALSE){
+  if (is.character(drivers) == FALSE) {
+    stop("Argument drivers must be a character string or character vector.")
+  } else {
+    for (driver in drivers) {
+      if (!(driver %in% colnames(input.data))) {
+        stop(paste(
+          "The driver ",
+          driver,
+          " column does not exist in input.data.",
+          sep = ""
+        ))
+      }
+    }
+  }
+
+  if (is.character(time) == FALSE) {
     stop("Argument time must be a character string.")
   } else {
-    if(!(time %in% colnames(input.data))){stop("The time column do not exist in input.data.")}
+    if (!(time %in% colnames(input.data))) {
+      stop("The time column do not exist in input.data.")
+    }
   }
 
-  if(!(oldest.sample %in% c("first", "FIRST", "First", "last", "LAST", "Last"))){
+  if (
+    !(oldest.sample %in% c("first", "FIRST", "First", "last", "LAST", "Last"))
+  ) {
     oldest.sample <- "first"
-    message("Argument oldest.sample was not defined, I am setting it up to 'first'. Check the help file for more details.")
+    message(
+      "Argument oldest.sample was not defined, I am setting it up to 'first'. Check the help file for more details."
+    )
   }
 
-  if(is.null(time.zoom) == FALSE){
-    if(max(time.zoom) > max(input.data[, time])){stop("Maximum of time.zoom should be lower or equal than the maximum of the time/age column.")}
-    if(min(time.zoom) < min(input.data[, time])){stop("Minimum of time.zoom should be higher or equal than the minimum of the time/age column.")}
+  if (is.null(time.zoom) == FALSE) {
+    if (max(time.zoom) > max(input.data[, time])) {
+      stop(
+        "Maximum of time.zoom should be lower or equal than the maximum of the time/age column."
+      )
+    }
+    if (min(time.zoom) < min(input.data[, time])) {
+      stop(
+        "Minimum of time.zoom should be higher or equal than the minimum of the time/age column."
+      )
+    }
   }
 
   #testing if lags are regular
   diff.lags <- vector()
-  for(i in length(lags):2){
-    diff.lags <- c(diff.lags, lags[i] - lags[i-1])
+  for (i in length(lags):2) {
+    diff.lags <- c(diff.lags, lags[i] - lags[i - 1])
   }
-  if(round(sd(diff.lags), 2) != 0){stop("Numeric sequence provided in argument lags is not regular.")}
+  if (round(sd(diff.lags), 2) != 0) {
+    stop("Numeric sequence provided in argument lags is not regular.")
+  }
 
   #computing data resolution to adjust lags for the annual resolution dataset
   temporal.resolution = input.data[2, time] - input.data[1, time]
 
   #converting lags from years to cases to be used as lags
-  lags.to.rows <- round(lags/temporal.resolution, 0)
+  lags.to.rows <- round(lags / temporal.resolution, 0)
 
   #testing lags.to.rows
-  if(length(unique(lags.to.rows)) != length(lags.to.rows)){stop("There is something wrong with the lags argument, I cannot translate lags into row indexes without repeating indexes. Probably lags are not defined in the same units as time/age. Take in mind that lags must be in the same units as the time/age column, and must be multiples of the time resolution (i.e. if time resolution is 100, valid lags are 0, 100, 200, 300, etc)")}
+  if (length(unique(lags.to.rows)) != length(lags.to.rows)) {
+    stop(
+      "There is something wrong with the lags argument, I cannot translate lags into row indexes without repeating indexes. Probably lags are not defined in the same units as time/age. Take in mind that lags must be in the same units as the time/age column, and must be multiples of the time resolution (i.e. if time resolution is 100, valid lags are 0, 100, 200, 300, etc)"
+    )
+  }
 
   #adds 0 to lags if it's not
-  if(!(0 %in% lags)){
+  if (!(0 %in% lags)) {
     lags.to.rows <- c(0, lags.to.rows)
     lags <- c(0, lags)
   }
 
   #if the first sample is the oldest one, lags have to be negative
-  if(oldest.sample == "first" | oldest.sample == "First" | oldest.sample == "FIRST"){
+  if (
+    oldest.sample == "first" |
+      oldest.sample == "First" |
+      oldest.sample == "FIRST"
+  ) {
     lags.to.rows <- -lags.to.rows
   }
 
   #if the last sample is the oldest one, lags have to be positive
-  if(oldest.sample == "last" | oldest.sample == "Last" | oldest.sample == "LAST"){
+  if (
+    oldest.sample == "last" | oldest.sample == "Last" | oldest.sample == "LAST"
+  ) {
     lags.to.rows <- abs(lags.to.rows)
   }
 
   #apply time.zoom if so
-  if(!is.null(time.zoom) & is.vector(time.zoom) & is.numeric(time.zoom) & length(time.zoom) == 2){
-    input.data <- input.data[input.data[, time] >= time.zoom[1] & input.data[, time] <= time.zoom[2], ]
+  if (
+    !is.null(time.zoom) &
+      is.vector(time.zoom) &
+      is.numeric(time.zoom) &
+      length(time.zoom) == 2
+  ) {
+    input.data <- input.data[
+      input.data[, time] >= time.zoom[1] & input.data[, time] <= time.zoom[2],
+    ]
   }
 
   #computing lags of the response
-  response.lags <- do.call("merge", lapply(lags.to.rows, function(lag.to.row) lag(zoo::as.zoo(input.data[,response]), lag.to.row)))
+  response.lags <- do.call(
+    "merge",
+    lapply(lags.to.rows, function(lag.to.row) {
+      lag(zoo::as.zoo(input.data[, response]), lag.to.row)
+    })
+  )
 
   #naming columns
   colnames(response.lags) <- paste("Response", lags, sep = "_")
 
   #driver lags
-  for(driver in drivers){
-
-    driver.lags <- do.call("merge", lapply(lags.to.rows, function(lag.to.row) lag(zoo::as.zoo(input.data[,driver]), lag.to.row)))
+  for (driver in drivers) {
+    driver.lags <- do.call(
+      "merge",
+      lapply(lags.to.rows, function(lag.to.row) {
+        lag(zoo::as.zoo(input.data[, driver]), lag.to.row)
+      })
+    )
 
     #naming columns
     colnames(driver.lags) <- paste(driver, lags, sep = "_")
 
     #joining with response lags
     response.lags <- cbind(response.lags, driver.lags)
-
   }
 
   #removing NA
@@ -155,12 +208,11 @@ prepareLaggedData = function(input.data = NULL,
   response.lags$time <- NULL
 
   #scaling data
-  if(scale == TRUE){
+  if (scale == TRUE) {
     response.lags <- data.frame(scale(response.lags), time)
   } else {
     response.lags <- data.frame(response.lags, time)
   }
 
   return(response.lags)
-
 }

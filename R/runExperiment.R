@@ -58,25 +58,26 @@
 #' @seealso \code{\link{computeMemory}}
 #'
 #' @export
-runExperiment <- function(simulations.file = NULL,
-                         selected.rows = 1,
-                         selected.columns = 1,
-                         parameters.file = NULL,
-                         parameters.names = NULL,
-                         sampling.names = NULL,
-                         driver.column = NULL,
-                         response.column = "Response_0",
-                         subset.response="none",
-                         time.column = "Time",
-                         time.zoom = NULL,
-                         lags = NULL,
-                         repetitions = 10){
-
+runExperiment <- function(
+  simulations.file = NULL,
+  selected.rows = 1,
+  selected.columns = 1,
+  parameters.file = NULL,
+  parameters.names = NULL,
+  sampling.names = NULL,
+  driver.column = NULL,
+  response.column = "Response_0",
+  subset.response = "none",
+  time.column = "Time",
+  time.zoom = NULL,
+  lags = NULL,
+  repetitions = 10
+) {
   #subsetting simulations file
   #checking if it has one column only
-  if(selected.columns == 1){
+  if (selected.columns == 1) {
     data.list <- simulations.file[selected.rows]
-    if(length(sampling.names) > 1){
+    if (length(sampling.names) > 1) {
       sampling.names <- sampling.names[1]
     }
   } else {
@@ -92,81 +93,93 @@ runExperiment <- function(simulations.file = NULL,
   #generating names matrix
   #-----------------------
   #getting parameter names and values
-  if(length(parameters.names) == 1){
-
+  if (length(parameters.names) == 1) {
     temp.parameters <- data.frame(parameters.list[, parameters.names])
     colnames(temp.parameters) <- parameters.names
-
   } else {
-
     temp.parameters <- parameters.list[, parameters.names]
-
   }
 
   #joining parameter name and parameter values
-  for(current.column in 1:ncol(temp.parameters)){
-
-    temp.parameters[,current.column] <- paste(colnames(temp.parameters)[current.column], ": ", temp.parameters[,current.column], sep = "")
-
+  for (current.column in 1:ncol(temp.parameters)) {
+    temp.parameters[, current.column] <- paste(
+      colnames(temp.parameters)[current.column],
+      ": ",
+      temp.parameters[, current.column],
+      sep = ""
+    )
   }
 
   #different parameters together
-  if(length(parameters.names) > 1){
-    temp.parameters <- data.frame(parameters = apply(temp.parameters[ , ] , 1 , paste , collapse = "; " ))
+  if (length(parameters.names) > 1) {
+    temp.parameters <- data.frame(
+      parameters = apply(temp.parameters[,], 1, paste, collapse = "; ")
+    )
   }
 
   #to matrix
   temp.parameters <- as.matrix(temp.parameters)
 
   #parameters with sampling names
-  sampling.names.matrix <- matrix(rep(sampling.names, length(selected.rows)), nrow = length(selected.rows), ncol = length(selected.columns), byrow = TRUE)
+  sampling.names.matrix <- matrix(
+    rep(sampling.names, length(selected.rows)),
+    nrow = length(selected.rows),
+    ncol = length(selected.columns),
+    byrow = TRUE
+  )
 
   #these are the simulation names
-  simulation.names <- matrix(paste(temp.parameters, sampling.names.matrix, sep = "; sampling: "), nrow = length(selected.rows), ncol = length(selected.columns), byrow = FALSE)
+  simulation.names <- matrix(
+    paste(temp.parameters, sampling.names.matrix, sep = "; sampling: "),
+    nrow = length(selected.rows),
+    ncol = length(selected.columns),
+    byrow = FALSE
+  )
 
   #RUNNING ANALYSIS FOR EACH CASE
-  if(is.null(dim(data.list))){
-    list.rows<-length(data.list)
-    list.columns<-1
+  if (is.null(dim(data.list))) {
+    list.rows <- length(data.list)
+    list.columns <- 1
   } else {
-    list.rows<-dim(data.list)[1]
-    list.columns<-dim(data.list)[2]
+    list.rows <- dim(data.list)[1]
+    list.columns <- dim(data.list)[2]
   }
 
-  for(data.list.row in 1:list.rows){
-    for(data.list.column in 1:list.columns){
-
+  for (data.list.row in 1:list.rows) {
+    for (data.list.column in 1:list.columns) {
       #info
       #cat(paste("\n Row: ", data.list.row, "; Column: ", data.list.column, "; Model: ", simulation.names[data.list.row, data.list.column], "\n", sep = ""))
 
       #retrieves data
-      if(list.columns > 1){
+      if (list.columns > 1) {
         simulation.data <- data.list[[data.list.row, data.list.column]]
-
       } else {
-
         simulation.data <- data.list[[data.list.row]]
       }
 
       #adds lags
-      simulation.data.lagged <- prepareLaggedData(input.data = simulation.data,
-                                                 response = response.column,
-                                                 drivers = driver.column,
-                                                 time = time.column,
-                                                 lags = lags,
-                                                 time.zoom = time.zoom)
+      simulation.data.lagged <- prepareLaggedData(
+        input.data = simulation.data,
+        response = response.column,
+        drivers = driver.column,
+        time = time.column,
+        lags = lags,
+        time.zoom = time.zoom
+      )
 
       #fitting model
-      simulation.data.memory <- computeMemory(lagged.data = simulation.data.lagged,
-                                             drivers = driver.column,
-                                             repetitions = repetitions,
-                                             add.random = TRUE,
-                                             random.mode = "autocorrelated",
-                                             response = "Response",
-                                             subset.response = subset.response)
+      simulation.data.memory <- computeMemory(
+        lagged.data = simulation.data.lagged,
+        drivers = driver.column,
+        repetitions = repetitions,
+        add.random = TRUE,
+        random.mode = "autocorrelated",
+        response = "Response",
+        subset.response = subset.response
+      )
 
       #saves result
-      if(list.columns > 1){
+      if (list.columns > 1) {
         output.list[[data.list.row, data.list.column]] <- simulation.data.memory
       } else {
         output.list[[data.list.row]] <- simulation.data.memory
@@ -174,7 +187,6 @@ runExperiment <- function(simulations.file = NULL,
 
       #clears RAM space
       gc()
-
     } #end of iterations through rows
   } #end of iterations through columns
 
@@ -182,5 +194,4 @@ runExperiment <- function(simulations.file = NULL,
   list.to.return$names <- simulation.names
   list.to.return$output <- output.list
   return(list.to.return)
-
 } #end of function

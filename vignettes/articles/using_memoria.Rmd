@@ -1,59 +1,22 @@
 ---
-title: 'Using "memoria" and "virtualPollen" together'
-subtitle: 'Quantifying ecological memory of virtual pollen curves'
-author: "Blas M. Benito"
-fig_width: 6
-output: rmarkdown::html_vignette
-vignette: >
-  %\VignetteIndexEntry{Using memoria}
-  %\VignetteEngine{knitr::rmarkdown}
-  \usepackage[utf8]{inputenc}
+title: "Using 'memoria' and 'virtualPollen' together"
+output: 
+  rmarkdown::html_document:
+    toc: true
+    toc_title: "Content"
+    source: false
 ---
 
-<!-- --- -->
-<!-- title: 'Using "memoria" and "virtualPollen" together' -->
-<!-- subtitle: 'Quantifying ecological memory of virtual pollen curves' -->
-<!-- author: "Blas M. Benito" -->
-<!-- output: -->
-<!--   pdf_document:  -->
-<!--     df_print: kable -->
-<!--     fig_caption: yes -->
-<!--     fig_width: 9 -->
-<!--     highlight: tango -->
-<!--     includes: -->
-<!--       in_header: header.tex -->
-<!--     keep_tex: yes -->
-<!--     latex_engine: xelatex -->
-<!--     number_sections: yes -->
-<!--     toc: yes -->
-<!--     toc_depth: 2 -->
-<!-- code_folding: show -->
-<!-- --- -->
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  eval = TRUE,
+  collapse = TRUE,
+  comment = "#>",
+  out.width = "100%"
+)
+```
 
 
-
-<!-- knit_hooks$set(document  =  function(x) {sub('\\usepackage[]{color}', '\\usepackage{xcolor}', x, fixed = TRUE)}) -->
-
-<!-- main info on pdf and notebooks -->
-<!-- http://rmarkdown.rstudio.com/pdf_document_format.html#latex_engine -->
-
-<!-- check xelatex fonts -->
-<!-- fc-list : family -->
-<!-- fc-list :fontformat = TrueType -->
-
-<!-- Equations cheatsheet -->
-<!-- $a_{b}$ -->
-<!-- $a^{b}$ -->
-<!-- $\alpha, \beta, \ldots$ -->
-<!-- $\sum_{n = 1}^N$ -->
-<!-- $\times$ -->
-<!-- $\prod_{n = 1}^N$ -->
-<!-- $<, \leq, \geq$ -->
-<!-- $\sim$ -->
-<!-- $\widehat{\alpha}$ -->
-<!-- $\bar{x}$ -->
-<!-- $\frac{a}{b}$ -->
-<!-- $\left(\frac{a}{b}\right)$ -->
 
 ```{r, echo = FALSE, warning = FALSE, message = FALSE, eval=FALSE}
 
