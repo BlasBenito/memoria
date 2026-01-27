@@ -50,7 +50,7 @@
 #'str(lagged.data)
 #'
 #' @export
-prepareLaggedData = function(
+prepareLaggedData <- function(
   input.data = NULL,
   response = NULL,
   drivers = NULL,
@@ -61,10 +61,10 @@ prepareLaggedData = function(
   scale = FALSE
 ) {
   #testing input data
-  if (inherits(input.data, "data.frame") == FALSE) {
+  if (!inherits(input.data, "data.frame")) {
     stop("Argument input.data must be a dataframe.")
   }
-  if (is.character(response) == FALSE) {
+  if (!is.character(response)) {
     stop("Argument response must be a character string.")
   } else {
     if (!(response %in% colnames(input.data))) {
@@ -72,7 +72,7 @@ prepareLaggedData = function(
     }
   }
 
-  if (is.character(drivers) == FALSE) {
+  if (!is.character(drivers)) {
     stop("Argument drivers must be a character string or character vector.")
   } else {
     for (driver in drivers) {
@@ -87,7 +87,7 @@ prepareLaggedData = function(
     }
   }
 
-  if (is.character(time) == FALSE) {
+  if (!is.character(time)) {
     stop("Argument time must be a character string.")
   } else {
     if (!(time %in% colnames(input.data))) {
@@ -104,7 +104,7 @@ prepareLaggedData = function(
     )
   }
 
-  if (is.null(time.zoom) == FALSE) {
+  if (!is.null(time.zoom)) {
     if (max(time.zoom) > max(input.data[, time])) {
       stop(
         "Maximum of time.zoom should be lower or equal than the maximum of the time/age column."
@@ -127,7 +127,7 @@ prepareLaggedData = function(
   }
 
   #computing data resolution to adjust lags for the annual resolution dataset
-  temporal.resolution = input.data[2, time] - input.data[1, time]
+  temporal.resolution <- input.data[2, time] - input.data[1, time]
 
   #converting lags from years to cases to be used as lags
   lags.to.rows <- round(lags / temporal.resolution, 0)
@@ -163,9 +163,9 @@ prepareLaggedData = function(
 
   #apply time.zoom if so
   if (
-    !is.null(time.zoom) &
-      is.vector(time.zoom) &
-      is.numeric(time.zoom) &
+    !is.null(time.zoom) &&
+      is.vector(time.zoom) &&
+      is.numeric(time.zoom) &&
       length(time.zoom) == 2
   ) {
     input.data <- input.data[
@@ -208,7 +208,7 @@ prepareLaggedData = function(
   response.lags$time <- NULL
 
   #scaling data
-  if (scale == TRUE) {
+  if (scale) {
     response.lags <- data.frame(scale(response.lags), time)
   } else {
     response.lags <- data.frame(response.lags, time)

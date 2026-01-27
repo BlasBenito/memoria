@@ -36,10 +36,10 @@ plotInteraction <- function(
 ) {
   #from https://stackoverflow.com/a/49167211
   #to ensure that scale_fill_viridis returns a transparent color scale
-  vir_lite = function(cols, ds = 0.4, dv = 0.7) {
-    cols = rgb2hsv(col2rgb(cols))
-    cols["v", ] = cols["v", ] + dv * (1 - cols["v", ])
-    cols["s", ] = ds * cols["s", ]
+  vir_lite <- function(cols, ds = 0.4, dv = 0.7) {
+    cols <- rgb2hsv(col2rgb(cols))
+    cols["v", ] <- cols["v", ] + dv * (1 - cols["v", ])
+    cols["s", ] <- ds * cols["s", ]
     apply(cols, 2, function(x) hsv(x[1], x[2], x[3]))
   }
 

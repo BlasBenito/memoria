@@ -46,7 +46,7 @@ mergePalaeoData <- function(
 ) {
   #CHECKING datasets.list
   #######################
-  if (inherits(datasets.list, "list") == FALSE) {
+  if (!inherits(datasets.list, "list")) {
     stop(
       "The argument dataset.list must be a list. Try something like: datasets.list = list(climate = climate.dataframe, pollen = pollen.dataframe)."
     )
@@ -59,8 +59,8 @@ mergePalaeoData <- function(
   }
 
   #checking each element in the list
-  for (i.list in 1:length(datasets.list)) {
-    if (inherits(datasets.list[[i.list]], "data.frame") == FALSE) {
+  for (i.list in seq_along(datasets.list)) {
+    if (!inherits(datasets.list[[i.list]], "data.frame")) {
       stop(paste(
         "Element ",
         i.list,
@@ -86,7 +86,7 @@ mergePalaeoData <- function(
     interpolation.interval,
     sep = ""
   ))
-  for (i.list in 1:length(datasets.list)) {
+  for (i.list in seq_along(datasets.list)) {
     #getting time column
     temp.time <- datasets.list[[i.list]][, time.column]
 
@@ -150,7 +150,7 @@ mergePalaeoData <- function(
     for (column.to.interpolate in colnames.temp) {
       #do not interpolate non-numeric columns
       if (
-        is.numeric(temp[, column.to.interpolate]) == FALSE |
+        !is.numeric(temp[, column.to.interpolate]) |
           column.to.interpolate == time.column
       ) {
         next
@@ -203,7 +203,7 @@ mergePalaeoData <- function(
     } #end of iteration through columns
 
     #removing the time column
-    temp.interpolated[, time.column] = NULL
+    temp.interpolated[, time.column] <- NULL
 
     #putting the data back in the list
     datasets.list[[dataset.to.interpolate]] <- temp.interpolated

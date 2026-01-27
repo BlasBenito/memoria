@@ -77,13 +77,13 @@ extractMemoryFeatures <- function(
 
   #checking if it is output of computeMemory or experimentToTable
   #if x$memory does not exist, it is an output of experimentToTable
-  if (is.null(x$memory) == TRUE) {
+  if (is.null(x$memory)) {
     #factors to character
     x$label <- as.character(x$label)
     x$Variable <- as.character(x$Variable)
 
     #subsetting by sampling.subset if available
-    if (is.null(sampling.subset) == FALSE) {
+    if (!is.null(sampling.subset)) {
       x <- x[x$sampling == sampling.subset, ]
     }
 
@@ -131,20 +131,20 @@ extractMemoryFeatures <- function(
   )
 
   #row counter
-  row.counter = 0
+  row.counter <- 0
 
   #iterating through taxa and sampling
   for (taxon in taxa) {
     for (samp in sampling) {
       #+1 to the row counter
-      row.counter = row.counter + 1
+      row.counter <- row.counter + 1
 
       #subsetting the taxon
-      if (is.computeMemory.object == FALSE) {
-        x.temp = x[x$label == taxon, ]
-        x.temp = x.temp[x.temp$sampling == samp, ]
+      if (!is.computeMemory.object) {
+        x.temp <- x[x$label == taxon, ]
+        x.temp <- x.temp[x.temp$sampling == samp, ]
       } else {
-        x.temp = x$memory
+        x.temp <- x$memory
       }
 
       #random median
@@ -182,10 +182,10 @@ extractMemoryFeatures <- function(
 
       #to 0 if negative
       if (strength.endogenous < 0) {
-        strength.endogenous = 0
+        strength.endogenous <- 0
       }
       if (strength.exogenous < 0) {
-        strength.exogenous = 0
+        strength.exogenous <- 0
       }
 
       #computing memory length: number of lags above the median of the random component
@@ -223,7 +223,7 @@ extractMemoryFeatures <- function(
       dominance.exogenous <- sum(exogenous > endogenous) / length(lags)
 
       #params
-      if (is.computeMemory.object == FALSE) {
+      if (!is.computeMemory.object) {
         maximum.age <- x.temp$maximum.age[1]
         fecundity <- x.temp$fecundity[1]
         niche.mean <- x.temp$niche.A.mean[1]
@@ -258,13 +258,13 @@ extractMemoryFeatures <- function(
   )
 
   #removing trait columns if input is not a memory object
-  if (is.computeMemory.object == TRUE) {
+  if (is.computeMemory.object) {
     output.df <- output.df[, 1:8]
   }
 
   #rescaling strength components
   if (length(taxa) > 1 | !("this" %in% sampling)) {
-    if (scale.strength == TRUE) {
+    if (scale.strength) {
       output.df$strength.concurrent <- output.df$strength.concurrent /
         max(output.df$strength.concurrent)
       output.df$strength.exogenous <- output.df$strength.exogenous /

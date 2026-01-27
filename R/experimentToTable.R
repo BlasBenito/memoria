@@ -58,8 +58,8 @@ experimentToTable <- function(
         ]]$memory
 
         #adding R2 to name if required
-        if (R2 == TRUE) {
-          temp.data$name = paste(
+        if (R2) {
+          temp.data$name <- paste(
             experiment.output$names[[current.row, current.column]],
             "; R2 ",
             round(
@@ -108,7 +108,7 @@ experimentToTable <- function(
         temp.data <- experiment.output$output[[current.row]]$memory
 
         #getting R2
-        if (R2 == TRUE) {
+        if (R2) {
           temp.data$name <- paste(
             experiment.output$names[[current.row]],
             "; R2 ",
@@ -169,21 +169,9 @@ experimentToTable <- function(
     replacement = "sma",
     x = simulation.df$name
   )
-  simulation.df$name <- gsub(
-    pattern = "sampling",
-    replacement = "smp",
-    x = simulation.df$name
-  )
-  simulation.df$name <- gsub(
-    pattern = ":",
-    replacement = "",
-    x = simulation.df$name
-  )
-  simulation.df$name <- gsub(
-    pattern = "fecundity",
-    replacement = "f",
-    x = simulation.df$name
-  )
+  simulation.df$name <- gsub(pattern = "sampling", replacement = "smp", x = simulation.df$name, fixed = TRUE)
+  simulation.df$name <- gsub(pattern = ":", replacement = "", x = simulation.df$name, fixed = TRUE)
+  simulation.df$name <- gsub(pattern = "fecundity", replacement = "f", x = simulation.df$name, fixed = TRUE)
   simulation.df$name <- gsub(
     pattern = "growth.rate",
     replacement = "gr",
@@ -204,11 +192,7 @@ experimentToTable <- function(
     replacement = "w",
     x = simulation.df$name
   )
-  simulation.df$name <- gsub(
-    pattern = "Annual",
-    replacement = "annual",
-    x = simulation.df$name
-  )
+  simulation.df$name <- gsub(pattern = "Annual", replacement = "annual", x = simulation.df$name, fixed = TRUE)
   simulation.df$name <- gsub(
     pattern = ".mean",
     replacement = "m",

@@ -101,7 +101,7 @@ runExperiment <- function(
   }
 
   #joining parameter name and parameter values
-  for (current.column in 1:ncol(temp.parameters)) {
+  for (current.column in seq_len(ncol(temp.parameters))) {
     temp.parameters[, current.column] <- paste(
       colnames(temp.parameters)[current.column],
       ": ",

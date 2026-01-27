@@ -105,19 +105,19 @@ computeMemory <- function(
   mtry = 2
 ) {
   #checking data
-  if (inherits(lagged.data, "data.frame") == FALSE) {
+  if (!inherits(lagged.data, "data.frame")) {
     stop("The input data must be a dataframe produced by prepareLaggedData.")
   }
 
   #checking drivers
-  if (is.character(drivers) == FALSE) {
+  if (!is.character(drivers)) {
     stop(
       "Argument drivers should be a character vector with column names of lagged.data to be used as predictors in the model."
     )
   }
 
   #checking response
-  if (is.character(response) == FALSE) {
+  if (!is.character(response)) {
     stop(
       "Argument response should be a character vector with a column name of lagged.data to be used as response in the model. If lagged.data was prepared with prepareLaggedData, the response column is likely named 'Response'."
     )
@@ -140,10 +140,10 @@ computeMemory <- function(
   }
 
   #checking repetitions
-  if (is.numeric(repetitions) == FALSE) {
+  if (!is.numeric(repetitions)) {
     repetitions <- 10
   }
-  if (is.integer(repetitions) == FALSE) {
+  if (!is.integer(repetitions)) {
     repetitions <- as.integer(repetitions)
   }
 
@@ -173,10 +173,10 @@ computeMemory <- function(
   addRandomColumn <- function(x, random.mode = "autocorrelated") {
     if (random.mode %in% c("autocorrelated", "correlated", "autocor")) {
       #generating the data
-      x$Random = as.vector(rescaleVector(
+      x$Random <- as.vector(rescaleVector(
         filter(
           rnorm(nrow(x)),
-          filter = rep(1, sample(1:floor(nrow(x) / 4), 1)),
+          filter = rep(1, sample.int(floor(nrow(x) / 4), 1)),
           method = "convolution",
           circular = TRUE
         ),
@@ -186,7 +186,7 @@ computeMemory <- function(
     }
 
     if (random.mode %in% c("white.noise", "white", "noise")) {
-      x$Random = rnorm(nrow(x))
+      x$Random <- rnorm(nrow(x))
     }
 
     return(x)
@@ -200,26 +200,26 @@ computeMemory <- function(
     integer = FALSE
   ) {
     #data extremes
-    old.min = min(x)
-    old.max = max(x)
+    old.min <- min(x)
+    old.max <- max(x)
 
     #SCALING VECTOR
     #----------------------
 
-    x = ((x - old.min) / (old.max - old.min)) * (new.max - new.min) + new.min
+    x <- ((x - old.min) / (old.max - old.min)) * (new.max - new.min) + new.min
 
     #FORCES VECTOR INTO INTEGER
     #----------------------
 
-    if (integer == TRUE) {
-      x = floor(x)
+    if (integer) {
+      x <- floor(x)
     }
 
     return(x)
   }
 
   #removing age column
-  lagged.data$time = NULL
+  lagged.data$time <- NULL
 
   #removing variables not in drivers
   if (length(drivers) > 1) {
@@ -248,7 +248,7 @@ computeMemory <- function(
   lagged.data$subset.column <- NA
 
   #response string (checking if there is a 0 or not in the response)
-  if (stringr::str_detect(response, "_0") == FALSE) {
+  if (!stringr::str_detect(response, "_0")) {
     response <- paste(response, "_0", sep = "")
   }
   if (!(response %in% colnames(lagged.data))) {
@@ -290,7 +290,7 @@ computeMemory <- function(
     lagged.data.model <- na.omit(lagged.data.model)
 
     #adding random column
-    if (add.random == TRUE) {
+    if (add.random) {
       lagged.data.model <- addRandomColumn(
         x = lagged.data.model,
         random.mode = random.mode
@@ -348,14 +348,14 @@ computeMemory <- function(
     ),
     stringsAsFactors = F
   )
-  importance.df$Variable = NULL
+  importance.df$Variable <- NULL
   names(importance.df)[5:6] <- c("Variable", "Lag")
 
   #removing the word "Random" fromt he lag column
   importance.df[importance.df$Variable == importance.df$Lag, "Lag"] <- 0
 
   #repeating the random variable
-  if (add.random == TRUE) {
+  if (add.random) {
     importance.df <- rbind(
       importance.df,
       importance.df[
@@ -382,7 +382,7 @@ computeMemory <- function(
   }
 
   #variable as factor
-  if (add.random == TRUE) {
+  if (add.random) {
     importance.df$Variable <- factor(
       importance.df$Variable,
       levels = c("Response", drivers, "Random")
