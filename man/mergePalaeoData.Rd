@@ -15,16 +15,16 @@ mergePalaeoData(
 
 \item{time.column}{character string, name of the time/age column of the datasets provided in \code{datasets.list}.}
 
-\item{interpolation.interval}{temporal resolution of the output data, in the same units as the age/time columns of the input data}
+\item{interpolation.interval}{numeric, temporal resolution of the output data, in the same units as the age/time columns of the input data.}
 }
 \value{
 A dataframe with every column of the initial dataset interpolated to a regular time grid of resolution defined by \code{interpolation.interval}. Column names follow the form datasetName.columnName, so the origin of columns can be tracked.
 }
 \description{
-It merges palaeoecological datasets with different time intervals between consecutive samples into a single dataset with samples separated by regular time intervals defined by the user
+Merges palaeoecological datasets with different time intervals between consecutive samples into a single dataset with samples separated by regular time intervals defined by the user.
 }
 \details{
-This function fits a \code{\link{loess}} model of the form \code{y ~ x}, where \code{y} is any column given by \code{columns.to.interpolate} and \code{x} is the column given by the \code{time.column} argument. The model is used to interpolate column \code{y} on a regular time series of intervals equal to \code{interpolation.interval}. All columns in every provided dataset go through this process to generate the final data with samples separated by regular time intervals. Non-numeric columns are ignored, and absent from the output dataframe.
+This function fits a \code{\link{loess}} model of the form \code{y ~ x}, where \code{y} is any numeric column in the input datasets and \code{x} is the column given by the \code{time.column} argument. The model is used to interpolate column \code{y} on a regular time series of intervals equal to \code{interpolation.interval}. All numeric columns in every provided dataset go through this process to generate the final data with samples separated by regular time intervals. Non-numeric columns are ignored and absent from the output dataframe.
 }
 \examples{
 

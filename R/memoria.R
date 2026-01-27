@@ -4,12 +4,12 @@
 #' A dataframe resulting from the application of \code{\link{prepareLaggedData}} to the dataset \code{\link{palaeodata}}. The dataframe columns are:
 #'
 #' \itemize{
-#'   \item \emph{Response_0} numeric, values of the response variable selected by the user in the argument \code{response} of the function \code{\link{prepareLaggedData}}. This column is used as response variable by the function \code{\link{computeMemory}}. In this case, Response represent pollen counts of Pinus.
-#'   \item \emph{Response_0.2-1} numeric, time delayed values of the response for different lags (in ky). Considered together these columns represent the endogenous ecological memory.
-#'   \item \emph{climate.temperatureAverage_0} numeric, values of the variable temperatureAverage for the lag 0 (no lag). This column represents the concurrent effect of the temperature over the response.
-#'   #'   \item \emph{climate.rainfallAverage_0} numeric, values of the variable rainfallAverage for the lag 0 (no lag). This column represents the concurrent effect of rainfall over the response.
-#'   \item \emph{climate.temperatureAverage_0.2-1} numeric, time delayed values of temperatureAverage for lags 0.2 to 1 (in ky).
-#'   #'   \item \emph{climate.rainfallAverage_0.2-1} numeric, time delayed values of rainfallAverage for lags 0.2 to 1 (in ky).
+#'   \item \emph{Response_0} numeric, values of the response variable selected by the user in the argument \code{response} of the function \code{\link{prepareLaggedData}}. This column is used as response variable by the function \code{\link{computeMemory}}. In this case, Response represents pollen counts of Pinus.
+#'   \item \emph{Response_0.2-1} numeric, time-delayed values of the response for different lags (in ky). Considered together, these columns represent the endogenous ecological memory.
+#'   \item \emph{climate.temperatureAverage_0} numeric, values of the variable temperatureAverage for lag 0 (no lag). This column represents the concurrent effect of temperature on the response.
+#'   \item \emph{climate.rainfallAverage_0} numeric, values of the variable rainfallAverage for lag 0 (no lag). This column represents the concurrent effect of rainfall on the response.
+#'   \item \emph{climate.temperatureAverage_0.2-1} numeric, time-delayed values of temperatureAverage for lags 0.2 to 1 (in ky).
+#'   \item \emph{climate.rainfallAverage_0.2-1} numeric, time-delayed values of rainfallAverage for lags 0.2 to 1 (in ky).
 #' }
 #'
 #' @author Blas M. Benito  <blasbenito@gmail.com>
@@ -47,10 +47,10 @@
 #'
 #' \itemize{
 #'   \item \emph{age} in kiloyears before present (ky BP).
-#'   \item \emph{temperatureAverage} average annual temperature in Celsius degrees.
-#'   \item \emph{rainfallAverage} average annual precipitation in milimetres per day (mm/day).
-#'   \item \emph{temperatureWarmestMonth} average temperature of the warmest month, in Celsius degrees.
-#'   \item \emph{temperatureColdestMonth} average temperature of the coldest month, in Celsius degrees.
+#'   \item \emph{temperatureAverage} average annual temperature in degrees Celsius.
+#'   \item \emph{rainfallAverage} average annual precipitation in millimetres per day (mm/day).
+#'   \item \emph{temperatureWarmestMonth} average temperature of the warmest month, in degrees Celsius.
+#'   \item \emph{temperatureColdestMonth} average temperature of the coldest month, in degrees Celsius.
 #'   \item \emph{oxigenIsotope} delta O18, global ratio of stable isotopes in the sea floor, see \url{http://lorraine-lisiecki.com/stack.html} for further details.
 #' }
 #' @author Blas M. Benito  <blasbenito@gmail.com>
@@ -72,10 +72,10 @@
 #'   \item \emph{quercus} pollen counts of Quercus.
 #'   \item \emph{poaceae} pollen counts of Poaceae.
 #'   \item \emph{artemisia} pollen counts of Artemisia.
-#'   \item \emph{temperatureAverage} average annual temperature in Celsius degrees.
-#'   \item \emph{rainfallAverage} average annual precipitation in milimetres per day (mm/day).
-#'   \item \emph{temperatureWarmestMonth} average temperature of the warmest month, in Celsius degrees.
-#'   \item \emph{temperatureColdestMonth} average temperature of the coldest month, in Celsius degrees.
+#'   \item \emph{temperatureAverage} average annual temperature in degrees Celsius.
+#'   \item \emph{rainfallAverage} average annual precipitation in millimetres per day (mm/day).
+#'   \item \emph{temperatureWarmestMonth} average temperature of the warmest month, in degrees Celsius.
+#'   \item \emph{temperatureColdestMonth} average temperature of the coldest month, in degrees Celsius.
 #'   \item \emph{oxigenIsotope} delta O18, global ratio of stable isotopes in the sea floor, see \url{http://lorraine-lisiecki.com/stack.html} for further details.
 #' }
 #' @author Blas M. Benito  <blasbenito@gmail.com>
@@ -99,9 +99,9 @@
 #'       \item \code{sd} numeric, standard deviation of the importance values of the given \code{Variable} across \code{repetitions}.
 #'       \item \code{min} and \code{max} numeric, percentiles 0.05 and 0.95 of importance values of the given \code{Variable} across \code{repetitions}.
 #'     }
-#'  \item \code{R2} vector, values of pseudo R-squared value obtained for the Random Forest model fitted on each repetition. Pseudo R-squared is the Pearson correlation beteween the observed and predicted data.
+#'  \item \code{R2} vector, values of pseudo R-squared value obtained for the Random Forest model fitted on each repetition. Pseudo R-squared is the Pearson correlation between the observed and predicted data.
 #'  \item \code{prediction} dataframe, with the same columns as the dataframe in the slot \code{memory}, with the median and confidence intervals of the predictions of all random forest models fitted.
-#'  \item \code{multicollinearity} multicollinearity analysis on the input data performed with \link[HH]{vif}. A vif value higher than 5 indicates that the given variable is highly correlated with other variables.
+#'  \item \code{multicollinearity} multicollinearity analysis on the input data performed with \link[collinear]{vif_df}. A vif value higher than 5 indicates that the given variable is highly correlated with other variables.
 #' }
 #' @author Blas M. Benito  <blasbenito@gmail.com>
 #' @docType data
@@ -111,7 +111,10 @@
 #' @format List with four slots.
 "palaeodataMemory"
 
-#' @import ggplot2 viridis viridisLite zoo stringr ranger HH tidyr
+#' @import ggplot2 viridis viridisLite zoo stringr ranger tidyr
+#' @importFrom collinear vif_df
+#' @importFrom grDevices col2rgb hsv rgb2hsv
+#' @importFrom stats as.formula cor filter lag loess loess.control na.omit predict quantile rnorm
 NULL
 
 #' @import utils

@@ -1,6 +1,6 @@
 #' Merges palaeoecological datasets with different time resolution.
 #'
-#' @description It merges palaeoecological datasets with different time intervals between consecutive samples into a single dataset with samples separated by regular time intervals defined by the user
+#' @description Merges palaeoecological datasets with different time intervals between consecutive samples into a single dataset with samples separated by regular time intervals defined by the user.
 #'
 #'
 #' @usage mergePalaeoData(
@@ -11,9 +11,9 @@
 #'
 #' @param datasets.list list of dataframes, as in \code{datasets.list = list(climate = climate.dataframe, pollen = pollen.dataframe)}. The provided dataframes must have an age/time column with the same column name and the same units of time. Non-numeric columns in these dataframes are ignored.
 #' @param time.column character string, name of the time/age column of the datasets provided in \code{datasets.list}.
-#' @param interpolation.interval temporal resolution of the output data, in the same units as the age/time columns of the input data
+#' @param interpolation.interval numeric, temporal resolution of the output data, in the same units as the age/time columns of the input data.
 #'
-#' @details This function fits a \code{\link{loess}} model of the form \code{y ~ x}, where \code{y} is any column given by \code{columns.to.interpolate} and \code{x} is the column given by the \code{time.column} argument. The model is used to interpolate column \code{y} on a regular time series of intervals equal to \code{interpolation.interval}. All columns in every provided dataset go through this process to generate the final data with samples separated by regular time intervals. Non-numeric columns are ignored, and absent from the output dataframe.
+#' @details This function fits a \code{\link{loess}} model of the form \code{y ~ x}, where \code{y} is any numeric column in the input datasets and \code{x} is the column given by the \code{time.column} argument. The model is used to interpolate column \code{y} on a regular time series of intervals equal to \code{interpolation.interval}. All numeric columns in every provided dataset go through this process to generate the final data with samples separated by regular time intervals. Non-numeric columns are ignored and absent from the output dataframe.
 #'
 #' @author Blas M. Benito  <blasbenito@gmail.com>
 #'

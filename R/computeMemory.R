@@ -1,6 +1,6 @@
 #' Quantifies ecological memory with Random Forest.
 #'
-#' @description Takes the oputput of \code{\link{prepareLaggedData}} to fit the following model with Random Forest:
+#' @description Takes the output of \code{\link{prepareLaggedData}} to fit the following model with Random Forest:
 #'
 #'  \eqn{p_{t} = p_{t-1} +...+ p_{t-n} + d_{t} + d_{t-1} +...+ d_{t-n} + r}
 #'
@@ -36,12 +36,12 @@
 #' @param random.mode either "white.noise" or "autocorrelated". See details.
 #' @param repetitions integer, number of random forest models to fit.
 #' @param response character string, name of the response variable (typically, "Response_0").
-#' @param subset.response character string with values "up", "down" or "none", triggers the subsetting of the input dataset. "up" only models memory on cases where the response's trend is positive, "down" selectes cases with negative trends, and "none" selects all cases.
+#' @param subset.response character string with values "up", "down" or "none", triggers the subsetting of the input dataset. "up" only models memory on cases where the response's trend is positive, "down" selects cases with negative trends, and "none" selects all cases.
 #' @param min.node.size integer, argument of the \link[ranger]{ranger} function. Minimal number of samples to be allocated in a terminal node. Default is 5.
 #' @param num.trees integer, argument of the \link[ranger]{ranger} function. Number of regression trees to be fitted (size of the forest). Default is 2000.
 #' @param mtry  integer, argument of the \link[ranger]{ranger} function. Number of variables to possibly split at in each node. Default is 2.
 #'
-#' @details This function uses the \link[ranger]{ranger} package to fit Random Forest models. Please, check the help of the \link[ranger]{ranger} function to better understand how Random Forest is parameterized in this library. This function fits the model explained above as many times as defined in the argument \code{repetitions}. To test the statistical significance of the variable importance scores returned by random forest, on each repetition the model is fitted with a different \code{r} (random) term. If \code{random.mode} equals "autocorrelated", the random term will have a temporal autocorrelation, and if it equals "white.noise", it will be a pseudo-random sequence of numbers generated with \code{\link{rnorm}}, with no temporal autocorrelation. The importance of the random sequence (as computed by random forest) is stored for each model run, and used as a benchmark to assess the importance of the other predictors used in the models. Importance values of other predictors that are above the median of the importance of the random term should be interpreted as non-random, and therefore, significant.
+#' @details This function uses the \link[ranger]{ranger} package to fit Random Forest models. Please, check the help of the \link[ranger]{ranger} function to better understand how Random Forest is parameterized in this package. This function fits the model explained above as many times as defined in the argument \code{repetitions}. To test the statistical significance of the variable importance scores returned by random forest, on each repetition the model is fitted with a different \code{r} (random) term. If \code{random.mode} equals "autocorrelated", the random term will have a temporal autocorrelation, and if it equals "white.noise", it will be a pseudo-random sequence of numbers generated with \code{\link{rnorm}}, with no temporal autocorrelation. The importance of the random sequence (as computed by random forest) is stored for each model run, and used as a benchmark to assess the importance of the other predictors used in the models. Importance values of other predictors that are above the median of the importance of the random term should be interpreted as non-random, and therefore, significant.
 #'
 #' @author Blas M. Benito  <blasbenito@gmail.com>
 #'
@@ -54,14 +54,15 @@
 #'       \item \code{sd} numeric, standard deviation of the importance values of the given \code{Variable} across \code{repetitions}.
 #'       \item \code{min} and \code{max} numeric, percentiles 0.05 and 0.95 of importance values of the given \code{Variable} across \code{repetitions}.
 #'     }
-#'  \item \code{R2} vector, values of pseudo R-squared value obtained for the Random Forest model fitted on each repetition. Pseudo R-squared is the Pearson correlation beteween the observed and predicted data.
+#'  \item \code{R2} vector, values of pseudo R-squared value obtained for the Random Forest model fitted on each repetition. Pseudo R-squared is the Pearson correlation between the observed and predicted data.
 #'  \item \code{prediction} dataframe, with the same columns as the dataframe in the slot \code{memory}, with the median and confidence intervals of the predictions of all random forest models fitted.
-#'  \item \code{multicollinearity} multicollinearity analysis on the input data performed with \link[HH]{vif}. A vif value higher than 5 indicates that the given variable is highly correlated with other variables.
+#'  \item \code{multicollinearity} multicollinearity analysis on the input data performed with \link[collinear]{vif_df}. A vif value higher than 5 indicates that the given variable is highly correlated with other variables.
 #' }
 #'
 #'
 #' @seealso \code{\link{plotMemory}}, \code{\link{extractMemoryFeatures}}
 #'
+#' @references
 #' \itemize{
 #'   \item Wright, M. N. & Ziegler, A. (2017). ranger: A fast implementation of random forests for high dimensional data in C++ and R. J Stat Softw 77:1-17. \url{https://doi.org/10.18637/jss.v077.i01}.
 #'   \item Breiman, L. (2001). Random forests. Mach Learn, 45:5-32. \url{https://doi.org/10.1023/A:1010933404324}.
@@ -195,8 +196,11 @@ computeMemory <- function(lagged.data = NULL,
   lagged.data <- lagged.data[, grepl(string.pattern, colnames(lagged.data))]
 
   #multicollinearity
-  multicollinearity <- data.frame(HH::vif(lagged.data[, 2:ncol(lagged.data)]))
-  multicollinearity <- data.frame(variable=rownames(multicollinearity), vif=multicollinearity[,1])
+  multicollinearity <- collinear::vif_df(
+    df = lagged.data,
+    predictors = colnames(lagged.data)[2:ncol(lagged.data)]
+  )
+  colnames(multicollinearity)[colnames(multicollinearity) == "predictor"] <- "variable"
 
   #object to store outputs
   importance.list <- list()
@@ -212,9 +216,9 @@ computeMemory <- function(lagged.data = NULL,
 
   #adding labels
   for(i in 1:(nrow(lagged.data)-1)){
-    if(lagged.data[i+1, response] > lagged.data[i, response]){lagged.data[i-1, "subset.column"] <- "up"}
-    if(lagged.data[i+1, response] < lagged.data[i, response]){lagged.data[i-1, "subset.column"] <- "down"}
-    if(lagged.data[i+1, response] == lagged.data[i, response]){lagged.data[i-1, "subset.column"] <- "stable"}
+    if(lagged.data[i+1, response] > lagged.data[i, response]){lagged.data[i, "subset.column"] <- "up"}
+    if(lagged.data[i+1, response] < lagged.data[i, response]){lagged.data[i, "subset.column"] <- "down"}
+    if(lagged.data[i+1, response] == lagged.data[i, response]){lagged.data[i, "subset.column"] <- "stable"}
   }
 
   subset.vector <- lagged.data$subset.column
@@ -235,7 +239,7 @@ computeMemory <- function(lagged.data = NULL,
 
     #adding random column
     if(add.random == TRUE){
-      lagged.data.model <- addRandomColumn(x=lagged.data, random.mode = random.mode)
+      lagged.data.model <- addRandomColumn(x=lagged.data.model, random.mode = random.mode)
     }#end of adding random column
 
     #fitting random forest

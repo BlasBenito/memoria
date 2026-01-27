@@ -4,7 +4,9 @@
 \name{palaeodata}
 \alias{palaeodata}
 \title{Dataframe with pollen and climate data.}
-\format{dataframe with 10 columns and 7986 rows.}
+\format{
+dataframe with 10 columns and 7986 rows.
+}
 \usage{
 data(palaeodata)
 }
@@ -18,10 +20,10 @@ A dataframe with a regular time grid of 0.2 ky resolution resulting from applyin
   \item \emph{quercus} pollen counts of Quercus.
   \item \emph{poaceae} pollen counts of Poaceae.
   \item \emph{artemisia} pollen counts of Artemisia.
-  \item \emph{temperatureAverage} average annual temperature in Celsius degrees.
-  \item \emph{rainfallAverage} average annual precipitation in milimetres per day (mm/day).
-  \item \emph{temperatureWarmestMonth} average temperature of the warmest month, in Celsius degrees.
-  \item \emph{temperatureColdestMonth} average temperature of the coldest month, in Celsius degrees.
+  \item \emph{temperatureAverage} average annual temperature in degrees Celsius.
+  \item \emph{rainfallAverage} average annual precipitation in millimetres per day (mm/day).
+  \item \emph{temperatureWarmestMonth} average temperature of the warmest month, in degrees Celsius.
+  \item \emph{temperatureColdestMonth} average temperature of the coldest month, in degrees Celsius.
   \item \emph{oxigenIsotope} delta O18, global ratio of stable isotopes in the sea floor, see \url{http://lorraine-lisiecki.com/stack.html} for further details.
 }
 }

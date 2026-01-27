@@ -1,4 +1,4 @@
-#' Computes ecological memory patterns on simulated pollen curves produced by the \code{virtualPollen} library.
+#' Computes ecological memory patterns on simulated pollen curves produced by the \code{virtualPollen} package.
 #'
 #' @description Applies \code{\link{computeMemory}} to assess ecological memory on a large set of virtual pollen curves.
 #'
@@ -19,18 +19,18 @@
 #'  repetitions = 10
 #'  )
 #'
-#' @param simulations.file list of dataframes, output of  the function \code{simulatePopulation} of the \code{virtualPollen} library.
+#' @param simulations.file list of dataframes, output of  the function \code{simulatePopulation} of the \code{virtualPollen} package.
 #' @param selected.rows numeric vector, rows (virtual taxa) of \code{simulations.file} to be analyzed.
-#' @param selected.columns numeric.vector, columns (experiment treatments) of \code{simulations.file} to be analyzed.
+#' @param selected.columns numeric vector, columns (experiment treatments) of \code{simulations.file} to be analyzed.
 #' @param parameters.file dataframe of simulation parameters.
 #' @param parameters.names vector of character strings with names of traits and niche features from \code{parameters.file} to be included in the analysis (i.e. c("maximum.age", "fecundity", "niche.A.mean", "niche.A.sd"))
 #' @param sampling.names vector of character strings with the names of the columns of \code{simulations.file}.
-#' @param driver.column vector of character strings, names of the columns to be considered as drivers (generally, one of "Suitability", "Driver.A", "Driver.B).
+#' @param driver.column vector of character strings, names of the columns to be considered as drivers (generally, one of "Suitability", "Driver.A", "Driver.B").
 #' @param response.column character string defining the response variable, typically "Response_0".
-#' @param subset.response character string, one of "up", "down" or "none", triggers the subsetting of the input dataset. "up" only models ecological memory on cases where the response's trend is positive, "down" selectes cases with negative trends, and "none" selects all cases.
+#' @param subset.response character string, one of "up", "down" or "none", triggers the subsetting of the input dataset. "up" only models ecological memory on cases where the response's trend is positive, "down" selects cases with negative trends, and "none" selects all cases.
 #' @param time.column character string, name of the time/age column. Usually, "Time".
 #' @param time.zoom numeric vector with two numbers defining the time/age extremes of the time interval of interest.
-#' @param lags ags numeric vector of positive integers, lags to be used in the equation. Generally, a regular sequence of numbers, in the same units as \code{time}. The use \code{\link{seq}} to define it is highly recommended. If 0 is absent from lags, it is added automatically to allow the consideration of a concurrent effect. Lags should take into account the temporal resolution of the data, and be aligned to it. For example, if the interval between consecutive samples is 100 years, lags should be something like \code{0, 100, 200, 300}. Lags can also be multiples of the time resolution, such as \code{0, 200, 400, 600} (in the case time resolution is 100 years).
+#' @param lags numeric vector, lags to be used in the equation, in the same units as \code{time}. The use of \code{\link{seq}} to define it is highly recommended. If 0 is absent from lags, it is added automatically to allow the consideration of a concurrent effect. Lags should be aligned to the temporal resolution of the data. For example, if the interval between consecutive samples is 100 years, lags should be something like \code{0, 100, 200, 300}. Lags can also be multiples of the time resolution, such as \code{0, 200, 400, 600} (when time resolution is 100 years).
 #' @param repetitions integer, number of random forest models to fit.
 #'
 #'
@@ -39,7 +39,7 @@
 #' @return A list with 2 slots:
 #'  \itemize{
 #'  \item \code{names} matrix of character strings, with as many rows and columns as \code{simulations.file}. Each cell holds a simulation name to be used afterwards, when plotting the results of the ecological memory analysis.
-#'  \item \code{output} a list with as many columns and columns as \code{simulations.file}. Each slot holds a an output of \code{\link{computeMemory}}.
+#'  \item \code{output} a list with as many rows and columns as \code{simulations.file}. Each slot holds a an output of \code{\link{computeMemory}}.
 #'  \itemize{
 #'  \item \code{memory} dataframe with five columns:
 #'     \itemize{
@@ -48,9 +48,9 @@
 #'       \item \code{sd} numeric, standard deviation of the importance values of the given \code{Variable} across \code{repetitions}.
 #'       \item \code{min} and \code{max} numeric, percentiles 0.05 and 0.95 of importance values of the given \code{Variable} across \code{repetitions}.
 #'     }
-#'  \item \code{R2} vector, values of pseudo R-squared value obtained for the Random Forest model fitted on each repetition. Pseudo R-squared is the Pearson correlation beteween the observed and predicted data.
+#'  \item \code{R2} vector, values of pseudo R-squared value obtained for the Random Forest model fitted on each repetition. Pseudo R-squared is the Pearson correlation between the observed and predicted data.
 #'  \item \code{prediction} dataframe, with the same columns as the dataframe in the slot \code{memory}, with the median and confidence intervals of the predictions of all random forest models fitted.
-#'  \item \code{multicollinearity} multicollinearity analysis on the input data performed with \code{\link[HH]{vif}}. A vif value higher than 5 indicates that the given variable is highly correlated with other variables.
+#'  \item \code{multicollinearity} multicollinearity analysis on the input data performed with \code{\link[collinear]{vif_df}}. A vif value higher than 5 indicates that the given variable is highly correlated with other variables.
 #' }
 #' }
 #'
@@ -92,7 +92,7 @@ runExperiment <- function(simulations.file = NULL,
   #generating names matrix
   #-----------------------
   #getting parameter names and values
-  if(length(parameters.names == 1)){
+  if(length(parameters.names) == 1){
 
     temp.parameters <- data.frame(parameters.list[, parameters.names])
     colnames(temp.parameters) <- parameters.names

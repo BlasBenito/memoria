@@ -58,7 +58,7 @@ vignette: >
 ```{r, echo = FALSE, warning = FALSE, message = FALSE, eval=FALSE}
 
 #checking if required packages are installed, and installing them if not
-list.of.packages <- c("ggplot2", "cowplot", "knitr", "viridis", "tidyr", "formatR", "grid", "zoo", "ranger", "rpart", "rpart.plot", "HH", "kableExtra", "magrittr", "stringr", "dplyr", "devtools")
+list.of.packages <- c("ggplot2", "cowplot", "knitr", "viridis", "tidyr", "formatR", "grid", "zoo", "ranger", "rpart", "rpart.plot", "collinear", "kableExtra", "magrittr", "stringr", "dplyr", "devtools")
 new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
 if(length(new.packages)) install.packages(new.packages, dep = TRUE ,repos = "http://cran.us.r-project.org")
 
@@ -84,7 +84,7 @@ library(grid)    #plotting
 library(tidyr)
 library(formatR)
 library(zoo)     #time series analysis
-library(HH)      #variance inflation factor (multicollinearity analysis)
+library(collinear) #variance inflation factor (multicollinearity analysis)
 library(kableExtra) #to fit tables to pdf page size
 library(magrittr) #kableExtra requires pipes
 library(pdp)     #partial dependence plots
@@ -272,8 +272,11 @@ for(i in 1:4){
   #removing time
   sim.temp.lags$time <- NULL
 
-  #computing varianca inflation factor (vif function from HH library)
-  vif.list[[i]] <- data.frame(HH::vif(sim.temp.lags[,2:ncol(sim.temp.lags)]))
+  #computing variance inflation factor (vif_df function from collinear library)
+  vif.list[[i]] <- collinear::vif_df(
+    df = sim.temp.lags,
+    predictors = colnames(sim.temp.lags)[2:ncol(sim.temp.lags)]
+  )
   
 }
 

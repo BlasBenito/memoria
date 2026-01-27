@@ -4,7 +4,9 @@
 \name{pollen}
 \alias{pollen}
 \title{Dataframe with pollen counts.}
-\format{dataframe with 5 columns and 639 rows.}
+\format{
+dataframe with 5 columns and 639 rows.
+}
 \usage{
 data(pollen)
 }

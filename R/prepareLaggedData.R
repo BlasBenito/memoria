@@ -19,11 +19,11 @@
 #' @param drivers  character vector, names of the numeric columns to be used as predictors in the model.
 #' @param time character vector, name of the numeric column with the time/age.
 #' @param oldest.sample character string, either "first" or "last". When "first", the first row taken as the oldest case of the time series and the last row is taken as the newest case, so ecological memory flows from the first to the last row of \code{input.data}. When "last", the last row is taken as the oldest sample, and this is the mode that should be used when \code{input.data} represents a palaeoecological dataset. Default behavior is "first".
-#' @param lags numeric vector of positive integers, lags to be used in the equation. Generally, a regular sequence of numbers, in the same units as \code{time}. The use \code{\link{seq}} to define it is highly recommended. If 0 is absent from lags, it is added automatically to allow the consideration of a concurrent effect. Lags should take into account the temporal resolution of the data, and be aligned to it. For example, if the interval between consecutive samples is 100 years, lags should be something like \code{0, 100, 200, 300}. Lags can also be multiples of the time resolution, such as \code{0, 200, 400, 600} (in the case time resolution is 100 years).
-#' @param time.zoom numeric vector of two numbers of the \code{time} column used to subset the data if desired.
+#' @param lags numeric vector, lags to be used in the equation, in the same units as \code{time}. The use of \code{\link{seq}} to define it is highly recommended. If 0 is absent from lags, it is added automatically to allow the consideration of a concurrent effect. Lags should be aligned to the temporal resolution of the data. For example, if the interval between consecutive samples is 100 years, lags should be something like \code{0, 100, 200, 300}. Lags can also be multiples of the time resolution, such as \code{0, 200, 400, 600} (when time resolution is 100 years).
+#' @param time.zoom numeric vector of two values from the range of the \code{time} column, used to subset the data if desired.
 #' @param scale boolean, if TRUE, applies the \code{\link{scale}} function to normalize the data. Required if the lagged data is going to be used to fit linear models.
 #'
-#' @details The function interprets the \code{time} column as an index representing the
+#' @details The function interprets the \code{time} column as an index representing the temporal position of each sample. It uses the \code{lag} function from the \pkg{zoo} package to shift columns by the specified lags, generating one new column per lag and variable.
 #'
 #' @author Blas M. Benito  <blasbenito@gmail.com>
 #'
@@ -87,8 +87,8 @@ prepareLaggedData = function(input.data = NULL,
   }
 
   if(is.null(time.zoom) == FALSE){
-    if(max(time.zoom) > max(input.data[, "age"])){stop("Maximum of time.zoom should be lower or equal than the maximum of the time/age column.")}
-    if(min(time.zoom) < min(input.data[, "age"])){stop("Minimum of time.zoom should be higher or equal than the minimum of the time/age column.")}
+    if(max(time.zoom) > max(input.data[, time])){stop("Maximum of time.zoom should be lower or equal than the maximum of the time/age column.")}
+    if(min(time.zoom) < min(input.data[, time])){stop("Minimum of time.zoom should be higher or equal than the minimum of the time/age column.")}
   }
 
   #testing if lags are regular

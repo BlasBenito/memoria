@@ -9,9 +9,9 @@
 #'   filename = NULL
 #' )
 #'
-#' @param memory.output a dataframe with one time series per column.
-#' @param title character string, name of the numeric column to be used as response in the model.
-#' @param legend.position  character vector, names of the numeric columns to be used as predictors in the model.
+#' @param memory.output list, output of \code{\link{computeMemory}}.
+#' @param title character string, title of the plot.
+#' @param legend.position character string, legend position (e.g., "right", "bottom", "none").
 #' @param filename  character string, name of output pdf file. If NULL or empty, no pdf is produced. It shouldn't include the extension of the output file.
 #'
 #' @author Blas M. Benito  <blasbenito@gmail.com>
@@ -57,11 +57,11 @@ plotMemory <- function(
     scale_y_continuous(expand=c(0,0)) +
     xlab(paste("Lag (", lag.units, ")", sep="")) +
     ylab("Relative importance") +
+    ggtitle(title) +
+    cowplot::theme_cowplot() +
     theme(strip.text.x = element_text(size = 12),
           legend.position = legend.position,
-          axis.text.x = element_text(size=12)) +
-    ggtitle(title) +
-    cowplot::theme_cowplot()
+          axis.text.x = element_text(size=12))
 
   print(plot.memory)
 

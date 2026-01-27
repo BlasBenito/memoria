@@ -12,11 +12,11 @@ plotMemory(
 )
 }
 \arguments{
-\item{memory.output}{a dataframe with one time series per column.}
+\item{memory.output}{list, output of \code{\link{computeMemory}}.}
 
-\item{title}{character string, name of the numeric column to be used as response in the model.}
+\item{title}{character string, title of the plot.}
 
-\item{legend.position}{character vector, names of the numeric columns to be used as predictors in the model.}
+\item{legend.position}{character string, legend position (e.g., "right", "bottom", "none").}
 
 \item{filename}{character string, name of output pdf file. If NULL or empty, no pdf is produced. It shouldn't include the extension of the output file.}
 }

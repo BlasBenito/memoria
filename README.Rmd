@@ -20,7 +20,7 @@ knitr::opts_chunk$set(
 
 The goal of memoria is to provide the tools to quantify **ecological memory** in long time-series involving environmental drivers and biotic responses, including palaeoecological datasets. 
 
-Ecological memory has two main components: the *endogenous* component, which represents the effect of antecedent values of the response on itself, and *endogenous* component, which represents the effect of antecedent values of the driver or drivers on the current state of the biotic response. Additionally, the *concurrent effect*, which represents the synchronic effect of the environmental drivers over the response is measured. The functions in the package allow the user 
+Ecological memory has two main components: the *endogenous* component, which represents the effect of antecedent values of the response on itself, and the *exogenous* component, which represents the effect of antecedent values of the driver or drivers on the current state of the biotic response. Additionally, the *concurrent effect*, which represents the synchronic effect of the environmental drivers on the response, is also quantified.
 
 The package *memoria* uses the fast implementation of Random Forest available in the [ranger](https://CRAN.R-project.org/package=ranger) package to fit a model of the form shown in **Equation 1**: 
 
@@ -36,11 +36,11 @@ Where:
 +  $d_{t-1} +...+ d_{t-n}$ represents the exogenous component of ecological memory.
 +  $d_{t}$ represents the concurrent effect of the driver over the response.
 
-Random Forest returns an importance score for each model term, and the functions in *memoria* let the user to plot the importance scores across time lags for each ecological memory components, and to compute different features of each memory component (length, strength, and dominance).
+Random Forest returns an importance score for each model term, and the functions in *memoria* let the user plot the importance scores across time lags for each ecological memory component, and to compute different features of each memory component (length, strength, and dominance).
 
 ## Installation
 
-You can install the released version of memoria from [GitHub](https://github.com/BlasBenito/memoria) or soon from [CRAN](https://CRAN.R-project.org) with:
+You can install memoria from [GitHub](https://github.com/BlasBenito/memoria) or [CRAN](https://CRAN.R-project.org) with:
 
 
 ```{r, eval=FALSE, results = "hide", message = FALSE, error = FALSE}
@@ -65,7 +65,7 @@ library(kableExtra)
 
 ## Workflow
 
-To work with the *memoria* package the user has to provide a long time-series with at least one environmental driver and one biotic response. The steps below assume that the driver and the biotic response were taken at different temporal resolutions or depth intervals, but if that is not the case, the actual workflow would start at point **2**.
+To work with *memoria*, the user needs a long time-series with at least one environmental driver and one biotic response. The steps below assume that the driver and the biotic response were sampled at different temporal resolutions or depth intervals. If that is not the case, the workflow starts at step **2**.
 
 **1.** **Prepare data**. The function *mergePalaeoData* allows the user to: 1) merge together environmental proxies/variables and biotic responses sampled at different time resolutions; 2) reinterpolate the data into a regular time grid using *loess*.
 
@@ -73,7 +73,7 @@ In this scenario we consider two datasets:
 
 * *pollen*, with 639 samples dated in ky BP and four pollen types: Pinus, Quercus, Poaceae, and Artemisia.
 
-* *climate*, with 800 samples dated in ky BP, and five climate variables: average temperature and rainfall, temperature of the warmest and coldest month, and oxigen isotope.
+* *climate*, with 800 samples dated in ky BP, and five climate variables: average temperature and rainfall, temperature of the warmest and coldest month, and oxygen isotope.
 
 ```{r, fig.height=4, fig.width=9}
 #loading and plotting pollen data
@@ -107,7 +107,7 @@ ggplot(data=gather(climate, variable, value, 2:5),
   ggtitle("Palaeoclimatic data")
 ```
 
-The datasets are not aligned, and *pollen* is not sampled at regular times, which makes any kind of analysis challenging. The code below fixes these issues by merging the data into the same regular time grid through the function *mergePalaeoData*. The function warns the user when the interpolation factor (difference between the original temporal resolution of the data and the interpolated resolution) is higher than one order of magnitude. Please, check the help file of the function to better understand how it works. 
+The datasets are not aligned, and *pollen* is not sampled at regular times, which makes analysis challenging. The code below fixes these issues by merging the data into the same regular time grid through the function *mergePalaeoData*. The function warns the user when the interpolation factor (ratio between the original and interpolated temporal resolutions) exceeds one order of magnitude. Please check the help file of the function for further details.
 
 ```{r, fig.height=8, fig.width=9}
 #merging and interpolating into a
@@ -135,7 +135,7 @@ ggplot(data=gather(pollen.climate, variable, value, 2:10),
   ggtitle("Pollen and palaeoclimate")
 ```
 
-**2.** **Organize the data in time lags**. To fit the model in **Equation 1** it is required to select a response variable, a set of drivers (or a single driver), and organize the data in lags, so every sample in the response column is aligned with antecedent values of the response and the environmental drivers for a given set of lags. The function *prepareLaggedData* generates a dataframe with one column per term in **Equation 1**. In this case, we use the pollen abundance of Pinus as response varaible, and average temperature and rainfall as drivers/predictors.
+**2.** **Organize the data in time lags**. To fit the model in **Equation 1** it is required to select a response variable, a set of drivers (or a single driver), and organize the data in lags, so every sample in the response column is aligned with antecedent values of the response and the environmental drivers for a given set of lags. The function *prepareLaggedData* generates a dataframe with one column per term in **Equation 1**. In this case, we use the pollen abundance of Pinus as response variable, and average temperature and rainfall as drivers/predictors.
 
 ```{r, fig.width=9, fig.height=4}
 
@@ -153,25 +153,25 @@ str(pollen.climate.lagged)
 
 ```
 
-Extra attention should be paid to the *oldest.sample* argument. When it is set to "last", as above, it assumes that the dataframe is ordered (top to bottom) by depth/age, and therefore represents a palaeoecological dataset. In this case, the lag 1 of the first sample is the second sample. If it is set to "first", it assumes that the first sample defines the beginning of the time series. In such a case, the lag 1 of the second sample is the first sample. 
+Pay attention to the *oldest.sample* argument. When set to "last" (as above), the dataframe is assumed to be ordered by depth/age with the oldest sample at the bottom, as in a typical palaeoecological dataset. In this case, lag 1 of the first sample is the second sample. When set to "first", the oldest sample is assumed to be at the top, so lag 1 of the second sample is the first sample.
 
 Also note that:
-*  The resoponse column is identified with the string *Response_0* (as in "value of the response for the lag 0").
+*  The response column is identified with the string *Response_0* (as in "value of the response for the lag 0").
 *  The endogenous memory terms are identified with the pattern *Response[0.2 - 1]*, with the numbers indicating the lag (in the same units as the time column).
 *  The exogenous memory terms are identified by the name of the climatic variables followed by the lags between 0.2 and 1.
 *  The concurrent effect is identified by the names of the climate variables with the lag 0.
 
-**3.** **Fit Random Forest model on the lagged data to assess ecological memory**. The function *computeMemory* fits a Random Forest on the lagged data following **Equation 1**. It does so by using the implementation of Random Forest available in the [ranger](https://CRAN.R-project.org/package=ranger) package. This is the fastest Random Forest implementation available to date, and has the ability to use every processor available in a computer, considerably speeding up the model-fitting process.
+**3.** **Fit Random Forest model on the lagged data to assess ecological memory**. The function *computeMemory* fits a Random Forest on the lagged data following **Equation 1**. It does so by using the implementation of Random Forest available in the [ranger](https://CRAN.R-project.org/package=ranger) package. This implementation supports parallel processing across all available cores, considerably speeding up model fitting.
 
 The goal of *computeMemory* is to measure the importance of every term in **Equation 1**. Random Forest provides a robust measure of variable importance that is insensitive to multicollinearity or temporal autocorrelation in the input dataset. It is based on the loss of accuracy when a given predictor is randomly permuted across a large number of regression trees (please, see the vignette for further information). 
 
-However, Random Forest does not provide any measure of significance, making it difficult to assess when the importance of a given predictor is the result of chance. To solve this issue, *computeMemory* adds a new term, named *r*, to **Equation 1**. This new term is either a totally random sequence of numbers (mode *white.noise*) or a time series with a temporal autocorrelation generated randomly (mode *autocorrelated*). Both serve as a sort of null test, but using the *autocorrelated* mode provides much more robust results. 
+However, Random Forest does not provide a measure of significance, making it difficult to assess whether a predictor's importance is due to chance. To address this, *computeMemory* adds a random term *r* to **Equation 1**. This term is either a white-noise sequence (mode *white.noise*) or a randomly generated autocorrelated time series (mode *autocorrelated*). Both serve as a null benchmark, but the *autocorrelated* mode provides more robust results.
 
-The model is then repeated a number of times defined by the user (check the *repetitions* argument in the help of the *computeMemory* function), the *r* term is generated again with a different random seed on each repetition, and after all iterations have been performed, the percentiles 0.05, 0.5, and 0.95 of the importance of each equation term are computed and provided in the output dataframe. 
+The model is fitted repeatedly (see the *repetitions* argument in the help of *computeMemory*), with the *r* term regenerated from a new random seed on each repetition. After all repetitions are completed, the 0.05, 0.5, and 0.95 percentiles of the importance of each equation term are computed and returned in the output dataframe.
 
-The output can be easily plotted with the *plotMemory* function. The example below is done with a low number of repetitions to reduce runtime, but note that the recommended number of *iterations* should be higher (300 gives stable results for time series with around 500 samples).
+The output can be easily plotted with the *plotMemory* function. The example below is done with a low number of repetitions to reduce runtime, but note that the recommended number of *repetitions* should be higher (300 gives stable results for time series with around 500 samples).
 
-```{r, fig.width = 5, fig.height=2, fig.cap="Ecological memory pattern of Pinus. The intrinsic memory is represented by the violet curve, the extrinsic components (temperature and rainfall) are represented by blue and green, and the random component is represented in yellow. The lag 0 of rainfall and precipitation represents the concurrent effect."}
+```{r, fig.width = 5, fig.height=2, fig.cap="Ecological memory pattern of Pinus. The endogenous memory is represented by the violet curve, the exogenous components (temperature and rainfall) are represented by blue and green, and the random component is represented in yellow. The lag 0 of temperature and rainfall represents the concurrent effect."}
 #computing memory
 memory.output <- computeMemory(
  lagged.data = pollen.climate.lagged,
@@ -202,7 +202,7 @@ head(memory.output$multicollinearity)
 plotMemory(memory.output)
 ```
 
-Below the model is repeated by using "auatocorrelated" in the argument *random.mode*.
+Below the model is repeated by using "autocorrelated" in the argument *random.mode*.
 
 ```{r, fig.width = 5, fig.height=2, fig.cap="Same as above, but observe that the yellow strip representing the random term in the model has much higher values than when the random time-series is generated without temporal autocorrelation, and therefore the exogenous component seem to have importance scores that are below the median of the random expectation."}
 #computing memory

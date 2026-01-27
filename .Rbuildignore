@@ -7,7 +7,10 @@
 ^memoria.Rproj
 ^README\.Rmd$
 ^cran-comments\.md$
-^\memoria_1.0.0\.tar.gz$
-^\memorian\.Rcheck
+^memoria_1\.0\.0\.tar\.gz$
+^memoria\.Rcheck
 ^CRAN-RELEASE$
 ^docs$
+^.claude$
+^CLAUDE\.md$
+^TODO\.md$

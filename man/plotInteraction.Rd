@@ -23,7 +23,7 @@ plotInteraction(
 
 \item{y}{character string, name of column in \code{data} to be plotted in the y axis.}
 
-\item{z}{character string, name of column in \code{data} to be plotted as a surface. Generally, the name of the response variable in \code{model}.}
+\item{z}{character string, name of the response variable column in \code{data}, plotted as the surface.}
 
 \item{grid}{numeric, resolution of the x and y axes.}
 
