@@ -15,8 +15,11 @@ knitr::opts_chunk$set(
 
 # memoria
 
+  <!-- badges: start -->
 [![CRAN_Release_Badge](http://www.r-pkg.org/badges/version-ago/memoria)](https://CRAN.R-project.org/package=memoria)
 [![CRAN_Download_Badge](http://cranlogs.r-pkg.org/badges/grand-total/memoria)](https://CRAN.R-project.org/package=memoria)
+[![R-CMD-check](https://github.com/blasbenito/memoria/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/blasbenito/memoria/actions/workflows/R-CMD-check.yaml)
+ <!-- badges: end -->
 
 The **memoria** package quantifies ecological memory in long time-series involving environmental drivers and biotic responses, including palaeoecological datasets. It uses Random Forest models to measure the relative importance of endogenous memory (effect of past response values), exogenous memory (effect of past driver values), and concurrent effects (synchronic driver influence).
 
