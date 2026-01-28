@@ -34,21 +34,83 @@ install.packages("memoria")
 Or the development version from GitHub:
 
 ```{r, eval = FALSE}
-# install.packages("devtools")
 devtools::install_github("BlasBenito/memoria")
 ```
 
 ## Quick Example
 
-This minimal example uses built-in data to demonstrate the core workflow:
+This minimal example uses built-in data to demonstrate the core workflow.
+
+```{r, message = FALSE, warning = FALSE}
+library(memoria)
+library(distantia)
+library(dplyr)
+```
+
+
+### Example Data
+
+The `palaeodata` dataset contains is a palaeoecological dataset with pollen percentages for several taxa and several climate variables.
+
+```{r}
+data(palaeodata)
+dplyr::glimpse(palaeodata)
+```
+For this example we select one of the plant species and two climate variables.
+
+```{r, fig.width=8, fig.height=4}
+df <- palaeodata |> 
+  dplyr::transmute(
+    pinus = pollen.pinus,
+    temperature = climate.temperatureAverage,
+    rain = climate.rainfallAverage,
+    time = age
+  )
+
+df |>  
+  distantia::tsl_init(
+  time_column = "time"
+) |> 
+  distantia::tsl_plot(
+    ylim = "relative",
+    guide = FALSE
+  )
+```
+Notice that in the plot above, time, in kilo years before present, goes from right (oldest) to left (newest).
+
+Before to analyze ecological memory in this dataset, we need to build a lagged version in which each value of the response and the predictors (drivers) is matched with previous values.
+
+
+```{r}
+df_lags <- memoria::prepareLaggedData(
+  input.data = df,
+  response = "pinus",
+  drivers = c(
+    "temperature", 
+    "rain"
+    ),
+  time = "time",
+  oldest.sample = "last",
+  lags = seq(from = 0.5, to = 10, by = 0.5)
+)
+```
+
+Lets plot three of these lags.
+
+```{r, fig.width=8, fig.height=4}
+distantia::zoo_plot(
+  x = zoo::zoo(
+    x = df_lags[1:500, c("temperature_0", "temperature_5", "temperature_10")],
+    order.by = df_lags$time[1:500]
+  ),
+  xlab = "Age (ka BP)"
+)
+```
+
+
+### Ecological Memory Analysis
 
 ```{r example, message = FALSE, warning = FALSE}
-library(memoria)
-
-# Load pre-prepared lagged data
-data(palaeodataLagged)
-
-# Compute ecological memory pattern
 memory_output <- computeMemory(
   lagged.data = palaeodataLagged,
   drivers = c(
