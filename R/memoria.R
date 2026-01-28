@@ -110,9 +110,10 @@
 #' @format List with four slots.
 "palaeodataMemory"
 
-#' @import ggplot2 viridis viridisLite zoo stringr ranger tidyr
+#' @import ggplot2 zoo ranger
 #' @importFrom collinear vif_df
 #' @importFrom grDevices col2rgb hsv rgb2hsv
+#' @importFrom rlang .data
 #' @importFrom stats as.formula cor filter lag loess loess.control na.omit predict quantile rnorm
 NULL
 
@@ -123,5 +124,6 @@ utils::globalVariables(c(
   "median",
   "Variable",
   "sd",
-  "parameters"
+  "parameters",
+  "name"
 ))

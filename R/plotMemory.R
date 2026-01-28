@@ -57,9 +57,9 @@ plotMemory <- function(
     )
   ) +
     geom_ribbon(aes(ymin = min, ymax = max), alpha = 0.3, colour = NA) +
-    geom_line(alpha = 0.6, size = 1.5) +
-    scale_color_viridis(discrete = TRUE) +
-    scale_fill_viridis(discrete = TRUE) +
+    geom_line(alpha = 0.6, linewidth = 1.5) +
+    scale_color_viridis_d() +
+    scale_fill_viridis_d() +
     scale_x_continuous(
       breaks = unique(memory.output.df$Lag),
       expand = c(0, 0)
@@ -68,14 +68,12 @@ plotMemory <- function(
     xlab(paste("Lag (", lag.units, ")", sep = "")) +
     ylab("Relative importance") +
     ggtitle(title) +
-    cowplot::theme_cowplot() +
+    theme_classic() +
     theme(
       strip.text.x = element_text(size = 12),
       legend.position = legend.position,
       axis.text.x = element_text(size = 12)
     )
-
-  print(plot.memory)
 
   #plots to pdf
   if (!is.null(filename)) {

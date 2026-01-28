@@ -74,31 +74,31 @@ plotInteraction <- function(
     newdata$prediction <- round(newdata$prediction, 0)
     newdata$prediction <- as.factor(newdata$prediction)
 
-    p1 <- ggplot(newdata, aes_string(x = x, y = y)) +
+    p1 <- ggplot(newdata, aes(x = .data[[x]], y = .data[[y]])) +
       geom_raster(aes(fill = prediction), alpha = 0.3) +
-      scale_fill_viridis(discrete = TRUE) +
+      scale_fill_viridis_d() +
       guides(fill = guide_legend(override.aes = list(alpha = 0.2))) +
       geom_point(
         data = data,
-        aes_string(x = x, y = y, color = z, size = z, alpha = z),
+        aes(x = .data[[x]], y = .data[[y]], color = .data[[z]], size = .data[[z]], alpha = .data[[z]]),
         shape = 16
       ) +
-      scale_color_gradient(low = "white", high = "black", guide = FALSE) +
+      scale_color_gradient(low = "white", high = "black", guide = "none") +
       scale_size_continuous(range = point.size.range) +
-      scale_alpha_continuous(guide = FALSE) +
+      scale_alpha_continuous(guide = "none") +
       labs(fill = "Predicted", size = "Observed")
   } else {
-    p1 <- ggplot(newdata, aes_string(x = x, y = y)) +
+    p1 <- ggplot(newdata, aes(x = .data[[x]], y = .data[[y]])) +
       geom_raster(aes(fill = prediction), alpha = 0.8) +
-      scale_fill_gradientn(colors = vir_lite(viridis(10))) +
+      scale_fill_gradientn(colors = vir_lite(grDevices::hcl.colors(10, "viridis"))) +
       geom_point(
         data = data,
-        aes_string(x = x, y = y, color = z, size = z, alpha = z),
+        aes(x = .data[[x]], y = .data[[y]], color = .data[[z]], size = .data[[z]], alpha = .data[[z]]),
         shape = 16
       ) +
-      scale_color_gradient(low = "white", high = "black", guide = FALSE) +
+      scale_color_gradient(low = "white", high = "black", guide = "none") +
       scale_size_continuous(range = point.size.range) +
-      scale_alpha_continuous(guide = FALSE) +
+      scale_alpha_continuous(guide = "none") +
       labs(fill = "Predicted", size = "Observed")
   }
 

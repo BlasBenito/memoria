@@ -85,12 +85,12 @@ plotExperiment <- function(
     )
   ) +
     geom_ribbon(aes(ymin = min, ymax = max), alpha = 0.3, colour = NA) +
-    geom_line(alpha = 0.6, size = 1.5) +
-    scale_color_viridis(discrete = TRUE) +
-    scale_fill_viridis(discrete = TRUE) +
+    geom_line(alpha = 0.6, linewidth = 1.5) +
+    scale_color_viridis_d() +
+    scale_fill_viridis_d() +
     scale_x_continuous(breaks = unique(simulation.df$Lag)) +
     facet_wrap(
-      "name",
+      vars(name),
       ncol = length(unique(simulation.df$sampling)),
       scales = "free_y"
     ) +
@@ -105,7 +105,7 @@ plotExperiment <- function(
       plot.title = element_text(size = title.size)
     ) +
     ggtitle(experiment.title) +
-    cowplot::theme_cowplot() +
+    theme_classic() +
     theme(legend.position = legend.position) +
     labs(caption = caption)
 

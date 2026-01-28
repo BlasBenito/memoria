@@ -1,0 +1,25 @@
+bibentry(
+  bibtype  = "Article",
+  title    = "Ecological memory at millennial time-scales: the importance of data constraints, species longevity, and niche features",
+  author   = c(
+    person("Blas M.", "Benito"),
+    person("Graciela", "Gil-Romera"),
+    person("H. John B.", "Birks")
+  ),
+  journal  = "Ecography",
+  year     = "2020",
+  volume   = "43",
+  number   = "1",
+  pages    = "1--10",
+  doi      = "10.1111/ecog.04772"
+)
+
+bibentry(
+  bibtype  = "Manual",
+  title    = "memoria: Quantifying Ecological Memory in Palaeoecological Datasets and Other Long Time-Series",
+  author   = person("Blas M.", "Benito"),
+  year     = "2025",
+  note     = "R package version 1.1.0",
+  doi      = "10.32614/CRAN.package.memoria"
+)
+# TODO: Add Zenodo DOI when available

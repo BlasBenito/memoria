@@ -6,6 +6,9 @@
 ^\.Rproj\.user$
 ^memoria.Rproj
 ^README\.Rmd$
+^README\.md$
+^README\.html$
+^vignettes/articles$
 ^cran-comments\.md$
 ^memoria_1\.0\.0\.tar\.gz$
 ^memoria\.Rcheck
@@ -14,3 +17,6 @@
 ^.claude$
 ^CLAUDE\.md$
 ^TODO\.md$
+^_pkgdown\.yml$
+^pkgdown$
+^\.github$

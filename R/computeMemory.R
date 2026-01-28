@@ -248,7 +248,7 @@ computeMemory <- function(
   lagged.data$subset.column <- NA
 
   #response string (checking if there is a 0 or not in the response)
-  if (!stringr::str_detect(response, "_0")) {
+  if (!grepl("_0", response, fixed = TRUE)) {
     response <- paste(response, "_0", sep = "")
   }
   if (!(response %in% colnames(lagged.data))) {
