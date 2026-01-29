@@ -18,7 +18,6 @@ Imports:
   ggplot2,
   ranger,
   zoo,
-  collinear,
   rlang
 Suggests:
   testthat

@@ -6,7 +6,7 @@
 \usage{
 plotMemory(
   memory.output = NULL,
-  title = "Ecological memory pattern",
+  ribbon = FALSE,
   legend.position = "right",
   filename = NULL
 )
@@ -14,11 +14,11 @@ plotMemory(
 \arguments{
 \item{memory.output}{list, output of \code{\link{computeMemory}}.}
 
-\item{title}{character string, title of the plot.}
+\item{ribbon}{logical, switches plotting of confidence intervals on (TRUE) and off (FALSE). Default: FALSE}
 
 \item{legend.position}{character string, legend position (e.g., "right", "bottom", "none").}
 
-\item{filename}{character string, name of output pdf file. If NULL or empty, no pdf is produced. It shouldn't include the extension of the output file.}
+\item{filename}{deprecated, not used. Kept for backwards compatibility.}
 }
 \value{
 A ggplot object.
@@ -32,6 +32,9 @@ data(palaeodataMemory)
 
 #plotting memory pattern
 plotMemory(memory.output = palaeodataMemory)
+
+#with confidence ribbon
+plotMemory(memory.output = palaeodataMemory, ribbon = TRUE)
 
 
 }

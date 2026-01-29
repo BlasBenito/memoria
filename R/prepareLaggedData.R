@@ -27,7 +27,7 @@
 #'
 #' @author Blas M. Benito  <blasbenito@gmail.com>
 #'
-#' @return A dataframe with columns representing time-delayed values of the drivers and the response. Column names have the lag number as a suffix. The response variable is identified in the output as "Response_0".
+#' @return A dataframe with columns representing time-delayed values of the drivers and the response. Column names have the lag number as a suffix. Has the attributes `response` and `drivers`, later used by [computeMemory()].
 #'
 #' @seealso \code{\link{computeMemory}}
 #'
@@ -42,12 +42,13 @@
 #'  drivers = c("climate.temperatureAverage", "climate.rainfallAverage"),
 #'  time = "age",
 #'  oldest.sample = "last",
-#'  lags = seq(0.2, 1, by=0.2),
-#'  time.zoom=NULL,
-#'  scale=FALSE
+#'  lags = seq(0.2, 1, by=0.2)
 #')
-#
+#'
 #'str(lagged.data)
+#'
+#'# Check attributes (used by computeMemory)
+#'attributes(lagged.data)
 #'
 #' @export
 prepareLaggedData <- function(
@@ -118,16 +119,36 @@ prepareLaggedData <- function(
   }
 
   #testing if lags are regular
-  diff.lags <- vector()
-  for (i in length(lags):2) {
-    diff.lags <- c(diff.lags, lags[i] - lags[i - 1])
+  diff.lags <- diff(lags)
+  if (sd(diff.lags) < 0e-10) {
+    stop("Argument 'lags' must be a regular sequence.")
   }
-  if (round(sd(diff.lags), 2) != 0) {
-    stop("Numeric sequence provided in argument lags is not regular.")
+
+  diff.time <- diff(input.data[[time]])
+  if (sd(diff.time) < 0e-10) {
+    stop(
+      "Column '",
+      time,
+      "' of argument 'input.data' is not a regular sequence."
+    )
+  }
+
+  if (max(diff.lags) < min(diff.time)) {
+    lags <- seq(
+      from = min(lags),
+      to = max(lags),
+      by = min(diff.time)
+    )
+
+    message(
+      "Lags interval is smaller than the time interval in 'input.data', resetting 'lags' to: ",
+      paste(lags, collapse = ", "),
+      "."
+    )
   }
 
   #computing data resolution to adjust lags for the annual resolution dataset
-  temporal.resolution <- input.data[2, time] - input.data[1, time]
+  temporal.resolution <- mean(diff.time, na.rm = TRUE)
 
   #converting lags from years to cases to be used as lags
   lags.to.rows <- round(lags / temporal.resolution, 0)
@@ -135,7 +156,9 @@ prepareLaggedData <- function(
   #testing lags.to.rows
   if (length(unique(lags.to.rows)) != length(lags.to.rows)) {
     stop(
-      "There is something wrong with the lags argument, I cannot translate lags into row indexes without repeating indexes. Probably lags are not defined in the same units as time/age. Take in mind that lags must be in the same units as the time/age column, and must be multiples of the time resolution (i.e. if time resolution is 100, valid lags are 0, 100, 200, 300, etc)"
+      "Lags must be in the units of the column '",
+      time,
+      "' and it's values be multiples of the time resolution (i.e. if time resolution is 100, valid lags are 0, 100, 200, 300, etc)"
     )
   }
 
@@ -184,7 +207,7 @@ prepareLaggedData <- function(
   )
 
   #naming columns
-  colnames(response.lags) <- paste("Response", lags, sep = "_")
+  colnames(response.lags) <- paste(response, lags, sep = "__")
 
   #driver lags
   for (driver in drivers) {
@@ -196,7 +219,7 @@ prepareLaggedData <- function(
     )
 
     #naming columns
-    colnames(driver.lags) <- paste(driver, lags, sep = "_")
+    colnames(driver.lags) <- paste(driver, lags, sep = "__")
 
     #joining with response lags
     response.lags <- cbind(response.lags, driver.lags)
@@ -215,6 +238,9 @@ prepareLaggedData <- function(
   } else {
     response.lags <- data.frame(response.lags, time)
   }
+
+  attr(x = response.lags, which = "response") <- response
+  attr(x = response.lags, which = "drivers") <- drivers
 
   return(response.lags)
 }

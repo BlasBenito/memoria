@@ -5,28 +5,26 @@
 \title{Quantifies ecological memory with Random Forest.}
 \usage{
 computeMemory(
- lagged.data = NULL,
- drivers = NULL,
- response = "Response",
- add.random = TRUE,
- random.mode = "autocorrelated",
- repetitions = 10,
- subset.response = "none",
- min.node.size = 5,
- num.trees = 2000,
- mtry = 2
- )
+  lagged.data = NULL,
+  response = NULL,
+  drivers = NULL,
+  random.mode = "autocorrelated",
+  repetitions = 10,
+  subset.response = "none",
+  min.node.size = 5,
+  num.trees = 500,
+  mtry = NULL,
+  num.threads = 2
+)
 }
 \arguments{
 \item{lagged.data}{a lagged dataset resulting from \code{\link{prepareLaggedData}}. See \code{\link{palaeodataLagged}} as example.}
 
-\item{drivers}{a character string or vector of character strings with variables to be used as predictors in the model (i.e. c("Suitability", "Driver.A")). \strong{Important:} \code{drivers} names must not have the character "_".}
+\item{response}{character string, name of the response variable. Not required if `lagged.data` was generated with [prepareLaggedData]. Default: NULL}
 
-\item{response}{character string, name of the response variable (typically, "Response_0").}
+\item{drivers}{a character string or vector of character strings with variables to be used as predictors in the model. Not required if `lagged.data` was generated with [prepareLaggedData].. \strong{Important:} \code{drivers} names must not have the character "__" (double underscore). Default: NULL}
 
-\item{add.random}{if TRUE, adds a random term to the model, useful to assess the significance of the variable importance scores.}
-
-\item{random.mode}{either "white.noise" or "autocorrelated". See details.}
+\item{random.mode}{either "none", "white.noise" or "autocorrelated". See details.}
 
 \item{repetitions}{integer, number of random forest models to fit.}
 
@@ -34,23 +32,27 @@ computeMemory(
 
 \item{min.node.size}{integer, argument of the \link[ranger]{ranger} function. Minimal number of samples to be allocated in a terminal node. Default is 5.}
 
-\item{num.trees}{integer, argument of the \link[ranger]{ranger} function. Number of regression trees to be fitted (size of the forest). Default is 2000.}
+\item{num.trees}{integer, argument of the \link[ranger]{ranger} function. Number of regression trees to be fitted (size of the forest). Default is 500}
 
-\item{mtry}{integer, argument of the \link[ranger]{ranger} function. Number of variables to possibly split at in each node. Default is 2.}
+\item{mtry}{integer, argument of the \link[ranger]{ranger} function. Number of variables to possibly split at in each node. Default: NULL.}
+
+\item{num.threads}{integer, number of cores \link[ranger]{ranger} can use for multithreading. Default: 2}
 }
 \value{
-A list with 4 slots:
+A list with 5 slots:
  \itemize{
- \item \code{memory} dataframe with five columns:
+ \item \code{response} character, response variable name.
+ \item \code{drivers} character vector, driver variable names.
+ \item \code{memory} dataframe with six columns:
     \itemize{
-      \item \code{Variable} character, names and lags of the different variables used to model ecological memory.
-      \item \code{median} numeric, median importance across \code{repetitions} of the given \code{Variable} according to Random Forest.
-      \item \code{sd} numeric, standard deviation of the importance values of the given \code{Variable} across \code{repetitions}.
-      \item \code{min} and \code{max} numeric, percentiles 0.05 and 0.95 of importance values of the given \code{Variable} across \code{repetitions}.
+      \item \code{median} numeric, median importance across \code{repetitions} of the given \code{variable} according to Random Forest.
+      \item \code{sd} numeric, standard deviation of the importance values of the given \code{variable} across \code{repetitions}.
+      \item \code{min} and \code{max} numeric, percentiles 0.05 and 0.95 of importance values of the given \code{variable} across \code{repetitions}.
+      \item \code{variable} character, names of the different variables used to model ecological memory.
+      \item \code{lag} numeric, time lag values.
     }
  \item \code{R2} vector, values of pseudo R-squared value obtained for the Random Forest model fitted on each repetition. Pseudo R-squared is the Pearson correlation between the observed and predicted data.
  \item \code{prediction} dataframe, with the same columns as the dataframe in the slot \code{memory}, with the median and confidence intervals of the predictions of all random forest models fitted.
- \item \code{multicollinearity} multicollinearity analysis on the input data performed with \link[collinear]{vif_df}. A vif value higher than 5 indicates that the given variable is highly correlated with other variables.
 }
 }
 \description{
@@ -71,21 +73,22 @@ Takes the output of \code{\link{prepareLaggedData}} to fit the following model w
 }
 }
 \details{
-This function uses the \link[ranger]{ranger} package to fit Random Forest models. Please, check the help of the \link[ranger]{ranger} function to better understand how Random Forest is parameterized in this package. This function fits the model explained above as many times as defined in the argument \code{repetitions}. To test the statistical significance of the variable importance scores returned by random forest, on each repetition the model is fitted with a different \code{r} (random) term. If \code{random.mode} equals "autocorrelated", the random term will have a temporal autocorrelation, and if it equals "white.noise", it will be a pseudo-random sequence of numbers generated with \code{\link{rnorm}}, with no temporal autocorrelation. The importance of the random sequence (as computed by random forest) is stored for each model run, and used as a benchmark to assess the importance of the other predictors used in the models. Importance values of other predictors that are above the median of the importance of the random term should be interpreted as non-random, and therefore, significant.
+This function uses the \link[ranger]{ranger} package to fit Random Forest models. Please, check the help of the \link[ranger]{ranger} function to better understand how Random Forest is parameterized in this package. This function fits the model explained above as many times as defined in the argument \code{repetitions}.
+
+To test the statistical significance of the variable importance scores returned by random forest, on each repetition the model is fitted with a different \code{r} (random) term, unless \code{random.mode = "none"}. If \code{random.mode} equals "autocorrelated", the random term will have a temporal autocorrelation, and if it equals "white.noise", it will be a pseudo-random sequence of numbers generated with \code{\link{rnorm}}, with no temporal autocorrelation. The importance of the random sequence in predicting the response is stored for each model run, and used as a benchmark to assess the importance of the other predictors.
+
+Importance values of other predictors that are above the median of the importance of the random term should be interpreted as non-random, and therefore, significant.
 }
 \examples{
 \donttest{
 #loading data
 data(palaeodataLagged)
 
+# Simplified call - response and drivers auto-detected from attributes
 memory.output <- computeMemory(
  lagged.data = palaeodataLagged,
- drivers = c("climate.temperatureAverage", "climate.rainfallAverage"),
- response = "Response",
- add.random = TRUE,
  random.mode = "autocorrelated",
- repetitions = 10,
- subset.response = "none"
+ repetitions = 10
 )
 
 str(memory.output)

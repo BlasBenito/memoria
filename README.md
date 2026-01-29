@@ -45,7 +45,6 @@ memory_output <- computeMemory(
   lagged.data = palaeodataLagged,
   drivers = c("climate.temperatureAverage", "climate.rainfallAverage"),
   response = "Response",
-  add.random = TRUE,
   random.mode = "autocorrelated",
   repetitions = 100
 )

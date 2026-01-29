@@ -172,7 +172,6 @@ runExperiment <- function(
         lagged.data = simulation.data.lagged,
         drivers = driver.column,
         repetitions = repetitions,
-        add.random = TRUE,
         random.mode = "autocorrelated",
         response = "Response",
         subset.response = subset.response

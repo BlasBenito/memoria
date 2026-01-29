@@ -95,7 +95,7 @@ library(rpart.plot)
 
 # Fit a simple tree
 tree_model <- rpart(
-  formula = Response_0 ~ Response_Lag_0.2 + climate.temperatureAverage_Lag_0.2,
+  formula = `pollen.pinus__0` ~ `pollen.pinus__0.2` + `climate.temperatureAverage__0.2`,
   data = lagged_data,
   control = rpart.control(minbucket = 10)
 )
@@ -116,12 +116,12 @@ Predictions are averaged across trees. This ensemble approach reduces the instab
 
 ```{r rf-example}
 # Prepare data for ranger
-rf_data <- lagged_data[, grepl("Response|climate", colnames(lagged_data))]
+rf_data <- lagged_data[, grepl("pollen.pinus|climate", colnames(lagged_data))]
 
 # Fit Random Forest
 rf_model <- ranger(
   data = rf_data,
-  dependent.variable.name = "Response_0",
+  dependent.variable.name = "pollen.pinus__0",
   num.trees = 500,
   min.node.size = 5,
   mtry = 2,
@@ -162,11 +162,9 @@ Two benchmark types are available:
 # Compute memory with autocorrelated benchmark
 data(palaeodataLagged)
 
+# Simplified call - response and drivers auto-detected from attributes
 memory_result <- computeMemory(
   lagged.data = palaeodataLagged,
-  drivers = c("climate.temperatureAverage", "climate.rainfallAverage"),
-  response = "Response",
-  add.random = TRUE,
   random.mode = "autocorrelated",
   repetitions = 100
 )
@@ -191,7 +189,7 @@ The `extractMemoryFeatures()` function quantifies memory patterns:
 features <- extractMemoryFeatures(
   memory.pattern = memory_result,
   exogenous.component = c("climate.temperatureAverage", "climate.rainfallAverage"),
-  endogenous.component = "Response",
+  endogenous.component = "pollen.pinus",
   scale.strength = TRUE
 )
 
@@ -253,9 +251,9 @@ The `plotInteraction()` function creates 2D response surfaces showing how two pr
 plotInteraction(
   model = rf_model,
   data = rf_data,
-  x = "climate.temperatureAverage_Lag_0",
-  y = "Response_Lag_0.2",
-  z = "Response_0",
+  x = "climate.temperatureAverage__0",
+  y = "pollen.pinus__0.2",
+  z = "pollen.pinus__0",
   point.size.range = c(0.5, 3)
 )
 ```

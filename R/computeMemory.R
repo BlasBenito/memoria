@@ -16,47 +16,39 @@
 #'  \item \eqn{r} represents a column of random values, used to test the significance of the variable importance scores returned by Random Forest.
 #' }
 #'
-#'
-#'@usage computeMemory(
-#'  lagged.data = NULL,
-#'  drivers = NULL,
-#'  response = "Response",
-#'  add.random = TRUE,
-#'  random.mode = "autocorrelated",
-#'  repetitions = 10,
-#'  subset.response = "none",
-#'  min.node.size = 5,
-#'  num.trees = 2000,
-#'  mtry = 2
-#'  )
-#'
 #' @param lagged.data a lagged dataset resulting from \code{\link{prepareLaggedData}}. See \code{\link{palaeodataLagged}} as example.
-#' @param drivers  a character string or vector of character strings with variables to be used as predictors in the model (i.e. c("Suitability", "Driver.A")). \strong{Important:} \code{drivers} names must not have the character "_".
-#' @param add.random if TRUE, adds a random term to the model, useful to assess the significance of the variable importance scores.
-#' @param random.mode either "white.noise" or "autocorrelated". See details.
+#' @param response character string, name of the response variable. Not required if `lagged.data` was generated with [prepareLaggedData]. Default: NULL
+#' @param drivers  a character string or vector of character strings with variables to be used as predictors in the model. Not required if `lagged.data` was generated with [prepareLaggedData].. \strong{Important:} \code{drivers} names must not have the character "__" (double underscore). Default: NULL
+#' @param random.mode either "none", "white.noise" or "autocorrelated". See details.
 #' @param repetitions integer, number of random forest models to fit.
-#' @param response character string, name of the response variable (typically, "Response_0").
 #' @param subset.response character string with values "up", "down" or "none", triggers the subsetting of the input dataset. "up" only models memory on cases where the response's trend is positive, "down" selects cases with negative trends, and "none" selects all cases.
 #' @param min.node.size integer, argument of the \link[ranger]{ranger} function. Minimal number of samples to be allocated in a terminal node. Default is 5.
-#' @param num.trees integer, argument of the \link[ranger]{ranger} function. Number of regression trees to be fitted (size of the forest). Default is 2000.
-#' @param mtry  integer, argument of the \link[ranger]{ranger} function. Number of variables to possibly split at in each node. Default is 2.
+#' @param num.trees integer, argument of the \link[ranger]{ranger} function. Number of regression trees to be fitted (size of the forest). Default is 500
+#' @param mtry  integer, argument of the \link[ranger]{ranger} function. Number of variables to possibly split at in each node. Default: NULL.
+#' @param num.threads integer, number of cores \link[ranger]{ranger} can use for multithreading. Default: 2
 #'
-#' @details This function uses the \link[ranger]{ranger} package to fit Random Forest models. Please, check the help of the \link[ranger]{ranger} function to better understand how Random Forest is parameterized in this package. This function fits the model explained above as many times as defined in the argument \code{repetitions}. To test the statistical significance of the variable importance scores returned by random forest, on each repetition the model is fitted with a different \code{r} (random) term. If \code{random.mode} equals "autocorrelated", the random term will have a temporal autocorrelation, and if it equals "white.noise", it will be a pseudo-random sequence of numbers generated with \code{\link{rnorm}}, with no temporal autocorrelation. The importance of the random sequence (as computed by random forest) is stored for each model run, and used as a benchmark to assess the importance of the other predictors used in the models. Importance values of other predictors that are above the median of the importance of the random term should be interpreted as non-random, and therefore, significant.
+#' @details This function uses the \link[ranger]{ranger} package to fit Random Forest models. Please, check the help of the \link[ranger]{ranger} function to better understand how Random Forest is parameterized in this package. This function fits the model explained above as many times as defined in the argument \code{repetitions}.
+#'
+#' To test the statistical significance of the variable importance scores returned by random forest, on each repetition the model is fitted with a different \code{r} (random) term, unless \code{random.mode = "none"}. If \code{random.mode} equals "autocorrelated", the random term will have a temporal autocorrelation, and if it equals "white.noise", it will be a pseudo-random sequence of numbers generated with \code{\link{rnorm}}, with no temporal autocorrelation. The importance of the random sequence in predicting the response is stored for each model run, and used as a benchmark to assess the importance of the other predictors.
+#'
+#' Importance values of other predictors that are above the median of the importance of the random term should be interpreted as non-random, and therefore, significant.
 #'
 #' @author Blas M. Benito  <blasbenito@gmail.com>
 #'
-#' @return A list with 4 slots:
+#' @return A list with 5 slots:
 #'  \itemize{
-#'  \item \code{memory} dataframe with five columns:
+#'  \item \code{response} character, response variable name.
+#'  \item \code{drivers} character vector, driver variable names.
+#'  \item \code{memory} dataframe with six columns:
 #'     \itemize{
-#'       \item \code{Variable} character, names and lags of the different variables used to model ecological memory.
-#'       \item \code{median} numeric, median importance across \code{repetitions} of the given \code{Variable} according to Random Forest.
-#'       \item \code{sd} numeric, standard deviation of the importance values of the given \code{Variable} across \code{repetitions}.
-#'       \item \code{min} and \code{max} numeric, percentiles 0.05 and 0.95 of importance values of the given \code{Variable} across \code{repetitions}.
+#'       \item \code{median} numeric, median importance across \code{repetitions} of the given \code{variable} according to Random Forest.
+#'       \item \code{sd} numeric, standard deviation of the importance values of the given \code{variable} across \code{repetitions}.
+#'       \item \code{min} and \code{max} numeric, percentiles 0.05 and 0.95 of importance values of the given \code{variable} across \code{repetitions}.
+#'       \item \code{variable} character, names of the different variables used to model ecological memory.
+#'       \item \code{lag} numeric, time lag values.
 #'     }
 #'  \item \code{R2} vector, values of pseudo R-squared value obtained for the Random Forest model fitted on each repetition. Pseudo R-squared is the Pearson correlation between the observed and predicted data.
 #'  \item \code{prediction} dataframe, with the same columns as the dataframe in the slot \code{memory}, with the median and confidence intervals of the predictions of all random forest models fitted.
-#'  \item \code{multicollinearity} multicollinearity analysis on the input data performed with \link[collinear]{vif_df}. A vif value higher than 5 indicates that the given variable is highly correlated with other variables.
 #' }
 #'
 #'
@@ -74,14 +66,11 @@
 #'#loading data
 #'data(palaeodataLagged)
 #'
+#'# Simplified call - response and drivers auto-detected from attributes
 #'memory.output <- computeMemory(
 #'  lagged.data = palaeodataLagged,
-#'  drivers = c("climate.temperatureAverage", "climate.rainfallAverage"),
-#'  response = "Response",
-#'  add.random = TRUE,
 #'  random.mode = "autocorrelated",
-#'  repetitions = 10,
-#'  subset.response = "none"
+#'  repetitions = 10
 #')
 #'
 #'str(memory.output)
@@ -94,50 +83,42 @@
 #' @export
 computeMemory <- function(
   lagged.data = NULL,
+  response = NULL,
   drivers = NULL,
-  response = "Response",
-  add.random = TRUE,
   random.mode = "autocorrelated",
   repetitions = 10,
   subset.response = "none",
   min.node.size = 5,
-  num.trees = 2000,
-  mtry = 2
+  num.trees = 500,
+  mtry = NULL,
+  num.threads = 2
 ) {
   #checking data
   if (!inherits(lagged.data, "data.frame")) {
     stop("The input data must be a dataframe produced by prepareLaggedData.")
   }
 
-  #checking drivers
-  if (!is.character(drivers)) {
-    stop(
-      "Argument drivers should be a character vector with column names of lagged.data to be used as predictors in the model."
-    )
+  if (!is.null(attributes(lagged.data)$response)) {
+    response <- attributes(lagged.data)$response
+  } else if (is.null(response)) {
+    stop("Argument 'response' cannot be NULL.")
   }
 
-  #checking response
-  if (!is.character(response)) {
-    stop(
-      "Argument response should be a character vector with a column name of lagged.data to be used as response in the model. If lagged.data was prepared with prepareLaggedData, the response column is likely named 'Response'."
-    )
+  if (!is.null(attributes(lagged.data)$drivers)) {
+    drivers <- attributes(lagged.data)$drivers
+  } else if (is.null(drivers)) {
+    stop("Argument 'drivers' cannot be NULL.")
   }
 
-  #checking random.mode
-  if (
-    !(random.mode %in%
-      c(
-        "autocorrelated",
-        "correlated",
-        "autocor",
-        "white.noise",
-        "white",
-        "noise"
-      ))
-  ) {
-    message("Setting random.mode to 'autocorrelated'.")
-    random.mode <- "autocorrelated"
-  }
+  random.mode <- match.arg(
+    arg = random.mode,
+    choices = c(
+      "autocorrelated",
+      "white.noise",
+      "none"
+    ),
+    several.ok = FALSE
+  )
 
   #checking repetitions
   if (!is.numeric(repetitions)) {
@@ -147,34 +128,12 @@ computeMemory <- function(
     repetitions <- as.integer(repetitions)
   }
 
-  #checking min.node.size
-  if (min.node.size < 5) {
-    message(
-      "Argument min.node.size should be equal or higher than 5, I am setting it to 5."
-    )
-    min.node.size <- 5
-  }
-
-  if (num.trees < 500) {
-    message(
-      "Argument num.trees should be equal or higher than 500, I am setting it to 500."
-    )
-    num.trees <- 500
-  }
-
-  if (mtry < 2) {
-    message(
-      "Argument mtry should be equal or higher than 2, I am setting it to 2"
-    )
-    mtry <- 2
-  }
-
   #function to add random columns to a dataframe for testing purposes
   addRandomColumn <- function(x, random.mode = "autocorrelated") {
-    if (random.mode %in% c("autocorrelated", "correlated", "autocor")) {
+    if (random.mode == "autocorrelated") {
       #generating the data
-      x$Random <- as.vector(rescaleVector(
-        filter(
+      x$random <- as.vector(rescaleVector(
+        stats::filter(
           rnorm(nrow(x)),
           filter = rep(1, sample.int(floor(nrow(x) / 4), 1)),
           method = "convolution",
@@ -185,8 +144,8 @@ computeMemory <- function(
       ))
     }
 
-    if (random.mode %in% c("white.noise", "white", "noise")) {
-      x$Random <- rnorm(nrow(x))
+    if (random.mode == "white.noise") {
+      x$random <- rnorm(nrow(x))
     }
 
     return(x)
@@ -196,29 +155,16 @@ computeMemory <- function(
   rescaleVector <- function(
     x = rnorm(100),
     new.min = 0,
-    new.max = 100,
-    integer = FALSE
+    new.max = 100
   ) {
     #data extremes
     old.min <- min(x)
     old.max <- max(x)
 
-    #SCALING VECTOR
-    #----------------------
-
-    x <- ((x - old.min) / (old.max - old.min)) * (new.max - new.min) + new.min
-
-    #FORCES VECTOR INTO INTEGER
-    #----------------------
-
-    if (integer) {
-      x <- floor(x)
-    }
-
-    return(x)
+    ((x - old.min) / (old.max - old.min)) * (new.max - new.min) + new.min
   }
 
-  #removing age column
+  #removing time column
   lagged.data$time <- NULL
 
   #removing variables not in drivers
@@ -230,15 +176,6 @@ computeMemory <- function(
   string.pattern <- paste(response, "|", driver.string, sep = "")
   lagged.data <- lagged.data[, grepl(string.pattern, colnames(lagged.data))]
 
-  #multicollinearity
-  multicollinearity <- collinear::vif_df(
-    df = lagged.data,
-    predictors = colnames(lagged.data)[2:ncol(lagged.data)]
-  )
-  colnames(multicollinearity)[
-    colnames(multicollinearity) == "predictor"
-  ] <- "variable"
-
   #object to store outputs
   importance.list <- list()
   pseudo.R2 <- vector()
@@ -248,11 +185,11 @@ computeMemory <- function(
   lagged.data$subset.column <- NA
 
   #response string (checking if there is a 0 or not in the response)
-  if (!grepl("_0", response, fixed = TRUE)) {
-    response <- paste(response, "_0", sep = "")
+  if (!grepl("__0", response, fixed = TRUE)) {
+    response <- paste(response, "__0", sep = "")
   }
   if (!(response %in% colnames(lagged.data))) {
-    stop("Response variable not found in the input data.")
+    stop("Variable '", response, "' not found in the input data.")
   }
 
   #adding labels
@@ -271,31 +208,27 @@ computeMemory <- function(
   subset.vector <- lagged.data$subset.column
   lagged.data$subset.column <- NULL
 
-  # cat("Repetition: ")
-
   #iterating through repetitions
   for (i in 1:repetitions) {
-    # cat(i, " ")
+    set.seed(i)
 
     #subsetting according to user choice
     if (subset.response == "up") {
       lagged.data.model <- lagged.data[subset.vector == "up", ]
-    }
-    if (subset.response == "down") {
+    } else if (subset.response == "down") {
       lagged.data.model <- lagged.data[subset.vector == "down", ]
-    }
-    if (subset.response == "none" || is.null(subset.response)) {
+    } else if (subset.response == "none" || is.null(subset.response)) {
       lagged.data.model <- lagged.data
     }
     lagged.data.model <- na.omit(lagged.data.model)
 
     #adding random column
-    if (add.random) {
+    if (random.mode != "none") {
       lagged.data.model <- addRandomColumn(
         x = lagged.data.model,
         random.mode = random.mode
       )
-    } #end of adding random column
+    }
 
     #fitting random forest
     model.output <- ranger::ranger(
@@ -308,7 +241,9 @@ computeMemory <- function(
       min.node.size = min.node.size,
       num.trees = num.trees,
       verbose = FALSE,
-      mtry = mtry
+      mtry = mtry,
+      seed = i,
+      num.threads = num.threads
     )
 
     #importance
@@ -332,7 +267,7 @@ computeMemory <- function(
 
   #processing output for plotting
   importance.df <- data.frame(
-    Variable = colnames(importance.df),
+    variable = colnames(importance.df),
     median = apply(importance.df, 2, median),
     sd = apply(importance.df, 2, sd),
     min = apply(importance.df, 2, quantile, probs = 0.05),
@@ -344,58 +279,57 @@ computeMemory <- function(
     importance.df,
     test = do.call(
       rbind,
-      strsplit(as.character(importance.df$Variable), '_', fixed = TRUE)
+      strsplit(as.character(importance.df$variable), "__", fixed = TRUE)
     ),
     stringsAsFactors = FALSE
   )
-  importance.df$Variable <- NULL
-  names(importance.df)[5:6] <- c("Variable", "Lag")
+  importance.df$variable <- NULL
+  names(importance.df)[5:6] <- c("variable", "lag")
+  rownames(importance.df) <- NULL
 
-  #removing the word "Random" fromt he lag column
-  importance.df[importance.df$Variable == importance.df$Lag, "Lag"] <- 0
+  #removing the word "random" from the lag column
+  importance.df[importance.df$lag == "random", "lag"] <- 0
 
   #repeating the random variable
-  if (add.random) {
+  if (random.mode != "none") {
     importance.df <- rbind(
       importance.df,
       importance.df[
         rep(
-          which(importance.df$Variable == "Random"),
-          each = length(na.omit(unique(importance.df$Lag))) - 1
+          which(importance.df$variable == "random"),
+          each = length(na.omit(unique(importance.df$lag))) - 1
         ),
       ]
     )
-    importance.df[importance.df$Variable == "Random", "Lag"] <- na.omit(unique(
-      importance.df$Lag
+    importance.df[importance.df$variable == "random", "lag"] <- na.omit(unique(
+      importance.df$lag
     ))
   }
-
-  #setting the floor of random at 0
-  importance.df[importance.df$Variable == "Random", "min"] <- 0
 
   #setting the median of random to 0 if it is negative (only important when white.noise is selected)
   if (
     random.mode == "white.noise" &&
-      importance.df[importance.df$Variable == "Random", "median"][1] < 0
+      importance.df[importance.df$variable == "random", "median"][1] < 0
   ) {
-    importance.df[importance.df$Variable == "Random", "median"] <- 0
+    importance.df[importance.df$variable == "random", "median"] <- 0
   }
 
   #variable as factor
-  if (add.random) {
-    importance.df$Variable <- factor(
-      importance.df$Variable,
-      levels = c("Response", drivers, "Random")
+  response <- gsub(pattern = "__0", replacement = "", x = response)
+  if (random.mode != "none") {
+    importance.df$variable <- factor(
+      importance.df$variable,
+      levels = c(response, drivers, "random")
     )
   } else {
-    importance.df$Variable <- factor(
-      importance.df$Variable,
-      levels = c("Response", drivers)
+    importance.df$variable <- factor(
+      importance.df$variable,
+      levels = c(response, drivers)
     )
   }
 
   #lag to numeric
-  importance.df$Lag <- as.numeric(importance.df$Lag)
+  importance.df$lag <- as.numeric(importance.df$lag)
 
   #aggregating predictions
   predictions.aggregated <- do.call("rbind", predictions.list)
@@ -410,10 +344,11 @@ computeMemory <- function(
 
   #output
   output.list <- list()
+  output.list$response <- response
+  output.list$drivers <- drivers
   output.list$memory <- importance.df
   output.list$R2 <- pseudo.R2
   output.list$prediction <- predictions.aggregated
-  output.list$multicollinearity <- multicollinearity
 
   return(output.list)
 }

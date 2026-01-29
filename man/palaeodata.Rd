@@ -16,15 +16,15 @@ A dataframe with a regular time grid of 0.2 ky resolution resulting from applyin
 \details{
 \itemize{
   \item \emph{age} in ky before present (ky BP).
-  \item \emph{pinus} pollen counts of Pinus.
-  \item \emph{quercus} pollen counts of Quercus.
-  \item \emph{poaceae} pollen counts of Poaceae.
-  \item \emph{artemisia} pollen counts of Artemisia.
-  \item \emph{temperatureAverage} average annual temperature in degrees Celsius.
-  \item \emph{rainfallAverage} average annual precipitation in millimetres per day (mm/day).
-  \item \emph{temperatureWarmestMonth} average temperature of the warmest month, in degrees Celsius.
-  \item \emph{temperatureColdestMonth} average temperature of the coldest month, in degrees Celsius.
-  \item \emph{oxigenIsotope} delta O18, global ratio of stable isotopes in the sea floor, see \url{http://lorraine-lisiecki.com/stack.html} for further details.
+  \item \emph{pollen.pinus} pollen percentages of Pinus.
+  \item \emph{pollen.quercus} pollen percentages of Quercus.
+  \item \emph{pollen.poaceae} pollen percentages of Poaceae.
+  \item \emph{pollen.artemisia} pollen percentages of Artemisia.
+  \item \emph{climate.temperatureAverage} average annual temperature in degrees Celsius.
+  \item \emph{climate.rainfallAverage} average annual precipitation in millimetres per day (mm/day).
+  \item \emph{climate.temperatureWarmestMonth} average temperature of the warmest month, in degrees Celsius.
+  \item \emph{climate.temperatureColdestMonth} average temperature of the coldest month, in degrees Celsius.
+  \item \emph{climate.oxigenIsotope} delta O18, global ratio of stable isotopes in the sea floor, see \url{http://lorraine-lisiecki.com/stack.html} for further details.
 }
 }
 \author{

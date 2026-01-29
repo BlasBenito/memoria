@@ -4,15 +4,15 @@
 #'
 #' @usage plotMemory(
 #'   memory.output = NULL,
-#'   title = "Ecological memory pattern",
+#'   ribbon = FALSE,
 #'   legend.position = "right",
 #'   filename = NULL
 #' )
 #'
 #' @param memory.output list, output of \code{\link{computeMemory}}.
-#' @param title character string, title of the plot.
+#' @param ribbon logical, switches plotting of confidence intervals on (TRUE) and off (FALSE). Default: FALSE
 #' @param legend.position character string, legend position (e.g., "right", "bottom", "none").
-#' @param filename  character string, name of output pdf file. If NULL or empty, no pdf is produced. It shouldn't include the extension of the output file.
+#' @param filename deprecated, not used. Kept for backwards compatibility.
 #'
 #' @author Blas M. Benito  <blasbenito@gmail.com>
 #'
@@ -27,58 +27,67 @@
 #'#plotting memory pattern
 #'plotMemory(memory.output = palaeodataMemory)
 #'
+#'#with confidence ribbon
+#'plotMemory(memory.output = palaeodataMemory, ribbon = TRUE)
+#'
 #'
 #'@export
 plotMemory <- function(
   memory.output = NULL,
-  title = "Ecological memory pattern",
+  ribbon = FALSE,
   legend.position = "right",
   filename = NULL
 ) {
-  #to dataframe
-  memory.output.df <- memory.output$memory
-
-  #guessing units of Lags
-  if ((memory.output.df[2, "Lag"] - memory.output.df[1, "Lag"]) < 1) {
-    lag.units <- "ky"
-  } else {
-    lag.units <- "years"
-  }
+  line.alpha <- ifelse(
+    test = ribbon,
+    yes = 0.6,
+    no = 1
+  )
 
   #plot
-  plot.memory <- ggplot(
-    data = memory.output.df,
-    aes(
-      x = Lag,
-      y = median,
-      group = Variable,
-      color = Variable,
-      fill = Variable
-    )
-  ) +
-    geom_ribbon(aes(ymin = min, ymax = max), alpha = 0.3, colour = NA) +
-    geom_line(alpha = 0.6, linewidth = 1.5) +
+  if (ribbon) {
+    plot.memory <- ggplot(
+      data = memory.output$memory,
+      aes(
+        x = lag,
+        y = median,
+        group = variable,
+        color = variable,
+        fill = variable
+      )
+    ) +
+      geom_ribbon(aes(ymin = min, ymax = max), alpha = 0.25, colour = NA) +
+      geom_line(alpha = line.alpha, linewidth = 1.5)
+  } else {
+    plot.memory <- ggplot(
+      data = memory.output$memory,
+      aes(
+        x = lag,
+        y = median,
+        group = variable,
+        color = variable,
+        fill = variable
+      )
+    ) +
+      geom_line(alpha = line.alpha, linewidth = 1.5)
+  }
+
+  plot.memory <- plot.memory +
     scale_color_viridis_d() +
     scale_fill_viridis_d() +
     scale_x_continuous(
-      breaks = unique(memory.output.df$Lag),
+      breaks = pretty(unique(memory.output$memory$lag)),
       expand = c(0, 0)
     ) +
     scale_y_continuous(expand = c(0, 0)) +
-    xlab(paste("Lag (", lag.units, ")", sep = "")) +
-    ylab("Relative importance") +
-    ggtitle(title) +
-    theme_classic() +
+    xlab("Lag") +
+    ylab("Permutation Importance") +
+    theme_bw() +
     theme(
       strip.text.x = element_text(size = 12),
       legend.position = legend.position,
       axis.text.x = element_text(size = 12)
     )
-
-  #plots to pdf
-  if (!is.null(filename)) {
-    ggsave(filename = paste(filename, ".pdf", sep = ""))
-  }
 
   return(plot.memory)
 }

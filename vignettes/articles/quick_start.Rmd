@@ -113,21 +113,23 @@ pollen_climate_lagged <- prepareLaggedData(
   drivers = c("climate.temperatureAverage", "climate.rainfallAverage"),
   time = "age",
   oldest.sample = "last",
-  lags = seq(0.2, 1, by = 0.2),
-  time.zoom = NULL,
-  scale = FALSE
+  lags = seq(0.2, 1, by = 0.2)
 )
 
 str(pollen_climate_lagged)
+
+# Check attributes (used by computeMemory for auto-detection)
+attr(pollen_climate_lagged, "response")
+attr(pollen_climate_lagged, "drivers")
 ```
 
 **Note on `oldest.sample`:** Set to `"last"` when the oldest sample is at the bottom of the dataframe (typical palaeoecological convention). Set to `"first"` if the oldest sample is at the top.
 
 The output columns follow a naming convention:
 
-- `Response_0`: Current response value
-- `Response_Lag_0.2`, `Response_Lag_0.4`, etc.: Endogenous terms
-- `climate.temperatureAverage_Lag_0`, `climate.temperatureAverage_Lag_0.2`, etc.: Concurrent effect and exogenous terms
+- `pollen.pinus__0`: Current response value
+- `pollen.pinus__0.2`, `pollen.pinus__0.4`, etc.: Endogenous terms
+- `climate.temperatureAverage__0`, `climate.temperatureAverage__0.2`, etc.: Concurrent effect and exogenous terms
 
 ## Step 3: Compute Memory
 
@@ -141,26 +143,21 @@ To assess significance, the function adds a random benchmark term. Two modes are
 The model runs multiple times (`repetitions`), regenerating the random term each time, then computes percentiles of importance scores.
 
 ```{r compute-memory-whitenoise, fig.width = 5, fig.height = 2}
+# Simplified call - response and drivers auto-detected from lagged data attributes
 memory_output <- computeMemory(
   lagged.data = pollen_climate_lagged,
-  drivers = c("climate.temperatureAverage", "climate.rainfallAverage"),
-  response = "Response",
-  add.random = TRUE,
   random.mode = "white.noise",
   repetitions = 100
 )
 
-# Output structure
+# Output structure (5 slots)
 names(memory_output)
 
-# Memory dataframe
+# Memory dataframe (lowercase column names: variable, lag)
 head(memory_output$memory)
 
 # Pseudo R-squared
 head(memory_output$R2)
-
-# Multicollinearity check (VIF > 5 indicates issues)
-head(memory_output$multicollinearity)
 
 # Plot
 plotMemory(memory_output)
@@ -171,9 +168,6 @@ Now with autocorrelated random mode (more stringent):
 ```{r compute-memory-autocor, fig.width = 5, fig.height = 2}
 memory_output_autocor <- computeMemory(
   lagged.data = pollen_climate_lagged,
-  drivers = c("climate.temperatureAverage", "climate.rainfallAverage"),
-  response = "Response",
-  add.random = TRUE,
   random.mode = "autocorrelated",
   repetitions = 100
 )
@@ -198,7 +192,7 @@ memory_features <- extractMemoryFeatures(
     "climate.temperatureAverage",
     "climate.rainfallAverage"
   ),
-  endogenous.component = "Response",
+  endogenous.component = "pollen.pinus",
   sampling.subset = NULL,
   scale.strength = TRUE
 )

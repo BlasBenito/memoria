@@ -33,7 +33,7 @@ prepareLaggedData(
 \item{scale}{boolean, if TRUE, applies the \code{\link{scale}} function to normalize the data. Required if the lagged data is going to be used to fit linear models.}
 }
 \value{
-A dataframe with columns representing time-delayed values of the drivers and the response. Column names have the lag number as a suffix. The response variable is identified in the output as "Response_0".
+A dataframe with columns representing time-delayed values of the drivers and the response. Column names have the lag number as a suffix. Has the attributes `response` and `drivers`, later used by [computeMemory()].
 }
 \description{
 Takes a multivariate time series, where at least one variable is meant to be used as a response while the others are meant to be used as predictors in a model, and organizes it in time lags, generating one new column per lag and variable in the model.
@@ -52,11 +52,13 @@ lagged.data <- prepareLaggedData(
  drivers = c("climate.temperatureAverage", "climate.rainfallAverage"),
  time = "age",
  oldest.sample = "last",
- lags = seq(0.2, 1, by=0.2),
- time.zoom=NULL,
- scale=FALSE
+ lags = seq(0.2, 1, by=0.2)
 )
+
 str(lagged.data)
+
+# Check attributes (used by computeMemory)
+attributes(lagged.data)
 
 }
 \seealso{
