@@ -16,11 +16,7 @@
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
-<li class="nav-item dropdown">
-  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/quick_start.html">Quick Start Guide</a></li>
-    <li><a class="dropdown-item" href="../articles/using_memoria.html">Understanding Ecological Memory Analysis</a></li>
-  </ul></li>
+<li class="nav-item"><a class="nav-link" href="../articles/index.html">Articles</a></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
@@ -48,19 +44,21 @@
 
     <div class="section level2">
     <h2 id="format">Format<a class="anchor" aria-label="anchor" href="#format"></a></h2>
-    <p>List with four slots.</p>
+    <p>List with five slots.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
 
-<ul><li><p><code>memory</code> dataframe with five columns:</p><ul><li><p><code>Variable</code> character, names and lags of the different variables used to model ecological memory.</p></li>
-<li><p><code>median</code> numeric, median importance across <code>repetitions</code> of the given <code>Variable</code> according to Random Forest.</p></li>
-<li><p><code>sd</code> numeric, standard deviation of the importance values of the given <code>Variable</code> across <code>repetitions</code>.</p></li>
-<li><p><code>min</code> and <code>max</code> numeric, percentiles 0.05 and 0.95 of importance values of the given <code>Variable</code> across <code>repetitions</code>.</p></li>
+<ul><li><p><code>response</code> character, response variable name.</p></li>
+<li><p><code>drivers</code> character vector, driver variable names.</p></li>
+<li><p><code>memory</code> dataframe with five columns:</p><ul><li><p><code>variable</code> character, names of the different variables used to model ecological memory.</p></li>
+<li><p><code>lag</code> numeric, time lag values.</p></li>
+<li><p><code>median</code> numeric, median importance across <code>repetitions</code> of the given <code>variable</code> according to Random Forest.</p></li>
+<li><p><code>sd</code> numeric, standard deviation of the importance values of the given <code>variable</code> across <code>repetitions</code>.</p></li>
+<li><p><code>min</code> and <code>max</code> numeric, percentiles 0.05 and 0.95 of importance values of the given <code>variable</code> across <code>repetitions</code>.</p></li>
 </ul></li>
 <li><p><code>R2</code> vector, values of pseudo R-squared value obtained for the Random Forest model fitted on each repetition. Pseudo R-squared is the Pearson correlation between the observed and predicted data.</p></li>
 <li><p><code>prediction</code> dataframe, with the same columns as the dataframe in the slot <code>memory</code>, with the median and confidence intervals of the predictions of all random forest models fitted.</p></li>
-<li><p><code>multicollinearity</code> multicollinearity analysis on the input data performed with <a href="https://blasbenito.github.io/collinear/reference/vif_df.html" class="external-link">vif_df</a>. A vif value higher than 5 indicates that the given variable is highly correlated with other variables.</p></li>
 </ul></div>
     <div class="section level2">
     <h2 id="author">Author<a class="anchor" aria-label="anchor" href="#author"></a></h2>

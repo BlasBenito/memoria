@@ -2,9 +2,9 @@ pandoc: '3.4'
 pkgdown: 2.2.0
 pkgdown_sha: ~
 articles:
-  articles/quick_start: quick_start.html
-  articles/using_memoria: using_memoria.html
-last_built: 2026-01-28T17:41Z
+  articles/download_history: download_history.html
+  articles/working_with_memoria: working_with_memoria.html
+last_built: 2026-01-30T13:41Z
 urls:
   reference: https://blasbenito.github.io/memoria/reference
   article: https://blasbenito.github.io/memoria/articles

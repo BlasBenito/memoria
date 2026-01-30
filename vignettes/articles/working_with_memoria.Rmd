@@ -1,5 +1,5 @@
 ---
-title: "Quick Start Guide"
+title: "Working with memoria"
 ---
 
 ```{r setup, include = FALSE}
@@ -12,7 +12,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-This guide walks through the complete memoria workflow: preparing data, computing ecological memory patterns, and extracting memory features.
+This article walks through the complete memoria workflow for quantifying ecological memory in palaeoecological datasets.
 
 ## Setup
 
@@ -31,18 +31,18 @@ $$p_{t} = p_{t-1} + \ldots + p_{t-n} + d_{t} + d_{t-1} + \ldots + d_{t-n}$$
 
 Where:
 
-- $p$ is pollen (or any biotic response)
+- $p$ is the biotic response (e.g., pollen abundance)
 - $d$ is the environmental driver
 - $t$ is time; $t-1$, $t-2$, etc. are time lags
-- $p_{t-1} + \ldots + p_{t-n}$ represents **endogenous memory**
-- $d_{t-1} + \ldots + d_{t-n}$ represents **exogenous memory**
-- $d_{t}$ represents the **concurrent effect**
+- $p_{t-1} + \ldots + p_{t-n}$ represents **endogenous memory** (effect of past response on current state)
+- $d_{t-1} + \ldots + d_{t-n}$ represents **exogenous memory** (effect of past drivers on current state)
+- $d_{t}$ represents the **concurrent effect** (synchronic driver influence)
 
 Random Forest returns importance scores for each term, which memoria plots and summarizes.
 
-## Step 1: Prepare Data
+## Workflow
 
-### Merge datasets with different temporal resolutions
+### Merge datasets
 
 The `mergePalaeoData()` function aligns and interpolates datasets sampled at different resolutions. Consider two built-in datasets:
 
@@ -102,7 +102,7 @@ ggplot(
   ggtitle("Pollen and palaeoclimate (merged)")
 ```
 
-## Step 2: Create Lagged Data
+### Create lagged data
 
 The `prepareLaggedData()` function organizes data into the lag structure required by the model. Each sample of the response is aligned with antecedent values of itself and the drivers.
 
@@ -131,13 +131,13 @@ The output columns follow a naming convention:
 - `pollen.pinus__0.2`, `pollen.pinus__0.4`, etc.: Endogenous terms
 - `climate.temperatureAverage__0`, `climate.temperatureAverage__0.2`, etc.: Concurrent effect and exogenous terms
 
-## Step 3: Compute Memory
+### Compute memory
 
 The `computeMemory()` function fits Random Forest models on the lagged data. It measures variable importance using permutation, which is robust to multicollinearity and temporal autocorrelation.
 
-To assess significance, the function adds a random benchmark term. Two modes are available:
+Two benchmark modes are available for significance testing:
 
-- `"white.noise"`: Random values without temporal structure
+- `"white.noise"`: Random values without temporal structure (faster)
 - `"autocorrelated"`: Random walk with temporal structure (more conservative, recommended)
 
 The model runs multiple times (`repetitions`), regenerating the random term each time, then computes percentiles of importance scores.
@@ -177,13 +177,9 @@ plotMemory(memory_output_autocor)
 
 Notice the yellow band (random benchmark) is higher with autocorrelated mode, providing a more conservative significance threshold.
 
-## Step 4: Extract Memory Features
+### Extract memory features
 
 The `extractMemoryFeatures()` function summarizes memory patterns into quantitative features:
-
-- **Memory strength**: Maximum difference between component importance and the random median (for endogenous, exogenous, and concurrent)
-- **Memory length**: Proportion of lags where importance exceeds the random median (endogenous and exogenous only)
-- **Dominance**: Proportion of significant lags where one component exceeds the other (endogenous and exogenous only)
 
 ```{r extract-features}
 memory_features <- extractMemoryFeatures(
@@ -200,13 +196,42 @@ memory_features <- extractMemoryFeatures(
 kable(memory_features)
 ```
 
+## Understanding the Output
+
+### Significance testing
+
+Random Forest provides importance scores but no built-in significance test. The solution is to add a random benchmark variable: if a predictor's importance equals or falls below the random variable's importance, we cannot distinguish its contribution from noise.
+
+In plots, predictors with importance above the yellow band (random median) are considered significant. The width of the band reflects uncertainty across model repetitions.
+
+The autocorrelated benchmark is recommended for palaeoecological analysis because it accounts for the temporal structure inherent in these datasets.
+
+### Memory features
+
+The extracted features quantify three aspects of ecological memory:
+
+- **Strength**: Maximum importance difference between a component and the random median. Higher values indicate stronger memory effects. Computed for endogenous, exogenous, and concurrent components.
+
+- **Length**: Proportion of lags where importance exceeds the random median. Values near 1 indicate persistent memory across all lags. Computed for endogenous and exogenous components only.
+
+- **Dominance**: Among significant lags, the proportion where one component (endogenous or exogenous) exceeds the other. Values near 1 indicate one component dominates; values near 0.5 indicate balance.
+
+## Batch Experiments
+
+The memoria package includes functions for batch analysis of simulated pollen curves from the [virtualPollen](https://github.com/BlasBenito/virtualPollen) package:
+
+- `runExperiment()`: Apply the full workflow across multiple simulations
+- `experimentToTable()`: Reshape experiment results into long format
+- `plotExperiment()`: Visualize memory patterns across parameter combinations
+
+These functions enable systematic exploration of how ecological memory varies with species traits and sampling resolution. The virtualPollen package must be installed separately from GitHub (`devtools::install_github("BlasBenito/virtualPollen")`).
+
 ## Summary
 
 The complete workflow:
+
 1. `mergePalaeoData()` - Align datasets with different resolutions
 2. `prepareLaggedData()` - Create lag structure
 3. `computeMemory()` - Fit Random Forest and compute importance
 4. `plotMemory()` - Visualize the memory pattern
 5. `extractMemoryFeatures()` - Quantify memory characteristics
-
-For theoretical background and advanced usage with simulated data, see the [Using memoria](using_memoria.html) article.

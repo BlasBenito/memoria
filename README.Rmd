@@ -159,8 +159,7 @@ The plot shows all ecological memory components of this dataset.
 
 ## Learn More
 
-- **[Quick Start Guide](https://blasbenito.github.io/memoria/articles/quick_start.html)**: Full workflow from raw data to memory features
-- **[Using memoria](https://blasbenito.github.io/memoria/articles/using_memoria.html)**: Detailed explanation of methods and theory
+- **[Working with memoria](https://blasbenito.github.io/memoria/articles/working_with_memoria.html)**: Complete workflow from raw data to memory features
 - **[Function Reference](https://blasbenito.github.io/memoria/reference/index.html)**: Documentation for all exported functions
 
 ## How to cite memoria
