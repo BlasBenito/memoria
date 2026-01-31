@@ -16,7 +16,6 @@
 
 ## Code improvements
 
-- Replaced `class(x) == "foo"` with `inherits(x, "foo")` in `plotInteraction()` for safer class checking.
 - Expanded compact `importFrom` directives into individual entries in NAMESPACE.
 - Added argument `num.threads` to `computeMemory()` to allow multithreading in `ranger::ranger()`.
 - Removed argument `add.random` from `computeMemory()` and replaced it with the option "none" in argument `random.mode`.
@@ -27,6 +26,10 @@
 
 - Fixed typos and improved clarity across roxygen2 documentation for `computeMemory()`, `extractMemoryFeatures()`, `mergePalaeoData()`, `plotMemory()`, `prepareLaggedData()`, `runExperiment()`, and dataset help pages.
 - Fixed NEWS.md header to comply with CRAN policy.
+
+## Other changes
+
+- Removed the function `plotInteraction()`, as it is available in `spatialRF::plot_response_surface()` and the package `pdp`.
 
 # memoria 1.0.0 (2019-05-17)
 

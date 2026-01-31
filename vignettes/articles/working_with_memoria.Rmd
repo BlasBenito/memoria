@@ -12,9 +12,47 @@ knitr::opts_chunk$set(
 )
 ```
 
-This article walks through the complete memoria workflow for quantifying ecological memory in palaeoecological datasets.
+This article walks through the complete memoria workflow for quantifying ecological memory in time series data consisting of at least one response and one predictor.
+
+## Ecological Memory
+
+The package `memoria` helps quantify how past and concurrent events shape the state of a system. This concept is summarized in the figure below:
+
+![Ecological Memory](ecological_memory.png)
+The blue and green curves represent the values of a biotic response `y` and a driver `x` over time. The vertical line `T` represents the *current* time, while `T - lag` represents a a previous time. The arrows represent *influence*, as follows:
+
+ + **Endogenous memory**: is the effect of past `y` on present `y`.
+ + **Exogenous memory**: is the effect of past `x` on present `y`.
+ + **Concurrent effect**: is the effect of present `x` on present `y`.
+ 
+To assess these effects, `memoria` generates the lagged data and trains the model
+
+$$y_{T} = y_{T-1} + \ldots + y_{T-n} + x_{T} + x_{T-1} + \ldots + x_{T-n} + r_{T}$$
+
+Where:
+
+- $y$ and $x$ are the response and the driver.
+- $T$ is the "current" time, and $t-1$ to  $t-n$, are the time lags.
+- $y_{T-1} + \ldots + y_{T-n}$ represents the **endogenous memory** across lags.
+- $x_{T-1} + \ldots + x_{T-n}$ represents the **exogenous memory** across lags.
+- $x_{T}$ represents the **concurrent effect**.
+- $r_{T}$ is a random term used to assess statistical significance.
+
+The ecological memory pattern is quantified using **permutation importance** from Random Forest models. For each predictor, the algorithm shuffles its values and measures the decrease in predictive accuracy—larger decreases indicate stronger influence on the response.
+
+![Ecological Memory](memory_plot.png)
+
+The following sections demonstrate how to implement this workflow in R using the `memoria` package.
 
 ## Setup
+
+```{r install-deps, include = FALSE}
+for (pkg in c("tidyr", "knitr")) {
+  if (!requireNamespace(pkg, quietly = TRUE)) {
+    install.packages(pkg)
+  }
+}
+```
 
 ```{r load-packages, message = FALSE, warning = FALSE}
 library(memoria)
@@ -23,22 +61,7 @@ library(tidyr)
 library(knitr)
 ```
 
-## The Model
 
-Ecological memory analysis fits a model of the form:
-
-$$p_{t} = p_{t-1} + \ldots + p_{t-n} + d_{t} + d_{t-1} + \ldots + d_{t-n}$$
-
-Where:
-
-- $p$ is the biotic response (e.g., pollen abundance)
-- $d$ is the environmental driver
-- $t$ is time; $t-1$, $t-2$, etc. are time lags
-- $p_{t-1} + \ldots + p_{t-n}$ represents **endogenous memory** (effect of past response on current state)
-- $d_{t-1} + \ldots + d_{t-n}$ represents **exogenous memory** (effect of past drivers on current state)
-- $d_{t}$ represents the **concurrent effect** (synchronic driver influence)
-
-Random Forest returns importance scores for each term, which memoria plots and summarizes.
 
 ## Workflow
 

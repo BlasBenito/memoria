@@ -110,6 +110,18 @@ computeMemory <- function(
     stop("Argument 'drivers' cannot be NULL.")
   }
 
+  # Validate that variable names do not contain '__' (double underscore)
+  # as this would corrupt the strsplit() parsing later
+
+  all_vars <- c(response, drivers)
+  invalid_vars <- all_vars[grepl("__", all_vars, fixed = TRUE)]
+  if (length(invalid_vars) > 0) {
+    stop(
+      "Variable names cannot contain '__' (double underscore): ",
+      paste(invalid_vars, collapse = ", ")
+    )
+  }
+
   random.mode <- match.arg(
     arg = random.mode,
     choices = c(

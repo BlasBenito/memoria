@@ -75,7 +75,7 @@ runExperiment <- function(
 ) {
   #subsetting simulations file
   #checking if it has one column only
-  if (selected.columns == 1) {
+  if (length(selected.columns) == 1) {
     data.list <- simulations.file[selected.rows]
     if (length(sampling.names) > 1) {
       sampling.names <- sampling.names[1]

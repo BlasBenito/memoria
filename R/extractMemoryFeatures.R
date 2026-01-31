@@ -178,6 +178,14 @@ extractMemoryFeatures <- function(
       lags <- unique(x.temp$lag)
       lags <- lags[lags != 0]
 
+      # Validate that there are lags to analyze
+      if (length(lags) == 0) {
+        stop(
+          "No lags found beyond lag 0. ",
+          "Ecological memory analysis requires at least one non-zero lag."
+        )
+      }
+
       #computing memory strength (difference betweenn component and median of the random term)
       # strength.concurrent <- x.temp[x.temp$variable == exogenous.component & x.temp$lag == 0, "median"] - random.median
       # x.temp <- x.temp[x.temp$lag!=0,] #removing lag 0
@@ -253,22 +261,20 @@ extractMemoryFeatures <- function(
         maximum.age <- fecundity <- niche.mean <- niche.sd <- NA
       }
 
-      #filling dataframe
-      output.df[row.counter, ] <- c(
-        taxon,
-        strength.endogenous,
-        strength.exogenous,
-        strength.concurrent,
-        length.endogenous,
-        length.exogenous,
-        dominance.endogenous,
-        dominance.exogenous,
-        maximum.age,
-        fecundity,
-        niche.mean,
-        niche.sd,
-        samp
-      )
+      #filling dataframe (use direct column assignment to avoid type coercion)
+      output.df$label[row.counter] <- taxon
+      output.df$strength.endogenous[row.counter] <- strength.endogenous
+      output.df$strength.exogenous[row.counter] <- strength.exogenous
+      output.df$strength.concurrent[row.counter] <- strength.concurrent
+      output.df$length.endogenous[row.counter] <- length.endogenous
+      output.df$length.exogenous[row.counter] <- length.exogenous
+      output.df$dominance.endogenous[row.counter] <- dominance.endogenous
+      output.df$dominance.exogenous[row.counter] <- dominance.exogenous
+      output.df$maximum.age[row.counter] <- maximum.age
+      output.df$fecundity[row.counter] <- fecundity
+      output.df$niche.mean[row.counter] <- niche.mean
+      output.df$niche.sd[row.counter] <- niche.sd
+      output.df$sampling[row.counter] <- samp
     } #end of iteration through sampling
   } #end of iteration through taxa
 

@@ -125,7 +125,8 @@ The function `computeMemory()` trains Random Forest models with the lagged data,
 memory <- memoria::computeMemory(
   lagged.data = df_lags,
   repetitions = 10,
-  num.threads = parallel::detectCores() - 1
+  num.threads = parallel::detectCores() - 1,
+  random.mode = "white.noise"
 )
 ```
 
@@ -138,6 +139,7 @@ names(memory)
 ```{r}
 dplyr::glimpse(memory$memory)
 ```
+
 The output of `computeMemory()` can be plotted with `plotMemory()`.
 
 ```{r, fig.width=8, fig.height=4, warning = FALSE}

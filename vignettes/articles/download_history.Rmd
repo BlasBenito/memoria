@@ -7,14 +7,15 @@ output:
     source: false
 ---
 
-```{r, include=FALSE, echo = FALSE}
-install.packages(c("cranlogs", "ggplot2"))
+```{r install-deps, include = FALSE}
+for (pkg in c("cranlogs")) {
+  if (!requireNamespace(pkg, quietly = TRUE)) {
+    install.packages(pkg)
+  }
+}
 ```
 
-
 ```{r, echo = FALSE}
-# Install packages if needed
-# install.packages(c("cranlogs", "ggplot2"))
 library(cranlogs)
 library(ggplot2)
 
