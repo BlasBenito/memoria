@@ -20,14 +20,14 @@ plotExperiment <- function(
   parameters.file = NULL,
   experiment.title = NULL
 ) {
-  strip.text.size = 12
-  axis.x.text.size = 8
-  axis.y.text.size = 12
-  axis.x.title.size = 14
-  axis.y.title.size = 14
-  title.size = 18
-  R2 = TRUE
-  legend.position = "bottom"
+  strip.text.size <- 12
+  axis.x.text.size <- 8
+  axis.y.text.size <- 12
+  axis.x.title.size <- 14
+  axis.y.title.size <- 14
+  title.size <- 18
+  R2 <- TRUE
+  legend.position <- "bottom"
 
   # Determine number of sampling columns
   if (is.null(dim(experiment.output$output))) {

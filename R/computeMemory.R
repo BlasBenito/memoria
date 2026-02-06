@@ -327,7 +327,7 @@ computeMemory <- function(
   }
 
   #variable as factor
-  response <- gsub(pattern = "__0", replacement = "", x = response)
+  response <- gsub(pattern = "__0", replacement = "", x = response, fixed = TRUE)
   if (random.mode != "none") {
     importance.df$variable <- factor(
       importance.df$variable,
