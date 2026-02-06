@@ -16,16 +16,16 @@
 #'  \item \eqn{r} represents a column of random values, used to test the significance of the variable importance scores returned by Random Forest.
 #' }
 #'
-#' @param lagged.data a lagged dataset resulting from \code{\link{prepareLaggedData}}. See \code{\link{palaeodataLagged}} as example.
-#' @param response character string, name of the response variable. Not required if `lagged.data` was generated with [prepareLaggedData]. Default: NULL
-#' @param drivers  a character string or vector of character strings with variables to be used as predictors in the model. Not required if `lagged.data` was generated with [prepareLaggedData].. \strong{Important:} \code{drivers} names must not have the character "__" (double underscore). Default: NULL
-#' @param random.mode either "none", "white.noise" or "autocorrelated". See details.
-#' @param repetitions integer, number of random forest models to fit.
-#' @param subset.response character string with values "up", "down" or "none", triggers the subsetting of the input dataset. "up" only models memory on cases where the response's trend is positive, "down" selects cases with negative trends, and "none" selects all cases.
-#' @param min.node.size integer, argument of the \link[ranger]{ranger} function. Minimal number of samples to be allocated in a terminal node. Default is 5.
-#' @param num.trees integer, argument of the \link[ranger]{ranger} function. Number of regression trees to be fitted (size of the forest). Default is 500
-#' @param mtry  integer, argument of the \link[ranger]{ranger} function. Number of variables to possibly split at in each node. Default: NULL.
-#' @param num.threads integer, number of cores \link[ranger]{ranger} can use for multithreading. Default: 2
+#' @param lagged.data a lagged dataset resulting from \code{\link{prepareLaggedData}}. See \code{\link{palaeodataLagged}} as example. Default: \code{NULL}.
+#' @param response character string, name of the response variable. Not required if `lagged.data` was generated with [prepareLaggedData]. Default: \code{NULL}.
+#' @param drivers  a character string or character vector with variables to be used as predictors in the model. Not required if `lagged.data` was generated with [prepareLaggedData]. \strong{Important:} \code{drivers} names must not have the character "__" (double underscore). Default: \code{NULL}.
+#' @param random.mode either "none", "white.noise" or "autocorrelated". See details. Default: \code{"autocorrelated"}.
+#' @param repetitions integer, number of random forest models to fit. Default: \code{10}.
+#' @param subset.response character string with values "up", "down" or "none", triggers the subsetting of the input dataset. "up" only models memory on cases where the response's trend is positive, "down" selects cases with negative trends, and "none" selects all cases. Default: \code{"none"}.
+#' @param min.node.size integer, argument of the \link[ranger]{ranger} function. Minimal number of samples to be allocated in a terminal node. Default: \code{5}.
+#' @param num.trees integer, argument of the \link[ranger]{ranger} function. Number of regression trees to be fitted (size of the forest). Default: \code{500}.
+#' @param mtry  integer, argument of the \link[ranger]{ranger} function. Number of variables to possibly split at in each node. Default: \code{NULL}.
+#' @param num.threads integer, number of cores \link[ranger]{ranger} can use for multithreading. Default: \code{2}.
 #'
 #' @details This function uses the \link[ranger]{ranger} package to fit Random Forest models. Please, check the help of the \link[ranger]{ranger} function to better understand how Random Forest is parameterized in this package. This function fits the model explained above as many times as defined in the argument \code{repetitions}.
 #'
@@ -79,7 +79,7 @@
 #'#plotting output
 #'plotMemory(memory.output = memory.output)
 #'}
-#'
+#' @family memoria
 #' @export
 computeMemory <- function(
   lagged.data = NULL,

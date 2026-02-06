@@ -21,6 +21,7 @@
 - Removed argument `add.random` from `computeMemory()` and replaced it with the option "none" in argument `random.mode`.
 - Arguments `response` and `drivers` are no longer required in `computeMemory()` if argument `lagged.data` was generated with `prepareLaggedData()`.
 - Added argument `ribbon` to `plotMemory()` and removed other useless arguments to simplify the usage.
+- Removed argument `sampling.names` from `runExperiment()`, `plotExperiment()`, and `experimentToTable()` as it provided minimal value while adding complexity.
 
 ## Documentation
 

@@ -3,35 +3,35 @@
 #' @description Applies \code{\link{computeMemory}} to assess ecological memory on a large set of virtual pollen curves.
 #'
 #'
-#'@usage runExperiment(
-#'  simulations.file = NULL,
-#'  selected.rows = 1,
-#'  selected.columns = 1,
-#'  parameters.file = NULL,
-#'  parameters.names = NULL,
-#'  sampling.names = NULL,
-#'  driver.column = NULL,
-#'  response.column = "Response_0",
-#'  subset.response = "none",
-#'  time.column = "Time",
-#'  time.zoom = NULL,
-#'  lags = NULL,
-#'  repetitions = 10
-#'  )
-#'
-#' @param simulations.file list of dataframes, output of  the function \code{simulatePopulation} of the \code{virtualPollen} package.
-#' @param selected.rows numeric vector, rows (virtual taxa) of \code{simulations.file} to be analyzed.
-#' @param selected.columns numeric vector, columns (experiment treatments) of \code{simulations.file} to be analyzed.
-#' @param parameters.file dataframe of simulation parameters.
-#' @param parameters.names vector of character strings with names of traits and niche features from \code{parameters.file} to be included in the analysis (i.e. c("maximum.age", "fecundity", "niche.A.mean", "niche.A.sd"))
-#' @param sampling.names vector of character strings with the names of the columns of \code{simulations.file}.
-#' @param driver.column vector of character strings, names of the columns to be considered as drivers (generally, one of "Suitability", "Driver.A", "Driver.B").
-#' @param response.column character string defining the response variable, typically "Response_0".
-#' @param subset.response character string, one of "up", "down" or "none", triggers the subsetting of the input dataset. "up" only models ecological memory on cases where the response's trend is positive, "down" selects cases with negative trends, and "none" selects all cases.
-#' @param time.column character string, name of the time/age column. Usually, "Time".
-#' @param time.zoom numeric vector with two numbers defining the time/age extremes of the time interval of interest.
-#' @param lags numeric vector, lags to be used in the equation, in the same units as \code{time}. The use of \code{\link{seq}} to define it is highly recommended. If 0 is absent from lags, it is added automatically to allow the consideration of a concurrent effect. Lags should be aligned to the temporal resolution of the data. For example, if the interval between consecutive samples is 100 years, lags should be something like \code{0, 100, 200, 300}. Lags can also be multiples of the time resolution, such as \code{0, 200, 400, 600} (when time resolution is 100 years).
-#' @param repetitions integer, number of random forest models to fit.
+#' @param simulations.file List of dataframes produced by \code{virtualPollen::simulatePopulation}.
+#'   Each list element is a time series dataframe for one virtual taxon. Can be a 1D list (one
+#'   sampling scheme) or a 2D matrix-like list (rows = taxa, columns = sampling schemes).
+#'   See \code{virtualPollen::simulation} for an example. Default: \code{NULL}.
+#' @param selected.rows Numeric vector indicating which virtual taxa (list elements)
+#'   from \code{simulations.file} to analyze. For example, \code{c(1, 3)} analyzes
+#'   the 1st and 3rd taxa. Default: \code{NULL} (analyzes all taxa).
+#' @param selected.columns Numeric vector indicating which sampling schemes (columns)
+#'   from \code{simulations.file} to analyze. Only relevant when \code{simulations.file}
+#'   has a 2D structure with multiple sampling schemes. Default: \code{NULL} (uses the
+#'   first sampling scheme only).
+#' @param parameters.file Dataframe of simulation parameters produced by
+#'   \code{virtualPollen::parametersDataframe}, with one row per virtual taxon.
+#'   Rows must align with \code{simulations.file}. See \code{virtualPollen::parameters}
+#'   for an example. Default: \code{NULL}.
+#' @param parameters.names Character vector of column names from \code{parameters.file}
+#'   to include in output labels. These help identify which simulation settings produced
+#'   each result. Example: \code{c("maximum.age", "fecundity")}. Default: \code{NULL}.
+#' @param driver.column Character vector of column names representing environmental
+#'   drivers in the simulation dataframes. Common choices: \code{"Driver.A"},
+#'   \code{"Driver.B"}, or \code{"Suitability"}. Default: \code{NULL}.
+#' @param response.column Character string naming the response variable column in the
+#'   simulation dataframes. Use \code{"Pollen"} for pollen abundance from
+#'   \code{virtualPollen::simulation}. Default: \code{"Pollen"}.
+#' @param subset.response character string, one of "up", "down" or "none", triggers the subsetting of the input dataset. "up" only models ecological memory on cases where the response's trend is positive, "down" selects cases with negative trends, and "none" selects all cases. Default: \code{"none"}.
+#' @param time.column character string, name of the time/age column. Usually, "Time". Default: \code{"Time"}.
+#' @param time.zoom numeric vector with two numbers defining the time/age extremes of the time interval of interest. Default: \code{NULL}.
+#' @param lags numeric vector, lags to be used in the equation, in the same units as \code{time}. The use of \code{\link{seq}} to define it is highly recommended. If 0 is absent from lags, it is added automatically to allow the consideration of a concurrent effect. Lags should be aligned to the temporal resolution of the data. For example, if the interval between consecutive samples is 100 years, lags should be something like \code{0, 100, 200, 300}. Lags can also be multiples of the time resolution, such as \code{0, 200, 400, 600} (when time resolution is 100 years). Default: \code{NULL}.
+#' @param repetitions integer, number of random forest models to fit. Default: \code{10}.
 #'
 #'
 #' @author Blas M. Benito  <blasbenito@gmail.com>
@@ -56,30 +56,39 @@
 #'
 #'
 #' @seealso \code{\link{computeMemory}}
-#'
+#' @family virtualPollen
 #' @export
 runExperiment <- function(
   simulations.file = NULL,
-  selected.rows = 1,
-  selected.columns = 1,
+  selected.rows = NULL,
+  selected.columns = NULL,
   parameters.file = NULL,
   parameters.names = NULL,
-  sampling.names = NULL,
   driver.column = NULL,
-  response.column = "Response_0",
+  response.column = "Pollen",
   subset.response = "none",
   time.column = "Time",
   time.zoom = NULL,
   lags = NULL,
   repetitions = 10
 ) {
+  # Handle NULL defaults
+  if (is.null(selected.columns)) {
+    selected.columns <- 1
+  }
+
+  if (is.null(selected.rows)) {
+    if (is.null(dim(simulations.file))) {
+      selected.rows <- seq_len(length(simulations.file))
+    } else {
+      selected.rows <- seq_len(dim(simulations.file)[1])
+    }
+  }
+
   #subsetting simulations file
   #checking if it has one column only
   if (length(selected.columns) == 1) {
     data.list <- simulations.file[selected.rows]
-    if (length(sampling.names) > 1) {
-      sampling.names <- sampling.names[1]
-    }
   } else {
     data.list <- simulations.file[selected.rows, selected.columns]
   }
@@ -120,17 +129,9 @@ runExperiment <- function(
   #to matrix
   temp.parameters <- as.matrix(temp.parameters)
 
-  #parameters with sampling names
-  sampling.names.matrix <- matrix(
-    rep(sampling.names, length(selected.rows)),
-    nrow = length(selected.rows),
-    ncol = length(selected.columns),
-    byrow = TRUE
-  )
-
   #these are the simulation names
   simulation.names <- matrix(
-    paste(temp.parameters, sampling.names.matrix, sep = "; sampling: "),
+    temp.parameters,
     nrow = length(selected.rows),
     ncol = length(selected.columns),
     byrow = FALSE
@@ -193,4 +194,4 @@ runExperiment <- function(
   list.to.return$names <- simulation.names
   list.to.return$output <- output.list
   return(list.to.return)
-} #end of function
+}

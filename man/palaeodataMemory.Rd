@@ -29,7 +29,15 @@ List containing the output of \code{\link{computeMemory}} applied to \code{\link
  \item \code{prediction} dataframe, with the same columns as the dataframe in the slot \code{memory}, with the median and confidence intervals of the predictions of all random forest models fitted.
 }
 }
+\seealso{
+Other example_data: 
+\code{\link{climate}},
+\code{\link{palaeodata}},
+\code{\link{palaeodataLagged}},
+\code{\link{pollen}}
+}
 \author{
 Blas M. Benito  <blasbenito@gmail.com>
 }
+\concept{example_data}
 \keyword{datasets}

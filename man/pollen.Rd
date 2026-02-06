@@ -22,7 +22,15 @@ A dataframe with the following columns:
   \item \emph{artemisia} pollen counts of Artemisia.
 }
 }
+\seealso{
+Other example_data: 
+\code{\link{climate}},
+\code{\link{palaeodata}},
+\code{\link{palaeodataLagged}},
+\code{\link{palaeodataMemory}}
+}
 \author{
 Blas M. Benito  <blasbenito@gmail.com>
 }
+\concept{example_data}
 \keyword{datasets}

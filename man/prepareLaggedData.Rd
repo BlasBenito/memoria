@@ -13,24 +13,24 @@ prepareLaggedData(
   lags = NULL,
   time.zoom = NULL,
   scale = FALSE
-  )
+)
 }
 \arguments{
-\item{input.data}{a dataframe with one time series per column.}
+\item{input.data}{a dataframe with one time series per column. Default: \code{NULL}.}
 
-\item{response}{character string, name of the numeric column to be used as response in the model.}
+\item{response}{character string, name of the numeric column to be used as response in the model. Default: \code{NULL}.}
 
-\item{drivers}{character vector, names of the numeric columns to be used as predictors in the model.}
+\item{drivers}{character vector, names of the numeric columns to be used as predictors in the model. Default: \code{NULL}.}
 
-\item{time}{character vector, name of the numeric column with the time/age.}
+\item{time}{character vector, name of the numeric column with the time/age. Default: \code{NULL}.}
 
-\item{oldest.sample}{character string, either "first" or "last". When "first", the first row taken as the oldest case of the time series and the last row is taken as the newest case, so ecological memory flows from the first to the last row of \code{input.data}. When "last", the last row is taken as the oldest sample, and this is the mode that should be used when \code{input.data} represents a palaeoecological dataset. Default behavior is "first".}
+\item{oldest.sample}{character string, either "first" or "last". When "first", the first row taken as the oldest case of the time series and the last row is taken as the newest case, so ecological memory flows from the first to the last row of \code{input.data}. When "last", the last row is taken as the oldest sample, and this is the mode that should be used when \code{input.data} represents a palaeoecological dataset. Default: \code{"first"}.}
 
-\item{lags}{numeric vector, lags to be used in the equation, in the same units as \code{time}. The use of \code{\link{seq}} to define it is highly recommended. If 0 is absent from lags, it is added automatically to allow the consideration of a concurrent effect. Lags should be aligned to the temporal resolution of the data. For example, if the interval between consecutive samples is 100 years, lags should be something like \code{0, 100, 200, 300}. Lags can also be multiples of the time resolution, such as \code{0, 200, 400, 600} (when time resolution is 100 years).}
+\item{lags}{numeric vector, lags to be used in the equation, in the same units as \code{time}. The use of \code{\link{seq}} to define it is highly recommended. If 0 is absent from lags, it is added automatically to allow the consideration of a concurrent effect. Lags should be aligned to the temporal resolution of the data. For example, if the interval between consecutive samples is 100 years, lags should be something like \code{0, 100, 200, 300}. Lags can also be multiples of the time resolution, such as \code{0, 200, 400, 600} (when time resolution is 100 years). Default: \code{NULL}.}
 
-\item{time.zoom}{numeric vector of two values from the range of the \code{time} column, used to subset the data if desired.}
+\item{time.zoom}{numeric vector of two values from the range of the \code{time} column, used to subset the data if desired. Default: \code{NULL}.}
 
-\item{scale}{boolean, if TRUE, applies the \code{\link{scale}} function to normalize the data. Required if the lagged data is going to be used to fit linear models.}
+\item{scale}{boolean, if TRUE, applies the \code{\link{scale}} function to normalize the data. Required if the lagged data is going to be used to fit linear models. Default: \code{FALSE}.}
 }
 \value{
 A dataframe with columns representing time-delayed values of the drivers and the response. Column names have the lag number as a suffix. Has the attributes `response` and `drivers`, later used by [computeMemory()].
@@ -59,11 +59,14 @@ str(lagged.data)
 
 # Check attributes (used by computeMemory)
 attributes(lagged.data)
-
 }
 \seealso{
 \code{\link{computeMemory}}
+
+Other data_preparation: 
+\code{\link{mergePalaeoData}()}
 }
 \author{
 Blas M. Benito  <blasbenito@gmail.com>
 }
+\concept{data_preparation}

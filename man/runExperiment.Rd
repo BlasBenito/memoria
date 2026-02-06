@@ -5,47 +5,61 @@
 \title{Computes ecological memory patterns on simulated pollen curves produced by the \code{virtualPollen} package.}
 \usage{
 runExperiment(
- simulations.file = NULL,
- selected.rows = 1,
- selected.columns = 1,
- parameters.file = NULL,
- parameters.names = NULL,
- sampling.names = NULL,
- driver.column = NULL,
- response.column = "Response_0",
- subset.response = "none",
- time.column = "Time",
- time.zoom = NULL,
- lags = NULL,
- repetitions = 10
- )
+  simulations.file = NULL,
+  selected.rows = NULL,
+  selected.columns = NULL,
+  parameters.file = NULL,
+  parameters.names = NULL,
+  driver.column = NULL,
+  response.column = "Pollen",
+  subset.response = "none",
+  time.column = "Time",
+  time.zoom = NULL,
+  lags = NULL,
+  repetitions = 10
+)
 }
 \arguments{
-\item{simulations.file}{list of dataframes, output of  the function \code{simulatePopulation} of the \code{virtualPollen} package.}
+\item{simulations.file}{List of dataframes produced by \code{virtualPollen::simulatePopulation}.
+Each list element is a time series dataframe for one virtual taxon. Can be a 1D list (one
+sampling scheme) or a 2D matrix-like list (rows = taxa, columns = sampling schemes).
+See \code{virtualPollen::simulation} for an example. Default: \code{NULL}.}
 
-\item{selected.rows}{numeric vector, rows (virtual taxa) of \code{simulations.file} to be analyzed.}
+\item{selected.rows}{Numeric vector indicating which virtual taxa (list elements)
+from \code{simulations.file} to analyze. For example, \code{c(1, 3)} analyzes
+the 1st and 3rd taxa. Default: \code{NULL} (analyzes all taxa).}
 
-\item{selected.columns}{numeric vector, columns (experiment treatments) of \code{simulations.file} to be analyzed.}
+\item{selected.columns}{Numeric vector indicating which sampling schemes (columns)
+from \code{simulations.file} to analyze. Only relevant when \code{simulations.file}
+has a 2D structure with multiple sampling schemes. Default: \code{NULL} (uses the
+first sampling scheme only).}
 
-\item{parameters.file}{dataframe of simulation parameters.}
+\item{parameters.file}{Dataframe of simulation parameters produced by
+\code{virtualPollen::parametersDataframe}, with one row per virtual taxon.
+Rows must align with \code{simulations.file}. See \code{virtualPollen::parameters}
+for an example. Default: \code{NULL}.}
 
-\item{parameters.names}{vector of character strings with names of traits and niche features from \code{parameters.file} to be included in the analysis (i.e. c("maximum.age", "fecundity", "niche.A.mean", "niche.A.sd"))}
+\item{parameters.names}{Character vector of column names from \code{parameters.file}
+to include in output labels. These help identify which simulation settings produced
+each result. Example: \code{c("maximum.age", "fecundity")}. Default: \code{NULL}.}
 
-\item{sampling.names}{vector of character strings with the names of the columns of \code{simulations.file}.}
+\item{driver.column}{Character vector of column names representing environmental
+drivers in the simulation dataframes. Common choices: \code{"Driver.A"},
+\code{"Driver.B"}, or \code{"Suitability"}. Default: \code{NULL}.}
 
-\item{driver.column}{vector of character strings, names of the columns to be considered as drivers (generally, one of "Suitability", "Driver.A", "Driver.B").}
+\item{response.column}{Character string naming the response variable column in the
+simulation dataframes. Use \code{"Pollen"} for pollen abundance from
+\code{virtualPollen::simulation}. Default: \code{"Pollen"}.}
 
-\item{response.column}{character string defining the response variable, typically "Response_0".}
+\item{subset.response}{character string, one of "up", "down" or "none", triggers the subsetting of the input dataset. "up" only models ecological memory on cases where the response's trend is positive, "down" selects cases with negative trends, and "none" selects all cases. Default: \code{"none"}.}
 
-\item{subset.response}{character string, one of "up", "down" or "none", triggers the subsetting of the input dataset. "up" only models ecological memory on cases where the response's trend is positive, "down" selects cases with negative trends, and "none" selects all cases.}
+\item{time.column}{character string, name of the time/age column. Usually, "Time". Default: \code{"Time"}.}
 
-\item{time.column}{character string, name of the time/age column. Usually, "Time".}
+\item{time.zoom}{numeric vector with two numbers defining the time/age extremes of the time interval of interest. Default: \code{NULL}.}
 
-\item{time.zoom}{numeric vector with two numbers defining the time/age extremes of the time interval of interest.}
+\item{lags}{numeric vector, lags to be used in the equation, in the same units as \code{time}. The use of \code{\link{seq}} to define it is highly recommended. If 0 is absent from lags, it is added automatically to allow the consideration of a concurrent effect. Lags should be aligned to the temporal resolution of the data. For example, if the interval between consecutive samples is 100 years, lags should be something like \code{0, 100, 200, 300}. Lags can also be multiples of the time resolution, such as \code{0, 200, 400, 600} (when time resolution is 100 years). Default: \code{NULL}.}
 
-\item{lags}{numeric vector, lags to be used in the equation, in the same units as \code{time}. The use of \code{\link{seq}} to define it is highly recommended. If 0 is absent from lags, it is added automatically to allow the consideration of a concurrent effect. Lags should be aligned to the temporal resolution of the data. For example, if the interval between consecutive samples is 100 years, lags should be something like \code{0, 100, 200, 300}. Lags can also be multiples of the time resolution, such as \code{0, 200, 400, 600} (when time resolution is 100 years).}
-
-\item{repetitions}{integer, number of random forest models to fit.}
+\item{repetitions}{integer, number of random forest models to fit. Default: \code{10}.}
 }
 \value{
 A list with 2 slots:
@@ -71,7 +85,12 @@ Applies \code{\link{computeMemory}} to assess ecological memory on a large set o
 }
 \seealso{
 \code{\link{computeMemory}}
+
+Other virtualPollen: 
+\code{\link{experimentToTable}()},
+\code{\link{plotExperiment}()}
 }
 \author{
 Blas M. Benito  <blasbenito@gmail.com>
 }
+\concept{virtualPollen}

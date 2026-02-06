@@ -20,3 +20,5 @@
 ^_pkgdown\.yml$
 ^pkgdown$
 ^\.github$
+^dev_scripts$
+^tests$

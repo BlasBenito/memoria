@@ -3,37 +3,9 @@
 #' @description Takes the output of \code{\link{runExperiment}}, and generates plots of ecological memory patterns for a large number of simulated pollen curves.
 #'
 #'
-#'@usage plotExperiment(
-#'  experiment.output = NULL,
-#'  parameters.file = NULL,
-#'  experiment.title = NULL,
-#'  sampling.names = NULL,
-#'  legend.position = "bottom",
-#'  R2 = NULL,
-#'  filename = NULL,
-#'  strip.text.size = 12,
-#'  axis.x.text.size = 8,
-#'  axis.y.text.size = 12,
-#'  axis.x.title.size = 14,
-#'  axis.y.title.size = 14,
-#'  title.size = 18,
-#'  caption = ""
-#'  )
-#'
-#' @param experiment.output list, output of  \code{\link{runExperiment}}.
-#' @param parameters.file dataframe of simulation parameters.
-#' @param experiment.title character string, title of the plot.
-#' @param sampling.names vector of character strings with the names of the columns used in the argument \code{simulations.file} of \code{\link{runExperiment}}.
-#' @param filename character string, path and name (without extension) of the output pdf file.
-#' @param legend.position legend position in ggplot object. One of "bottom", "right", "none".
-#' @param R2 boolean. If \code{TRUE}, pseudo R-squared values are printed along with the traits of the virtual taxa.
-#' @param strip.text.size size of the facet's labels.
-#' @param axis.x.text.size size of the labels in x axis.
-#' @param axis.y.text.size size of the labels in y axis.
-#' @param axis.x.title.size size of the title of the x axis.
-#' @param axis.y.title.size size of the title of the y axis.
-#' @param title.size size of the plot title.
-#' @param caption character string, caption of the output figure.
+#' @param experiment.output list, output of  \code{\link{runExperiment}}. Default: \code{NULL}.
+#' @param parameters.file dataframe of simulation parameters. Default: \code{NULL}.
+#' @param experiment.title character string, title of the plot. Default: \code{NULL}.
 #'
 #'
 #' @author Blas M. Benito  <blasbenito@gmail.com>
@@ -41,29 +13,32 @@
 #' @return A ggplot2 object.
 #'
 #' @seealso \code{\link{plotMemory}}, \code{\link{runExperiment}}
-#'
+#' @family virtualPollen
 #' @export
 plotExperiment <- function(
   experiment.output = NULL,
   parameters.file = NULL,
-  experiment.title = NULL,
-  sampling.names = NULL,
-  legend.position = "bottom",
-  R2 = NULL,
-  filename = NULL,
-  strip.text.size = 12,
-  axis.x.text.size = 8,
-  axis.y.text.size = 12,
-  axis.x.title.size = 14,
-  axis.y.title.size = 14,
-  title.size = 18,
-  caption = ""
+  experiment.title = NULL
 ) {
+  strip.text.size = 12
+  axis.x.text.size = 8
+  axis.y.text.size = 12
+  axis.x.title.size = 14
+  axis.y.title.size = 14
+  title.size = 18
+  R2 = TRUE
+  legend.position = "bottom"
+
+  # Determine number of sampling columns
+  if (is.null(dim(experiment.output$output))) {
+    n.columns <- 1
+  } else {
+    n.columns <- dim(experiment.output$output)[2]
+  }
   #output of experiment.output to long table
   simulation.df <- experimentToTable(
     experiment.output = experiment.output,
     parameters.file = parameters.file,
-    sampling.names = sampling.names,
     R2 = R2
   )
 
@@ -77,21 +52,21 @@ plotExperiment <- function(
   experiment.plot <- ggplot(
     data = simulation.df,
     aes(
-      x = Lag,
+      x = lag,
       y = median,
-      group = Variable,
-      color = Variable,
-      fill = Variable
+      group = variable,
+      color = variable,
+      fill = variable
     )
   ) +
     geom_ribbon(aes(ymin = min, ymax = max), alpha = 0.3, colour = NA) +
     geom_line(alpha = 0.6, linewidth = 1.5) +
     scale_color_viridis_d() +
     scale_fill_viridis_d() +
-    scale_x_continuous(breaks = unique(simulation.df$Lag)) +
+    scale_x_continuous(breaks = unique(simulation.df$lag)) +
     facet_wrap(
       vars(name),
-      ncol = length(unique(simulation.df$sampling)),
+      ncol = n.columns,
       scales = "free_y"
     ) +
     xlab("Lag (years)") +
@@ -106,16 +81,7 @@ plotExperiment <- function(
     ) +
     ggtitle(experiment.title) +
     theme_classic() +
-    theme(legend.position = legend.position) +
-    labs(caption = caption)
-
-  if (!is.null(filename) && is.character(filename)) {
-    ggsave(
-      filename = paste(filename, ".pdf", sep = ""),
-      width = length(unique(simulation.df$sampling)) * 4,
-      height = 1.5 * nrow(experiment.output$output)
-    )
-  }
+    theme(legend.position = legend.position)
 
   return(experiment.plot)
 }

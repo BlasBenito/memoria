@@ -2,8 +2,50 @@ url: https://blasbenito.github.io/memoria/
 template:
   bootstrap: 5
 
+build:
+  extra_packages:
+    - ggplot2
+    - cranlogs
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+  release:
+    types: [published]
+  workflow_dispatch:  # allows manual triggering
+  schedule:
+    - cron: '0 0 1 * *'  # runs at midnight UTC on the 1st of each month
+
+reference:
+- title: Data Preparation
+  desc: >
+    Prepare time series for ecological memory analyses.
+- contents:
+  - has_concept("data_preparation")
+
+- title: Ecological Memory Analysis
+  desc: >
+    Analyze ecological memory in environmental time series.
+- contents:
+  - has_concept("memoria")
+
+- title: Integration With [`virtualPollen`](https://github.com/BlasBenito/virtualPollen)
+  desc: >
+    Perform large experiments from simulations generated with the package `virtualPollen`.
+- contents:
+  - has_concept("virtualPollen")
+
+- title: Example Data
+  desc: >
+    Example data to play with.
+- contents:
+  - has_concept("example_data")
+
 articles:
 - title: Articles
   contents:
-  - articles/working_with_memoria
+  - articles/getting_started
+  - articles/memoria_and_virtualPollen
   - articles/download_history

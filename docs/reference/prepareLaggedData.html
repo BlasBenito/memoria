@@ -48,7 +48,7 @@
 <span>  lags <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  time.zoom <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  scale <span class="op">=</span> <span class="cn">FALSE</span></span>
-<span>  <span class="op">)</span></span></code></pre></div>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -56,35 +56,35 @@
 
 
 <dl><dt id="arg-input-data">input.data<a class="anchor" aria-label="anchor" href="#arg-input-data"></a></dt>
-<dd><p>a dataframe with one time series per column.</p></dd>
+<dd><p>a dataframe with one time series per column. Default: <code>NULL</code>.</p></dd>
 
 
 <dt id="arg-response">response<a class="anchor" aria-label="anchor" href="#arg-response"></a></dt>
-<dd><p>character string, name of the numeric column to be used as response in the model.</p></dd>
+<dd><p>character string, name of the numeric column to be used as response in the model. Default: <code>NULL</code>.</p></dd>
 
 
 <dt id="arg-drivers">drivers<a class="anchor" aria-label="anchor" href="#arg-drivers"></a></dt>
-<dd><p>character vector, names of the numeric columns to be used as predictors in the model.</p></dd>
+<dd><p>character vector, names of the numeric columns to be used as predictors in the model. Default: <code>NULL</code>.</p></dd>
 
 
 <dt id="arg-time">time<a class="anchor" aria-label="anchor" href="#arg-time"></a></dt>
-<dd><p>character vector, name of the numeric column with the time/age.</p></dd>
+<dd><p>character vector, name of the numeric column with the time/age. Default: <code>NULL</code>.</p></dd>
 
 
 <dt id="arg-oldest-sample">oldest.sample<a class="anchor" aria-label="anchor" href="#arg-oldest-sample"></a></dt>
-<dd><p>character string, either "first" or "last". When "first", the first row taken as the oldest case of the time series and the last row is taken as the newest case, so ecological memory flows from the first to the last row of <code>input.data</code>. When "last", the last row is taken as the oldest sample, and this is the mode that should be used when <code>input.data</code> represents a palaeoecological dataset. Default behavior is "first".</p></dd>
+<dd><p>character string, either "first" or "last". When "first", the first row taken as the oldest case of the time series and the last row is taken as the newest case, so ecological memory flows from the first to the last row of <code>input.data</code>. When "last", the last row is taken as the oldest sample, and this is the mode that should be used when <code>input.data</code> represents a palaeoecological dataset. Default: <code>"first"</code>.</p></dd>
 
 
 <dt id="arg-lags">lags<a class="anchor" aria-label="anchor" href="#arg-lags"></a></dt>
-<dd><p>numeric vector, lags to be used in the equation, in the same units as <code>time</code>. The use of <code><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></code> to define it is highly recommended. If 0 is absent from lags, it is added automatically to allow the consideration of a concurrent effect. Lags should be aligned to the temporal resolution of the data. For example, if the interval between consecutive samples is 100 years, lags should be something like <code>0, 100, 200, 300</code>. Lags can also be multiples of the time resolution, such as <code>0, 200, 400, 600</code> (when time resolution is 100 years).</p></dd>
+<dd><p>numeric vector, lags to be used in the equation, in the same units as <code>time</code>. The use of <code><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></code> to define it is highly recommended. If 0 is absent from lags, it is added automatically to allow the consideration of a concurrent effect. Lags should be aligned to the temporal resolution of the data. For example, if the interval between consecutive samples is 100 years, lags should be something like <code>0, 100, 200, 300</code>. Lags can also be multiples of the time resolution, such as <code>0, 200, 400, 600</code> (when time resolution is 100 years). Default: <code>NULL</code>.</p></dd>
 
 
 <dt id="arg-time-zoom">time.zoom<a class="anchor" aria-label="anchor" href="#arg-time-zoom"></a></dt>
-<dd><p>numeric vector of two values from the range of the <code>time</code> column, used to subset the data if desired.</p></dd>
+<dd><p>numeric vector of two values from the range of the <code>time</code> column, used to subset the data if desired. Default: <code>NULL</code>.</p></dd>
 
 
 <dt id="arg-scale">scale<a class="anchor" aria-label="anchor" href="#arg-scale"></a></dt>
-<dd><p>boolean, if TRUE, applies the <code><a href="https://rdrr.io/r/base/scale.html" class="external-link">scale</a></code> function to normalize the data. Required if the lagged data is going to be used to fit linear models.</p></dd>
+<dd><p>boolean, if TRUE, applies the <code><a href="https://rdrr.io/r/base/scale.html" class="external-link">scale</a></code> function to normalize the data. Required if the lagged data is going to be used to fit linear models. Default: <code>FALSE</code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -97,7 +97,9 @@
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="computeMemory.html">computeMemory</a></code></p></div>
+    <div class="dont-index"><p><code><a href="computeMemory.html">computeMemory</a></code></p>
+<p>Other data_preparation:
+<code><a href="mergePalaeoData.html">mergePalaeoData()</a></code></p></div>
     </div>
     <div class="section level2">
     <h2 id="author">Author<a class="anchor" aria-label="anchor" href="#author"></a></h2>
@@ -567,7 +569,6 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> $drivers</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "climate.temperatureAverage" "climate.rainfallAverage"   </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

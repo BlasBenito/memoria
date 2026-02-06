@@ -5,50 +5,17 @@
 \title{Plots the output of  \code{\link{runExperiment}}.}
 \usage{
 plotExperiment(
- experiment.output = NULL,
- parameters.file = NULL,
- experiment.title = NULL,
- sampling.names = NULL,
- legend.position = "bottom",
- R2 = NULL,
- filename = NULL,
- strip.text.size = 12,
- axis.x.text.size = 8,
- axis.y.text.size = 12,
- axis.x.title.size = 14,
- axis.y.title.size = 14,
- title.size = 18,
- caption = ""
- )
+  experiment.output = NULL,
+  parameters.file = NULL,
+  experiment.title = NULL
+)
 }
 \arguments{
-\item{experiment.output}{list, output of  \code{\link{runExperiment}}.}
+\item{experiment.output}{list, output of  \code{\link{runExperiment}}. Default: \code{NULL}.}
 
-\item{parameters.file}{dataframe of simulation parameters.}
+\item{parameters.file}{dataframe of simulation parameters. Default: \code{NULL}.}
 
-\item{experiment.title}{character string, title of the plot.}
-
-\item{sampling.names}{vector of character strings with the names of the columns used in the argument \code{simulations.file} of \code{\link{runExperiment}}.}
-
-\item{legend.position}{legend position in ggplot object. One of "bottom", "right", "none".}
-
-\item{R2}{boolean. If \code{TRUE}, pseudo R-squared values are printed along with the traits of the virtual taxa.}
-
-\item{filename}{character string, path and name (without extension) of the output pdf file.}
-
-\item{strip.text.size}{size of the facet's labels.}
-
-\item{axis.x.text.size}{size of the labels in x axis.}
-
-\item{axis.y.text.size}{size of the labels in y axis.}
-
-\item{axis.x.title.size}{size of the title of the x axis.}
-
-\item{axis.y.title.size}{size of the title of the y axis.}
-
-\item{title.size}{size of the plot title.}
-
-\item{caption}{character string, caption of the output figure.}
+\item{experiment.title}{character string, title of the plot. Default: \code{NULL}.}
 }
 \value{
 A ggplot2 object.
@@ -58,7 +25,12 @@ Takes the output of \code{\link{runExperiment}}, and generates plots of ecologic
 }
 \seealso{
 \code{\link{plotMemory}}, \code{\link{runExperiment}}
+
+Other virtualPollen: 
+\code{\link{experimentToTable}()},
+\code{\link{runExperiment}()}
 }
 \author{
 Blas M. Benito  <blasbenito@gmail.com>
 }
+\concept{virtualPollen}

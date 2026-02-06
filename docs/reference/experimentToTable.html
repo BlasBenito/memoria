@@ -40,11 +40,11 @@
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">experimentToTable</span><span class="op">(</span></span>
-<span> experiment.output <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span> parameters.file <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span> sampling.names <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span> R2 <span class="op">=</span> <span class="cn">TRUE</span></span>
-<span> <span class="op">)</span></span></code></pre></div>
+<span>  experiment.output <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  parameters.file <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  sampling.names <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  R2 <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -52,19 +52,19 @@
 
 
 <dl><dt id="arg-experiment-output">experiment.output<a class="anchor" aria-label="anchor" href="#arg-experiment-output"></a></dt>
-<dd><p>list, output of  <code><a href="runExperiment.html">runExperiment</a></code>.</p></dd>
+<dd><p>list, output of  <code><a href="runExperiment.html">runExperiment</a></code>. Default: <code>NULL</code>.</p></dd>
 
 
 <dt id="arg-parameters-file">parameters.file<a class="anchor" aria-label="anchor" href="#arg-parameters-file"></a></dt>
-<dd><p>dataframe of simulation parameters.</p></dd>
+<dd><p>dataframe of simulation parameters. Default: <code>NULL</code>.</p></dd>
 
 
 <dt id="arg-sampling-names">sampling.names<a class="anchor" aria-label="anchor" href="#arg-sampling-names"></a></dt>
-<dd><p>vector of character strings with the names of the columns of <code>simulations.file</code>.</p></dd>
+<dd><p>character vector with the names of the columns of <code>simulations.file</code>. Default: <code>NULL</code>.</p></dd>
 
 
 <dt id="arg-r-">R2<a class="anchor" aria-label="anchor" href="#arg-r-"></a></dt>
-<dd><p>boolean. If TRUE, the average pseudo R-squared of the random forest models used to analyze the ecological memory pattern of the virtual taxa are shown with the taxon traits.</p></dd>
+<dd><p>boolean. If TRUE, the average pseudo R-squared of the random forest models used to analyze the ecological memory pattern of the virtual taxa are shown with the taxon traits. Default: <code>TRUE</code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -77,7 +77,10 @@
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="runExperiment.html">runExperiment</a></code>, <code><a href="plotExperiment.html">plotExperiment</a></code></p></div>
+    <div class="dont-index"><p><code><a href="runExperiment.html">runExperiment</a></code>, <code><a href="plotExperiment.html">plotExperiment</a></code></p>
+<p>Other virtualPollen:
+<code><a href="plotExperiment.html">plotExperiment()</a></code>,
+<code><a href="runExperiment.html">runExperiment()</a></code></p></div>
     </div>
     <div class="section level2">
     <h2 id="author">Author<a class="anchor" aria-label="anchor" href="#author"></a></h2>

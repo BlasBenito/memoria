@@ -3,15 +3,10 @@
 #' @description Merges palaeoecological datasets with different time intervals between consecutive samples into a single dataset with samples separated by regular time intervals defined by the user.
 #'
 #'
-#' @usage mergePalaeoData(
-#'  datasets.list = NULL,
-#'  time.column = NULL,
-#'  interpolation.interval = NULL
-#'  )
 #'
-#' @param datasets.list list of dataframes, as in \code{datasets.list = list(climate = climate.dataframe, pollen = pollen.dataframe)}. The provided dataframes must have an age/time column with the same column name and the same units of time. Non-numeric columns in these dataframes are ignored.
-#' @param time.column character string, name of the time/age column of the datasets provided in \code{datasets.list}.
-#' @param interpolation.interval numeric, temporal resolution of the output data, in the same units as the age/time columns of the input data.
+#' @param datasets.list list of dataframes, as in \code{datasets.list = list(climate = climate.dataframe, pollen = pollen.dataframe)}. The provided dataframes must have an age/time column with the same column name and the same units of time. Non-numeric columns in these dataframes are ignored. Default: \code{NULL}.
+#' @param time.column character string, name of the time/age column of the datasets provided in \code{datasets.list}. Default: \code{NULL}.
+#' @param interpolation.interval numeric, temporal resolution of the output data, in the same units as the age/time columns of the input data. Default: \code{NULL}.
 #'
 #' @details This function fits a \code{\link{loess}} model of the form \code{y ~ x}, where \code{y} is any numeric column in the input datasets and \code{x} is the column given by the \code{time.column} argument. The model is used to interpolate column \code{y} on a regular time series of intervals equal to \code{interpolation.interval}. All numeric columns in every provided dataset go through this process to generate the final data with samples separated by regular time intervals. Non-numeric columns are ignored and absent from the output dataframe.
 #'
@@ -37,7 +32,7 @@
 #'  )
 #'
 #'  }
-#'
+#'@family data_preparation
 #'@export
 mergePalaeoData <- function(
   datasets.list = NULL,
@@ -81,11 +76,6 @@ mergePalaeoData <- function(
   }
 
   #computing average temporal resolution of the datasets
-  message(paste(
-    "Argument interpolation.interval is set to ",
-    interpolation.interval,
-    sep = ""
-  ))
   for (i.list in seq_along(datasets.list)) {
     #getting time column
     temp.time <- datasets.list[[i.list]][, time.column]
@@ -99,15 +89,6 @@ mergePalaeoData <- function(
       temporal.resolution / interpolation.interval,
       2
     )
-    message(paste(
-      "The average temporal resolution of ",
-      names(datasets.list)[i.list],
-      " is ",
-      temporal.resolution,
-      "; you are incrementing data resolution by a factor of ",
-      resolution.increase.factor,
-      sep = ""
-    ))
     if (resolution.increase.factor > 10) {
       message(
         "The resolution increase factor is higher than 10, please consider incrementing the value of the argument interpolation.interval."

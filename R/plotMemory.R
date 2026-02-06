@@ -2,17 +2,10 @@
 #'
 #' @description Plots the ecological memory pattern yielded by \code{\link{computeMemory}}.
 #'
-#' @usage plotMemory(
-#'   memory.output = NULL,
-#'   ribbon = FALSE,
-#'   legend.position = "right",
-#'   filename = NULL
-#' )
-#'
-#' @param memory.output list, output of \code{\link{computeMemory}}.
-#' @param ribbon logical, switches plotting of confidence intervals on (TRUE) and off (FALSE). Default: FALSE
-#' @param legend.position character string, legend position (e.g., "right", "bottom", "none").
-#' @param filename deprecated, not used. Kept for backwards compatibility.
+#' @param memory.output list, output of \code{\link{computeMemory}}. Default: \code{NULL}.
+#' @param ribbon logical, switches plotting of confidence intervals on (TRUE) and off (FALSE). Default: \code{FALSE}.
+#' @param legend.position character string, legend position (e.g., "right", "bottom", "none"). Default: \code{"right"}.
+#' @param filename deprecated, not used. Kept for backwards compatibility. Default: \code{NULL}.
 #'
 #' @author Blas M. Benito  <blasbenito@gmail.com>
 #'
@@ -30,7 +23,7 @@
 #'#with confidence ribbon
 #'plotMemory(memory.output = palaeodataMemory, ribbon = TRUE)
 #'
-#'
+#'@family memoria
 #'@export
 plotMemory <- function(
   memory.output = NULL,

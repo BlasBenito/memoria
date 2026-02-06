@@ -27,7 +27,15 @@ A dataframe with a regular time grid of 0.2 ky resolution resulting from applyin
   \item \emph{climate.oxigenIsotope} delta O18, global ratio of stable isotopes in the sea floor, see \url{http://lorraine-lisiecki.com/stack.html} for further details.
 }
 }
+\seealso{
+Other example_data: 
+\code{\link{climate}},
+\code{\link{palaeodataLagged}},
+\code{\link{palaeodataMemory}},
+\code{\link{pollen}}
+}
 \author{
 Blas M. Benito  <blasbenito@gmail.com>
 }
+\concept{example_data}
 \keyword{datasets}

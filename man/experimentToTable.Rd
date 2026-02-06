@@ -4,21 +4,14 @@
 \alias{experimentToTable}
 \title{Turns the outcome of \code{\link{runExperiment}} into a long table.}
 \usage{
-experimentToTable(
- experiment.output = NULL,
- parameters.file = NULL,
- sampling.names = NULL,
- R2 = TRUE
- )
+experimentToTable(experiment.output = NULL, parameters.file = NULL, R2 = TRUE)
 }
 \arguments{
-\item{experiment.output}{list, output of  \code{\link{runExperiment}}.}
+\item{experiment.output}{list, output of  \code{\link{runExperiment}}. Default: \code{NULL}.}
 
-\item{parameters.file}{dataframe of simulation parameters.}
+\item{parameters.file}{dataframe of simulation parameters. Default: \code{NULL}.}
 
-\item{sampling.names}{vector of character strings with the names of the columns of \code{simulations.file}.}
-
-\item{R2}{boolean. If TRUE, the average pseudo R-squared of the random forest models used to analyze the ecological memory pattern of the virtual taxa are shown with the taxon traits.}
+\item{R2}{boolean. If TRUE, the average pseudo R-squared of the random forest models used to analyze the ecological memory pattern of the virtual taxa are shown with the taxon traits. Default: \code{TRUE}.}
 }
 \value{
 A dataframe.
@@ -31,7 +24,12 @@ This function is used internally by \code{\link{plotExperiment}}, but it is also
 }
 \seealso{
 \code{\link{runExperiment}}, \code{\link{plotExperiment}}
+
+Other virtualPollen: 
+\code{\link{plotExperiment}()},
+\code{\link{runExperiment}()}
 }
 \author{
 Blas M. Benito  <blasbenito@gmail.com>
 }
+\concept{virtualPollen}

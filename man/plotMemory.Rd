@@ -12,13 +12,13 @@ plotMemory(
 )
 }
 \arguments{
-\item{memory.output}{list, output of \code{\link{computeMemory}}.}
+\item{memory.output}{list, output of \code{\link{computeMemory}}. Default: \code{NULL}.}
 
-\item{ribbon}{logical, switches plotting of confidence intervals on (TRUE) and off (FALSE). Default: FALSE}
+\item{ribbon}{logical, switches plotting of confidence intervals on (TRUE) and off (FALSE). Default: \code{FALSE}.}
 
-\item{legend.position}{character string, legend position (e.g., "right", "bottom", "none").}
+\item{legend.position}{character string, legend position (e.g., "right", "bottom", "none"). Default: \code{"right"}.}
 
-\item{filename}{deprecated, not used. Kept for backwards compatibility.}
+\item{filename}{deprecated, not used. Kept for backwards compatibility. Default: \code{NULL}.}
 }
 \value{
 A ggplot object.
@@ -36,11 +36,15 @@ plotMemory(memory.output = palaeodataMemory)
 #with confidence ribbon
 plotMemory(memory.output = palaeodataMemory, ribbon = TRUE)
 
-
 }
 \seealso{
 \code{\link{computeMemory}}
+
+Other memoria: 
+\code{\link{computeMemory}()},
+\code{\link{extractMemoryFeatures}()}
 }
 \author{
 Blas M. Benito  <blasbenito@gmail.com>
 }
+\concept{memoria}

@@ -26,7 +26,15 @@ A dataframe resulting from the application of \code{\link{prepareLaggedData}} to
 
 The dataframe has attributes \code{response} and \code{drivers} that are automatically used by \code{\link{computeMemory}}.
 }
+\seealso{
+Other example_data: 
+\code{\link{climate}},
+\code{\link{palaeodata}},
+\code{\link{palaeodataMemory}},
+\code{\link{pollen}}
+}
 \author{
 Blas M. Benito  <blasbenito@gmail.com>
 }
+\concept{example_data}
 \keyword{datasets}

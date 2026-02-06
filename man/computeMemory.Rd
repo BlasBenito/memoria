@@ -18,25 +18,25 @@ computeMemory(
 )
 }
 \arguments{
-\item{lagged.data}{a lagged dataset resulting from \code{\link{prepareLaggedData}}. See \code{\link{palaeodataLagged}} as example.}
+\item{lagged.data}{a lagged dataset resulting from \code{\link{prepareLaggedData}}. See \code{\link{palaeodataLagged}} as example. Default: \code{NULL}.}
 
-\item{response}{character string, name of the response variable. Not required if `lagged.data` was generated with [prepareLaggedData]. Default: NULL}
+\item{response}{character string, name of the response variable. Not required if `lagged.data` was generated with [prepareLaggedData]. Default: \code{NULL}.}
 
-\item{drivers}{a character string or vector of character strings with variables to be used as predictors in the model. Not required if `lagged.data` was generated with [prepareLaggedData].. \strong{Important:} \code{drivers} names must not have the character "__" (double underscore). Default: NULL}
+\item{drivers}{a character string or character vector with variables to be used as predictors in the model. Not required if `lagged.data` was generated with [prepareLaggedData]. \strong{Important:} \code{drivers} names must not have the character "__" (double underscore). Default: \code{NULL}.}
 
-\item{random.mode}{either "none", "white.noise" or "autocorrelated". See details.}
+\item{random.mode}{either "none", "white.noise" or "autocorrelated". See details. Default: \code{"autocorrelated"}.}
 
-\item{repetitions}{integer, number of random forest models to fit.}
+\item{repetitions}{integer, number of random forest models to fit. Default: \code{10}.}
 
-\item{subset.response}{character string with values "up", "down" or "none", triggers the subsetting of the input dataset. "up" only models memory on cases where the response's trend is positive, "down" selects cases with negative trends, and "none" selects all cases.}
+\item{subset.response}{character string with values "up", "down" or "none", triggers the subsetting of the input dataset. "up" only models memory on cases where the response's trend is positive, "down" selects cases with negative trends, and "none" selects all cases. Default: \code{"none"}.}
 
-\item{min.node.size}{integer, argument of the \link[ranger]{ranger} function. Minimal number of samples to be allocated in a terminal node. Default is 5.}
+\item{min.node.size}{integer, argument of the \link[ranger]{ranger} function. Minimal number of samples to be allocated in a terminal node. Default: \code{5}.}
 
-\item{num.trees}{integer, argument of the \link[ranger]{ranger} function. Number of regression trees to be fitted (size of the forest). Default is 500}
+\item{num.trees}{integer, argument of the \link[ranger]{ranger} function. Number of regression trees to be fitted (size of the forest). Default: \code{500}.}
 
-\item{mtry}{integer, argument of the \link[ranger]{ranger} function. Number of variables to possibly split at in each node. Default: NULL.}
+\item{mtry}{integer, argument of the \link[ranger]{ranger} function. Number of variables to possibly split at in each node. Default: \code{NULL}.}
 
-\item{num.threads}{integer, number of cores \link[ranger]{ranger} can use for multithreading. Default: 2}
+\item{num.threads}{integer, number of cores \link[ranger]{ranger} can use for multithreading. Default: \code{2}.}
 }
 \value{
 A list with 5 slots:
@@ -97,7 +97,6 @@ str(memory.output$memory)
 #plotting output
 plotMemory(memory.output = memory.output)
 }
-
 }
 \references{
 \itemize{
@@ -108,7 +107,12 @@ plotMemory(memory.output = memory.output)
 }
 \seealso{
 \code{\link{plotMemory}}, \code{\link{extractMemoryFeatures}}
+
+Other memoria: 
+\code{\link{extractMemoryFeatures}()},
+\code{\link{plotMemory}()}
 }
 \author{
 Blas M. Benito  <blasbenito@gmail.com>
 }
+\concept{memoria}

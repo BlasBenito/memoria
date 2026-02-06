@@ -19,6 +19,7 @@
 #' @keywords datasets
 #' @name palaeodataLagged
 #' @usage data(palaeodataLagged)
+#' @family example_data
 #' @format dataframe with 19 columns and 3988 rows.
 "palaeodataLagged"
 
@@ -39,6 +40,7 @@
 #' @keywords datasets
 #' @name pollen
 #' @usage data(pollen)
+#' @family example_data
 #' @format dataframe with 5 columns and 639 rows.
 "pollen"
 
@@ -60,6 +62,7 @@
 #' @keywords datasets
 #' @name climate
 #' @usage data(climate)
+#' @family example_data
 #' @format dataframe with 6 columns and 800 rows.
 "climate"
 
@@ -85,6 +88,7 @@
 #' @keywords datasets
 #' @name palaeodata
 #' @usage data(palaeodata)
+#' @family example_data
 #' @format dataframe with 10 columns and 7986 rows.
 "palaeodata"
 
@@ -112,6 +116,7 @@
 #' @keywords datasets
 #' @name palaeodataMemory
 #' @usage data(palaeodataMemory)
+#' @family example_data
 #' @format List with five slots.
 "palaeodataMemory"
 

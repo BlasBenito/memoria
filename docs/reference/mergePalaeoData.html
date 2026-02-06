@@ -40,10 +40,10 @@
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">mergePalaeoData</span><span class="op">(</span></span>
-<span> datasets.list <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span> time.column <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span> interpolation.interval <span class="op">=</span> <span class="cn">NULL</span></span>
-<span> <span class="op">)</span></span></code></pre></div>
+<span>  datasets.list <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  time.column <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  interpolation.interval <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -51,15 +51,15 @@
 
 
 <dl><dt id="arg-datasets-list">datasets.list<a class="anchor" aria-label="anchor" href="#arg-datasets-list"></a></dt>
-<dd><p>list of dataframes, as in <code>datasets.list = list(climate = climate.dataframe, pollen = pollen.dataframe)</code>. The provided dataframes must have an age/time column with the same column name and the same units of time. Non-numeric columns in these dataframes are ignored.</p></dd>
+<dd><p>list of dataframes, as in <code>datasets.list = list(climate = climate.dataframe, pollen = pollen.dataframe)</code>. The provided dataframes must have an age/time column with the same column name and the same units of time. Non-numeric columns in these dataframes are ignored. Default: <code>NULL</code>.</p></dd>
 
 
 <dt id="arg-time-column">time.column<a class="anchor" aria-label="anchor" href="#arg-time-column"></a></dt>
-<dd><p>character string, name of the time/age column of the datasets provided in <code>datasets.list</code>.</p></dd>
+<dd><p>character string, name of the time/age column of the datasets provided in <code>datasets.list</code>. Default: <code>NULL</code>.</p></dd>
 
 
 <dt id="arg-interpolation-interval">interpolation.interval<a class="anchor" aria-label="anchor" href="#arg-interpolation-interval"></a></dt>
-<dd><p>numeric, temporal resolution of the output data, in the same units as the age/time columns of the input data.</p></dd>
+<dd><p>numeric, temporal resolution of the output data, in the same units as the age/time columns of the input data. Default: <code>NULL</code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -69,6 +69,11 @@
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>This function fits a <code><a href="https://rdrr.io/r/stats/loess.html" class="external-link">loess</a></code> model of the form <code>y ~ x</code>, where <code>y</code> is any numeric column in the input datasets and <code>x</code> is the column given by the <code>time.column</code> argument. The model is used to interpolate column <code>y</code> on a regular time series of intervals equal to <code>interpolation.interval</code>. All numeric columns in every provided dataset go through this process to generate the final data with samples separated by regular time intervals. Non-numeric columns are ignored and absent from the output dataframe.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
+    <div class="dont-index"><p>Other data_preparation:
+<code><a href="prepareLaggedData.html">prepareLaggedData()</a></code></p></div>
     </div>
     <div class="section level2">
     <h2 id="author">Author<a class="anchor" aria-label="anchor" href="#author"></a></h2>
@@ -91,12 +96,8 @@
 <span class="r-in"><span> time.column <span class="op">=</span> <span class="st">"age"</span>,</span></span>
 <span class="r-in"><span> interpolation.interval <span class="op">=</span> <span class="fl">0.2</span></span></span>
 <span class="r-in"><span> <span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Argument interpolation.interval is set to 0.2</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> The average temporal resolution of pollen is 1.27; you are incrementing data resolution by a factor of 6.35</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> The average temporal resolution of climate is 1; you are incrementing data resolution by a factor of 5</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span> <span class="co"># }</span></span></span>
-<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

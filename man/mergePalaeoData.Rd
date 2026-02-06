@@ -5,17 +5,17 @@
 \title{Merges palaeoecological datasets with different time resolution.}
 \usage{
 mergePalaeoData(
- datasets.list = NULL,
- time.column = NULL,
- interpolation.interval = NULL
- )
+  datasets.list = NULL,
+  time.column = NULL,
+  interpolation.interval = NULL
+)
 }
 \arguments{
-\item{datasets.list}{list of dataframes, as in \code{datasets.list = list(climate = climate.dataframe, pollen = pollen.dataframe)}. The provided dataframes must have an age/time column with the same column name and the same units of time. Non-numeric columns in these dataframes are ignored.}
+\item{datasets.list}{list of dataframes, as in \code{datasets.list = list(climate = climate.dataframe, pollen = pollen.dataframe)}. The provided dataframes must have an age/time column with the same column name and the same units of time. Non-numeric columns in these dataframes are ignored. Default: \code{NULL}.}
 
-\item{time.column}{character string, name of the time/age column of the datasets provided in \code{datasets.list}.}
+\item{time.column}{character string, name of the time/age column of the datasets provided in \code{datasets.list}. Default: \code{NULL}.}
 
-\item{interpolation.interval}{numeric, temporal resolution of the output data, in the same units as the age/time columns of the input data.}
+\item{interpolation.interval}{numeric, temporal resolution of the output data, in the same units as the age/time columns of the input data. Default: \code{NULL}.}
 }
 \value{
 A dataframe with every column of the initial dataset interpolated to a regular time grid of resolution defined by \code{interpolation.interval}. Column names follow the form datasetName.columnName, so the origin of columns can be tracked.
@@ -43,8 +43,12 @@ x <- mergePalaeoData(
  )
 
  }
-
+}
+\seealso{
+Other data_preparation: 
+\code{\link{prepareLaggedData}()}
 }
 \author{
 Blas M. Benito  <blasbenito@gmail.com>
 }
+\concept{data_preparation}

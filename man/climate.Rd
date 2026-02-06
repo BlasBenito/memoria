@@ -23,7 +23,15 @@ A dataframe containing palaeoclimate data at 1 ky temporal resolution with the f
   \item \emph{oxigenIsotope} delta O18, global ratio of stable isotopes in the sea floor, see \url{http://lorraine-lisiecki.com/stack.html} for further details.
 }
 }
+\seealso{
+Other example_data: 
+\code{\link{palaeodata}},
+\code{\link{palaeodataLagged}},
+\code{\link{palaeodataMemory}},
+\code{\link{pollen}}
+}
 \author{
 Blas M. Benito  <blasbenito@gmail.com>
 }
+\concept{example_data}
 \keyword{datasets}
