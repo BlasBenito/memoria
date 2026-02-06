@@ -11,9 +11,6 @@ computeMemory(
   random.mode = "autocorrelated",
   repetitions = 10,
   subset.response = "none",
-  min.node.size = 5,
-  num.trees = 500,
-  mtry = NULL,
   num.threads = 2
 )
 }
@@ -29,12 +26,6 @@ computeMemory(
 \item{repetitions}{integer, number of random forest models to fit. Default: \code{10}.}
 
 \item{subset.response}{character string with values "up", "down" or "none", triggers the subsetting of the input dataset. "up" only models memory on cases where the response's trend is positive, "down" selects cases with negative trends, and "none" selects all cases. Default: \code{"none"}.}
-
-\item{min.node.size}{integer, argument of the \link[ranger]{ranger} function. Minimal number of samples to be allocated in a terminal node. Default: \code{5}.}
-
-\item{num.trees}{integer, argument of the \link[ranger]{ranger} function. Number of regression trees to be fitted (size of the forest). Default: \code{500}.}
-
-\item{mtry}{integer, argument of the \link[ranger]{ranger} function. Number of variables to possibly split at in each node. Default: \code{NULL}.}
 
 \item{num.threads}{integer, number of cores \link[ranger]{ranger} can use for multithreading. Default: \code{2}.}
 }

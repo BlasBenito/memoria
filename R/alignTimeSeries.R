@@ -1,12 +1,13 @@
-#' Merges palaeoecological datasets with different time resolution.
+#' Align and join multiple time series to a common temporal resolution
 #'
-#' @description Merges palaeoecological datasets with different time intervals between consecutive samples into a single dataset with samples separated by regular time intervals defined by the user.
+#' @description
+#' Aligns multiple time series datasets to a common temporal resolution
+#' using LOESS interpolation and joins them into a single dataframe. This is
+#' useful when combining datasets with different sampling intervals.
 #'
-#'
-#'
-#' @param datasets.list list of dataframes, as in \code{datasets.list = list(climate = climate.dataframe, pollen = pollen.dataframe)}. The provided dataframes must have an age/time column with the same column name and the same units of time. Non-numeric columns in these dataframes are ignored. Default: \code{NULL}.
-#' @param time.column character string, name of the time/age column of the datasets provided in \code{datasets.list}. Default: \code{NULL}.
-#' @param interpolation.interval numeric, temporal resolution of the output data, in the same units as the age/time columns of the input data. Default: \code{NULL}.
+#' @param datasets.list list of dataframes, as in \code{datasets.list = list(dataset1 = df1, dataset2 = df2)}. The provided dataframes must have a time column with the same column name and the same units of time. Non-numeric columns in these dataframes are ignored. Default: \code{NULL}.
+#' @param time.column character string, name of the time column of the datasets provided in \code{datasets.list}. Default: \code{NULL}.
+#' @param interpolation.interval numeric, temporal resolution of the output data, in the same units as the time columns of the input data. Default: \code{NULL}.
 #'
 #' @details This function fits a \code{\link{loess}} model of the form \code{y ~ x}, where \code{y} is any numeric column in the input datasets and \code{x} is the column given by the \code{time.column} argument. The model is used to interpolate column \code{y} on a regular time series of intervals equal to \code{interpolation.interval}. All numeric columns in every provided dataset go through this process to generate the final data with samples separated by regular time intervals. Non-numeric columns are ignored and absent from the output dataframe.
 #'
@@ -22,7 +23,7 @@
 #'data(pollen)
 #'data(climate)
 #'
-#'x <- mergePalaeoData(
+#'x <- alignTimeSeries(
 #'  datasets.list = list(
 #'    pollen=pollen,
 #'    climate=climate
@@ -34,7 +35,7 @@
 #'  }
 #'@family data_preparation
 #'@export
-mergePalaeoData <- function(
+alignTimeSeries <- function(
   datasets.list = NULL,
   time.column = NULL,
   interpolation.interval = NULL
@@ -43,12 +44,12 @@ mergePalaeoData <- function(
   #######################
   if (!inherits(datasets.list, "list")) {
     stop(
-      "The argument dataset.list must be a list. Try something like: datasets.list = list(climate = climate.dataframe, pollen = pollen.dataframe)."
+      "The argument dataset.list must be a list. Try something like: datasets.list = list(dataset1 = df1, dataset2 = df2)."
     )
   } else {
     if (length(datasets.list) < 2) {
       stop(
-        "The argument dataset.list only has one object, there is nothing to merge here!"
+        "The argument dataset.list only has one object, there is nothing to align here!"
       )
     }
   }
@@ -211,4 +212,20 @@ mergePalaeoData <- function(
   output.dataframe <- data.frame(age = reference.time, output.dataframe)
 
   return(output.dataframe)
+}
+
+
+#' @rdname alignTimeSeries
+#' @export
+mergePalaeoData <- function(
+  datasets.list = NULL,
+  time.column = NULL,
+  interpolation.interval = NULL
+) {
+  .Deprecated("alignTimeSeries")
+  alignTimeSeries(
+    datasets.list = datasets.list,
+    time.column = time.column,
+    interpolation.interval = interpolation.interval
+  )
 }

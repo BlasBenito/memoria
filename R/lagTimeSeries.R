@@ -1,12 +1,14 @@
-#' Organizes time series data into lags.
+#' Create lagged versions of time series variables
 #'
-#' @description Takes a multivariate time series, where at least one variable is meant to be used as a response while the others are meant to be used as predictors in a model, and organizes it in time lags, generating one new column per lag and variable in the model.
+#' @description Takes a multivariate time series and creates time-lagged
+#' columns for modeling. This generates one new column per lag and variable,
+#' enabling analysis of how past values influence current observations.
 #'
 #'
 #' @param input.data a dataframe with one time series per column. Default: \code{NULL}.
 #' @param response character string, name of the numeric column to be used as response in the model. Default: \code{NULL}.
 #' @param drivers  character vector, names of the numeric columns to be used as predictors in the model. Default: \code{NULL}.
-#' @param time character vector, name of the numeric column with the time/age. Default: \code{NULL}.
+#' @param time character vector, name of the numeric column with the time. Default: \code{NULL}.
 #' @param oldest.sample character string, either "first" or "last". When "first", the first row taken as the oldest case of the time series and the last row is taken as the newest case, so ecological memory flows from the first to the last row of \code{input.data}. When "last", the last row is taken as the oldest sample, and this is the mode that should be used when \code{input.data} represents a palaeoecological dataset. Default: \code{"first"}.
 #' @param lags numeric vector, lags to be used in the equation, in the same units as \code{time}. The use of \code{\link{seq}} to define it is highly recommended. If 0 is absent from lags, it is added automatically to allow the consideration of a concurrent effect. Lags should be aligned to the temporal resolution of the data. For example, if the interval between consecutive samples is 100 years, lags should be something like \code{0, 100, 200, 300}. Lags can also be multiples of the time resolution, such as \code{0, 200, 400, 600} (when time resolution is 100 years). Default: \code{NULL}.
 #' @param time.zoom numeric vector of two values from the range of the \code{time} column, used to subset the data if desired. Default: \code{NULL}.
@@ -25,7 +27,7 @@
 #'data(palaeodata)
 #'
 #'#adding lags
-#'lagged.data <- prepareLaggedData(
+#'lagged.data <- lagTimeSeries(
 #'  input.data = palaeodata,
 #'  response = "pollen.pinus",
 #'  drivers = c("climate.temperatureAverage", "climate.rainfallAverage"),
@@ -40,7 +42,7 @@
 #'attributes(lagged.data)
 #' @family data_preparation
 #' @export
-prepareLaggedData <- function(
+lagTimeSeries <- function(
   input.data = NULL,
   response = NULL,
   drivers = NULL,
@@ -232,4 +234,30 @@ prepareLaggedData <- function(
   attr(x = response.lags, which = "drivers") <- drivers
 
   return(response.lags)
+}
+
+
+#' @rdname lagTimeSeries
+#' @export
+prepareLaggedData <- function(
+  input.data = NULL,
+  response = NULL,
+  drivers = NULL,
+  time = NULL,
+  oldest.sample = "first",
+  lags = NULL,
+  time.zoom = NULL,
+  scale = FALSE
+) {
+  .Deprecated("lagTimeSeries")
+  lagTimeSeries(
+    input.data = input.data,
+    response = response,
+    drivers = drivers,
+    time = time,
+    oldest.sample = oldest.sample,
+    lags = lags,
+    time.zoom = time.zoom,
+    scale = scale
+  )
 }

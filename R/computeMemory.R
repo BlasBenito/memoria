@@ -22,9 +22,6 @@
 #' @param random.mode either "none", "white.noise" or "autocorrelated". See details. Default: \code{"autocorrelated"}.
 #' @param repetitions integer, number of random forest models to fit. Default: \code{10}.
 #' @param subset.response character string with values "up", "down" or "none", triggers the subsetting of the input dataset. "up" only models memory on cases where the response's trend is positive, "down" selects cases with negative trends, and "none" selects all cases. Default: \code{"none"}.
-#' @param min.node.size integer, argument of the \link[ranger]{ranger} function. Minimal number of samples to be allocated in a terminal node. Default: \code{5}.
-#' @param num.trees integer, argument of the \link[ranger]{ranger} function. Number of regression trees to be fitted (size of the forest). Default: \code{500}.
-#' @param mtry  integer, argument of the \link[ranger]{ranger} function. Number of variables to possibly split at in each node. Default: \code{NULL}.
 #' @param num.threads integer, number of cores \link[ranger]{ranger} can use for multithreading. Default: \code{2}.
 #'
 #' @details This function uses the \link[ranger]{ranger} package to fit Random Forest models. Please, check the help of the \link[ranger]{ranger} function to better understand how Random Forest is parameterized in this package. This function fits the model explained above as many times as defined in the argument \code{repetitions}.
@@ -88,9 +85,6 @@ computeMemory <- function(
   random.mode = "autocorrelated",
   repetitions = 10,
   subset.response = "none",
-  min.node.size = 5,
-  num.trees = 500,
-  mtry = NULL,
   num.threads = 2
 ) {
   #checking data
@@ -250,10 +244,9 @@ computeMemory <- function(
       scale.permutation.importance = TRUE,
       replace = FALSE,
       splitrule = "variance",
-      min.node.size = min.node.size,
-      num.trees = num.trees,
+      min.node.size = 5,
+      num.trees = 500,
       verbose = FALSE,
-      mtry = mtry,
       seed = i,
       num.threads = num.threads
     )
@@ -327,7 +320,12 @@ computeMemory <- function(
   }
 
   #variable as factor
-  response <- gsub(pattern = "__0", replacement = "", x = response, fixed = TRUE)
+  response <- gsub(
+    pattern = "__0",
+    replacement = "",
+    x = response,
+    fixed = TRUE
+  )
   if (random.mode != "none") {
     importance.df$variable <- factor(
       importance.df$variable,

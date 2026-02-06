@@ -121,7 +121,7 @@ The package `memoria` requires the input time series to be regular, but `pollen`
 To homogenize both datasets, below we use linear interpolation with time to align `pollen` with `climate`.
 
 ```{r}
-df <- memoria::mergePalaeoData(
+df <- memoria::alignTimeSeries(
   datasets.list = list(
     pollen = pollen,
     climate = climate
@@ -151,10 +151,10 @@ df <- df |>
 
 ### Create lagged data
 
-The `prepareLaggedData()` function organizes data into the lag structure required by the model. Each sample of the response is aligned with antecedent values of itself and the drivers. In this case we use lags 1 to 10, which correspond with 1000 to 10000 years.
+The `lagTimeSeries()` function organizes data into the lag structure required by the model. Each sample of the response is aligned with antecedent values of itself and the drivers. In this case we use lags 1 to 10, which correspond with 1000 to 10000 years.
 
 ```{r prepare-lagged}
-quercus_lags <- prepareLaggedData(
+quercus_lags <- lagTimeSeries(
   input.data = df,
   response = "quercus",
   drivers = c("rain", "temp"),
@@ -211,7 +211,7 @@ quercus_memory <- memoria::computeMemory(
 
 We can visualize the results with `plotMemory()`.
 
-```{r compute-memory-autocor, fig.width = 5, fig.height = 4}
+```{r compute-memory-autocor, fig.width = 5, fig.height = 3}
 memoria::plotMemory(quercus_memory)
 ```
 
@@ -246,8 +246,8 @@ The **dominance** values (proportion in [0, 1]) measure whether endogenous or ex
 
 The complete workflow:
 
-1. `mergePalaeoData()` - Align datasets with different resolutions.
-2. `prepareLaggedData()` - Create lag structure.
+1. `alignTimeSeries()` - Align datasets with different resolutions.
+2. `lagTimeSeries()` - Create lag structure.
 3. `computeMemory()` - Fit Random Forest and compute importance.
 4. `plotMemory()` - Visualize the memory pattern.
 5. `extractMemoryFeatures()` - Quantify memory characteristics.

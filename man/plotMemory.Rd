@@ -7,8 +7,13 @@
 plotMemory(
   memory.output = NULL,
   ribbon = FALSE,
+  data = NULL,
   legend.position = "right",
-  filename = NULL
+  base.theme = "bw",
+  xlab = "Lag",
+  ylab = "Permutation Importance",
+  title = NULL,
+  ribbon.alpha = 0.25
 )
 }
 \arguments{
@@ -16,9 +21,19 @@ plotMemory(
 
 \item{ribbon}{logical, switches plotting of confidence intervals on (TRUE) and off (FALSE). Default: \code{FALSE}.}
 
-\item{legend.position}{character string, legend position (e.g., "right", "bottom", "none"). Default: \code{"right"}.}
+\item{data}{data.frame, for internal use by \code{\link{plotExperiment}}. When provided, used instead of \code{memory.output$memory}. Default: \code{NULL}.}
 
-\item{filename}{deprecated, not used. Kept for backwards compatibility. Default: \code{NULL}.}
+\item{legend.position}{character, position of the legend. Default: \code{"right"}.}
+
+\item{base.theme}{character, base theme to use: \code{"bw"} for \code{theme_bw()} or \code{"classic"} for \code{theme_classic()}. Default: \code{"bw"}.}
+
+\item{xlab}{character, x-axis label. Default: \code{"Lag"}.}
+
+\item{ylab}{character, y-axis label. Default: \code{"Permutation Importance"}.}
+
+\item{title}{character, plot title. Default: \code{NULL}.}
+
+\item{ribbon.alpha}{numeric, alpha transparency for the ribbon. Default: \code{0.25}.}
 }
 \value{
 A ggplot object.

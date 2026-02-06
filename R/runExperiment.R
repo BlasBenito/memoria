@@ -159,7 +159,7 @@ runExperiment <- function(
       }
 
       #adds lags
-      simulation.data.lagged <- prepareLaggedData(
+      simulation.data.lagged <- lagTimeSeries(
         input.data = simulation.data,
         response = response.column,
         drivers = driver.column,

@@ -158,7 +158,7 @@ test_that("both random.mode options produce valid output", {
 test_that("computeMemory works with a single driver", {
   # Create lagged data with only one driver
   data(palaeodata, package = "memoria")
-  lagged_single <- prepareLaggedData(
+  lagged_single <- lagTimeSeries(
     input.data = palaeodata[1:200, ],
     response = "pollen.pinus",
     drivers = "climate.temperatureAverage",

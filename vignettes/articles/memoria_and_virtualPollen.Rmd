@@ -122,8 +122,7 @@ The `plotExperiment()` function generates faceted plots showing memory patterns 
 ```{r plot-experiment, fig.width=8, fig.height = 6, warning = FALSE}
 memoria::plotExperiment(
   experiment.output = experiment,
-  parameters.file = parameters,
-  R2 = TRUE
+  parameters.file = parameters
 )
 ```
 
@@ -163,31 +162,16 @@ The output includes:
 The `extractMemoryFeatures()` function can process output from `experimentToTable()` to compute the eight memory features for each taxon:
 
 ```{r extract-features-batch}
-# Extract features from experiment table
 features <- extractMemoryFeatures(
   memory.pattern = experiment_table,
   exogenous.component = "Driver.A",
   endogenous.component = "Pollen"
 )
+
+dplyr::glimpse(features)
 ```
 
-```{r, echo = FALSE}
-DT::datatable(features) |> 
-  DT::formatRound(
-    columns = c(
-      "strength.endogenous", 
-      "strength.exogenous", 
-      "strength.concurrent"
-    ), digits = 2
-  ) |>
-  DT::formatRound(
-    columns = c(
-      "length.endogenous", 
-      "length.exogenous"
-    ),
-    digits = 3
-  )
-```
+
 
 
 The eight features (organized in three groups):
