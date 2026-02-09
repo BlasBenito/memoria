@@ -27,10 +27,12 @@ runExperiment(
 
 - simulations.file:
 
-  List of dataframes produced by `virtualPollen::simulatePopulation`.
+  List of dataframes produced by
+  [`virtualPollen::simulatePopulation`](https://rdrr.io/pkg/virtualPollen/man/simulatePopulation.html).
   Each list element is a time series dataframe for one virtual taxon.
   Can be a 1D list (one sampling scheme) or a 2D matrix-like list (rows
-  = taxa, columns = sampling schemes). See `virtualPollen::simulation`
+  = taxa, columns = sampling schemes). See
+  [`virtualPollen::simulation`](https://rdrr.io/pkg/virtualPollen/man/simulation.html)
   for an example. Default: `NULL`.
 
 - selected.rows:
@@ -49,9 +51,11 @@ runExperiment(
 - parameters.file:
 
   Dataframe of simulation parameters produced by
-  `virtualPollen::parametersDataframe`, with one row per virtual taxon.
-  Rows must align with `simulations.file`. See
-  `virtualPollen::parameters` for an example. Default: `NULL`.
+  [`virtualPollen::parametersDataframe`](https://rdrr.io/pkg/virtualPollen/man/parametersDataframe.html),
+  with one row per virtual taxon. Rows must align with
+  `simulations.file`. See
+  [`virtualPollen::parameters`](https://rdrr.io/pkg/virtualPollen/man/parameters.html)
+  for an example. Default: `NULL`.
 
 - parameters.names:
 
@@ -70,7 +74,8 @@ runExperiment(
 
   Character string naming the response variable column in the simulation
   dataframes. Use `"Pollen"` for pollen abundance from
-  `virtualPollen::simulation`. Default: `"Pollen"`.
+  [`virtualPollen::simulation`](https://rdrr.io/pkg/virtualPollen/man/simulation.html).
+  Default: `"Pollen"`.
 
 - subset.response:
 

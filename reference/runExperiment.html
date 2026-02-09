@@ -16,7 +16,14 @@
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
-<li class="nav-item"><a class="nav-link" href="../articles/index.html">Articles</a></li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Tutorials</h6></li>
+    <li><a class="dropdown-item" href="../articles/getting_started.html">Getting Started</a></li>
+    <li><a class="dropdown-item" href="../articles/memoria_and_virtualPollen.html">memoria and virtualPollen</a></li>
+    <li><a class="dropdown-item" href="../articles/download_history.html">Download History</a></li>
+  </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
@@ -60,10 +67,10 @@
 
 
 <dl><dt id="arg-simulations-file">simulations.file<a class="anchor" aria-label="anchor" href="#arg-simulations-file"></a></dt>
-<dd><p>List of dataframes produced by <code>virtualPollen::simulatePopulation</code>.
+<dd><p>List of dataframes produced by <code><a href="https://rdrr.io/pkg/virtualPollen/man/simulatePopulation.html" class="external-link">virtualPollen::simulatePopulation</a></code>.
 Each list element is a time series dataframe for one virtual taxon. Can be a 1D list (one
 sampling scheme) or a 2D matrix-like list (rows = taxa, columns = sampling schemes).
-See <code>virtualPollen::simulation</code> for an example. Default: <code>NULL</code>.</p></dd>
+See <code><a href="https://rdrr.io/pkg/virtualPollen/man/simulation.html" class="external-link">virtualPollen::simulation</a></code> for an example. Default: <code>NULL</code>.</p></dd>
 
 
 <dt id="arg-selected-rows">selected.rows<a class="anchor" aria-label="anchor" href="#arg-selected-rows"></a></dt>
@@ -81,8 +88,8 @@ first sampling scheme only).</p></dd>
 
 <dt id="arg-parameters-file">parameters.file<a class="anchor" aria-label="anchor" href="#arg-parameters-file"></a></dt>
 <dd><p>Dataframe of simulation parameters produced by
-<code>virtualPollen::parametersDataframe</code>, with one row per virtual taxon.
-Rows must align with <code>simulations.file</code>. See <code>virtualPollen::parameters</code>
+<code><a href="https://rdrr.io/pkg/virtualPollen/man/parametersDataframe.html" class="external-link">virtualPollen::parametersDataframe</a></code>, with one row per virtual taxon.
+Rows must align with <code>simulations.file</code>. See <code><a href="https://rdrr.io/pkg/virtualPollen/man/parameters.html" class="external-link">virtualPollen::parameters</a></code>
 for an example. Default: <code>NULL</code>.</p></dd>
 
 
@@ -101,7 +108,7 @@ drivers in the simulation dataframes. Common choices: <code>"Driver.A"</code>,
 <dt id="arg-response-column">response.column<a class="anchor" aria-label="anchor" href="#arg-response-column"></a></dt>
 <dd><p>Character string naming the response variable column in the
 simulation dataframes. Use <code>"Pollen"</code> for pollen abundance from
-<code>virtualPollen::simulation</code>. Default: <code>"Pollen"</code>.</p></dd>
+<code><a href="https://rdrr.io/pkg/virtualPollen/man/simulation.html" class="external-link">virtualPollen::simulation</a></code>. Default: <code>"Pollen"</code>.</p></dd>
 
 
 <dt id="arg-subset-response">subset.response<a class="anchor" aria-label="anchor" href="#arg-subset-response"></a></dt>
