@@ -41,7 +41,8 @@ reference:
   - has_concept("example_data")
 
 articles:
-- title: Articles
+- title: "Tutorials"
+  navbar: "Tutorials"
   contents:
   - articles/getting_started
   - articles/memoria_and_virtualPollen
