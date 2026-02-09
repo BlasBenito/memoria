@@ -40,7 +40,6 @@
 #'   \item \emph{fecundity} numeric, trait of the given taxon.
 #'   \item \emph{niche.mean} numeric, trait of the given taxon.
 #'   \item \emph{niche.sd} numeric, trait of the given taxon.
-#'   \item \emph{sampling} numeric, trait of the given taxon.
 #' }
 #'
 #' @seealso \code{\link{computeMemory}}
@@ -84,7 +83,6 @@ extractMemoryFeatures <- function(
 
     #identifying available groups
     taxa <- unique(x$label)
-    sampling <- unique(x$sampling)
 
     #memory object switch to false
     is.computeMemory.object <- FALSE
@@ -92,7 +90,6 @@ extractMemoryFeatures <- function(
     #it is a list containing results of a single taxa.
     is.computeMemory.object <- TRUE
     taxa <- 1
-    sampling <- "this"
 
     # Auto-extract component names from computeMemory output if not provided
     if (is.null(endogenous.component) && !is.null(x$response)) {
@@ -147,7 +144,7 @@ extractMemoryFeatures <- function(
   }
 
   #dataframe to store results
-  nas <- rep(NA, (length(taxa) * length(sampling)))
+  nas <- rep(NA, (length(taxa)))
   output.df <- data.frame(
     label = nas,
     strength.endogenous = nas,
@@ -161,135 +158,129 @@ extractMemoryFeatures <- function(
     fecundity = nas,
     niche.mean = nas,
     niche.sd = nas,
-    sampling = nas,
     stringsAsFactors = FALSE
   )
 
   #row counter
   row.counter <- 0
 
-  #iterating through taxa and sampling
+  #iterating through taxa
   for (taxon in taxa) {
-    for (samp in sampling) {
-      #+1 to the row counter
-      row.counter <- row.counter + 1
+    #+1 to the row counter
+    row.counter <- row.counter + 1
 
-      #subsetting the taxon
-      if (!is.computeMemory.object) {
-        x.temp <- x[x$label == taxon, ]
-        x.temp <- x.temp[x.temp$sampling == samp, ]
-      } else {
-        x.temp <- x$memory
-      }
+    #subsetting the taxon
+    if (!is.computeMemory.object) {
+      x.temp <- x[x$label == taxon, ]
+    } else {
+      x.temp <- x$memory
+    }
 
-      #random median
-      random.median <- round(
-        x.temp[x.temp$variable == "random", "median"][1],
-        2
+    #random median
+    random.median <- round(
+      x.temp[x.temp$variable == "random", "median"][1],
+      2
+    )
+
+    #number of lags
+    lags <- unique(x.temp$lag)
+    lags <- lags[lags != 0]
+
+    # Validate that there are lags to analyze
+    if (length(lags) == 0) {
+      stop(
+        "No lags found beyond lag 0. ",
+        "Ecological memory analysis requires at least one non-zero lag."
       )
+    }
 
-      #number of lags
-      lags <- unique(x.temp$lag)
-      lags <- lags[lags != 0]
+    #computing memory strength (difference betweenn component and median of the random term)
+    # strength.concurrent <- x.temp[x.temp$variable == exogenous.component & x.temp$lag == 0, "median"] - random.median
+    # x.temp <- x.temp[x.temp$lag!=0,] #removing lag 0
+    # strength.endogenous  <-  max(x.temp[x.temp$variable == endogenous.component, "median"]) - random.median
+    # strength.exogenous <- max(x.temp[x.temp$variable == exogenous.component, "median"]) - random.median
 
-      # Validate that there are lags to analyze
-      if (length(lags) == 0) {
-        stop(
-          "No lags found beyond lag 0. ",
-          "Ecological memory analysis requires at least one non-zero lag."
+    strength.concurrent <- max(x.temp[
+      x.temp$variable %in% exogenous.component & x.temp$lag == 0,
+      "median"
+    ]) -
+      random.median
+    x.temp <- x.temp[x.temp$lag != 0, ] #removing lag 0
+    strength.endogenous <- max(x.temp[
+      x.temp$variable %in% endogenous.component,
+      "median"
+    ]) -
+      random.median
+    strength.exogenous <- max(x.temp[
+      x.temp$variable %in% exogenous.component,
+      "median"
+    ]) -
+      random.median
+
+    #to 0 if negative
+    if (strength.endogenous < 0) {
+      strength.endogenous <- 0
+    }
+    if (strength.exogenous < 0) {
+      strength.exogenous <- 0
+    }
+
+    #computing memory length: number of lags above the median of the random component
+    length.endogenous <- sum(
+      x.temp[x.temp$variable == endogenous.component, "median"] > random.median
+    ) /
+      length(lags)
+
+    #getting medians of exogenous components
+    max.exogenous <- x.temp[
+      x.temp$variable == exogenous.component[1],
+      "median"
+    ]
+    if (length(exogenous.component) > 1) {
+      for (j in exogenous.component[2:length(exogenous.component)]) {
+        max.exogenous <- pmax(
+          max.exogenous,
+          x.temp[x.temp$variable == j, "median"]
         )
       }
+    }
+    length.exogenous <- sum(max.exogenous > random.median) / length(lags)
 
-      #computing memory strength (difference betweenn component and median of the random term)
-      # strength.concurrent <- x.temp[x.temp$variable == exogenous.component & x.temp$lag == 0, "median"] - random.median
-      # x.temp <- x.temp[x.temp$lag!=0,] #removing lag 0
-      # strength.endogenous  <-  max(x.temp[x.temp$variable == endogenous.component, "median"]) - random.median
-      # strength.exogenous <- max(x.temp[x.temp$variable == exogenous.component, "median"]) - random.median
+    #computing memory dominance lags of one component above other component
+    endogenous <- x.temp[x.temp$variable == endogenous.component, "median"]
+    exogenous <- max.exogenous
 
-      strength.concurrent <- max(x.temp[
-        x.temp$variable %in% exogenous.component & x.temp$lag == 0,
-        "median"
-      ]) -
-        random.median
-      x.temp <- x.temp[x.temp$lag != 0, ] #removing lag 0
-      strength.endogenous <- max(x.temp[
-        x.temp$variable %in% endogenous.component,
-        "median"
-      ]) -
-        random.median
-      strength.exogenous <- max(x.temp[
-        x.temp$variable %in% exogenous.component,
-        "median"
-      ]) -
-        random.median
+    #values below random.median to zero
+    endogenous[endogenous < random.median] <- 0
+    exogenous[exogenous < random.median] <- 0
 
-      #to 0 if negative
-      if (strength.endogenous < 0) {
-        strength.endogenous <- 0
-      }
-      if (strength.exogenous < 0) {
-        strength.exogenous <- 0
-      }
+    #values
+    dominance.endogenous <- sum(endogenous > exogenous) / length(lags)
+    dominance.exogenous <- sum(exogenous > endogenous) / length(lags)
 
-      #computing memory length: number of lags above the median of the random component
-      length.endogenous <- sum(
-        x.temp[x.temp$variable == endogenous.component, "median"] >
-          random.median
-      ) /
-        length(lags)
+    #params
+    if (!is.computeMemory.object) {
+      maximum.age <- x.temp$maximum.age[1]
+      fecundity <- x.temp$fecundity[1]
+      niche.mean <- x.temp$niche.A.mean[1]
+      niche.sd <- x.temp$niche.A.sd[1]
+    } else {
+      maximum.age <- fecundity <- niche.mean <- niche.sd <- NA
+    }
 
-      #getting medians of exogenous components
-      max.exogenous <- x.temp[
-        x.temp$variable == exogenous.component[1],
-        "median"
-      ]
-      if (length(exogenous.component) > 1) {
-        for (j in exogenous.component[2:length(exogenous.component)]) {
-          max.exogenous <- pmax(
-            max.exogenous,
-            x.temp[x.temp$variable == j, "median"]
-          )
-        }
-      }
-      length.exogenous <- sum(max.exogenous > random.median) / length(lags)
-
-      #computing memory dominance lags of one component above other component
-      endogenous <- x.temp[x.temp$variable == endogenous.component, "median"]
-      exogenous <- max.exogenous
-
-      #values below random.median to zero
-      endogenous[endogenous < random.median] <- 0
-      exogenous[exogenous < random.median] <- 0
-
-      #values
-      dominance.endogenous <- sum(endogenous > exogenous) / length(lags)
-      dominance.exogenous <- sum(exogenous > endogenous) / length(lags)
-
-      #params
-      if (!is.computeMemory.object) {
-        maximum.age <- x.temp$maximum.age[1]
-        fecundity <- x.temp$fecundity[1]
-        niche.mean <- x.temp$niche.A.mean[1]
-        niche.sd <- x.temp$niche.A.sd[1]
-      } else {
-        maximum.age <- fecundity <- niche.mean <- niche.sd <- NA
-      }
-
-      #filling dataframe (use direct column assignment to avoid type coercion)
-      output.df$label[row.counter] <- taxon
-      output.df$strength.endogenous[row.counter] <- strength.endogenous
-      output.df$strength.exogenous[row.counter] <- strength.exogenous
-      output.df$strength.concurrent[row.counter] <- strength.concurrent
-      output.df$length.endogenous[row.counter] <- length.endogenous
-      output.df$length.exogenous[row.counter] <- length.exogenous
-      output.df$dominance.endogenous[row.counter] <- dominance.endogenous
-      output.df$dominance.exogenous[row.counter] <- dominance.exogenous
-      output.df$maximum.age[row.counter] <- maximum.age
-      output.df$fecundity[row.counter] <- fecundity
-      output.df$niche.mean[row.counter] <- niche.mean
-      output.df$niche.sd[row.counter] <- niche.sd
-      output.df$sampling[row.counter] <- samp
-    } #end of iteration through sampling
+    #filling dataframe (use direct column assignment to avoid type coercion)
+    output.df$label[row.counter] <- taxon
+    output.df$strength.endogenous[row.counter] <- strength.endogenous
+    output.df$strength.exogenous[row.counter] <- strength.exogenous
+    output.df$strength.concurrent[row.counter] <- strength.concurrent
+    output.df$length.endogenous[row.counter] <- length.endogenous
+    output.df$length.exogenous[row.counter] <- length.exogenous
+    output.df$dominance.endogenous[row.counter] <- dominance.endogenous
+    output.df$dominance.exogenous[row.counter] <- dominance.exogenous
+    output.df$maximum.age[row.counter] <- maximum.age
+    output.df$fecundity[row.counter] <- fecundity
+    output.df$niche.mean[row.counter] <- niche.mean
+    output.df$niche.sd[row.counter] <- niche.sd
   } #end of iteration through taxa
 
   #to numeric
@@ -304,10 +295,7 @@ extractMemoryFeatures <- function(
   }
 
   #rescaling strength components
-  if (
-    length(taxa) > 1 ||
-      !("this" %in% sampling)
-  ) {
+  if (length(taxa) > 1) {
     if (scale.strength) {
       output.df$strength.concurrent <- output.df$strength.concurrent /
         max(output.df$strength.concurrent)

@@ -5,7 +5,7 @@
 #'
 #' @param experiment.output list, output of  \code{\link{runExperiment}}. Default: \code{NULL}.
 #' @param parameters.file dataframe of simulation parameters. Default: \code{NULL}.
-#' @param experiment.title character string, title of the plot. Default: \code{NULL}.
+#' @inheritParams plotMemory
 #'
 #'
 #' @author Blas M. Benito  <blasbenito@gmail.com>
@@ -18,9 +18,8 @@
 plotExperiment <- function(
   experiment.output = NULL,
   parameters.file = NULL,
-  experiment.title = NULL
+  ribbon = FALSE
 ) {
-
   # Determine number of sampling columns
   if (is.null(dim(experiment.output$output))) {
     n.columns <- 1
@@ -31,8 +30,7 @@ plotExperiment <- function(
   # Convert experiment output to long table
   simulation.df <- experimentToTable(
     experiment.output = experiment.output,
-    parameters.file = parameters.file,
-    R2 = TRUE
+    parameters.file = parameters.file
   )
 
   # Order of name as it comes in the dataset
@@ -44,12 +42,11 @@ plotExperiment <- function(
   # Build plot using plotMemory
   experiment.plot <- plotMemory(
     data = simulation.df,
-    ribbon = TRUE,
+    ribbon = ribbon,
     legend.position = "bottom",
     base.theme = "classic",
     xlab = "Lag (years)",
     ylab = "Relative importance",
-    title = experiment.title,
     ribbon.alpha = 0.3
   ) +
     facet_wrap(

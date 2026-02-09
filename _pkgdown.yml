@@ -1,22 +1,19 @@
+title: memoria
+home:
+  title: "memoria: Ecological Memory Analysis"
 url: https://blasbenito.github.io/memoria/
 template:
   bootstrap: 5
+  fonts:
+    heading: Montserrat
+    body: Montserrat
+  includes:
+    in_header: |
+      <link rel="stylesheet" href="extra.css"
 
-build:
-  extra_packages:
-    - ggplot2
-    - cranlogs
-
-on:
-  push:
-    branches: [main, master]
-  pull_request:
-    branches: [main, master]
-  release:
-    types: [published]
-  workflow_dispatch:  # allows manual triggering
-  schedule:
-    - cron: '0 0 1 * *'  # runs at midnight UTC on the 1st of each month
+authors:
+  Blas M. Benito:
+    href: https://blasbenito.com
 
 reference:
 - title: Data Preparation
@@ -49,3 +46,19 @@ articles:
   - articles/getting_started
   - articles/memoria_and_virtualPollen
   - articles/download_history
+
+build:
+  extra_packages:
+    - ggplot2
+    - cranlogs
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+  release:
+    types: [published]
+  workflow_dispatch:  # allows manual triggering
+  schedule:
+    - cron: '0 0 1 * *'  # runs at midnight UTC on the 1st of each month

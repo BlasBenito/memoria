@@ -5,7 +5,6 @@
 #'
 #' @param experiment.output list, output of  \code{\link{runExperiment}}. Default: \code{NULL}.
 #' @param parameters.file dataframe of simulation parameters. Default: \code{NULL}.
-#' @param R2 boolean. If TRUE, the average pseudo R-squared of the random forest models used to analyze the ecological memory pattern of the virtual taxa are shown with the taxon traits. Default: \code{TRUE}.
 #'
 #' @details This function is used internally by \code{\link{plotExperiment}}, but it is also available to users in case they want to do other kinds of analyses or plots with the data.
 #'
@@ -19,12 +18,12 @@
 #' @export
 experimentToTable <- function(
   experiment.output = NULL,
-  parameters.file = NULL,
-  R2 = TRUE
+  parameters.file = NULL
 ) {
   #objects to store results
   df.list <- list()
   df.list.index <- 0
+  R2 <- TRUE
 
   #assessing the number of columns of experiment.input
   if (is.null(dim(experiment.output$output))) {

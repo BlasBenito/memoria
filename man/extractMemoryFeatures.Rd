@@ -44,7 +44,6 @@ A dataframe with 8 columns and 1 row if \code{memory.pattern} is the output of \
   \item \emph{fecundity} numeric, trait of the given taxon.
   \item \emph{niche.mean} numeric, trait of the given taxon.
   \item \emph{niche.sd} numeric, trait of the given taxon.
-  \item \emph{sampling} numeric, trait of the given taxon.
 }
 }
 \description{

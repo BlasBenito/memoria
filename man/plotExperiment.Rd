@@ -7,7 +7,7 @@
 plotExperiment(
   experiment.output = NULL,
   parameters.file = NULL,
-  experiment.title = NULL
+  ribbon = FALSE
 )
 }
 \arguments{
@@ -15,7 +15,7 @@ plotExperiment(
 
 \item{parameters.file}{dataframe of simulation parameters. Default: \code{NULL}.}
 
-\item{experiment.title}{character string, title of the plot. Default: \code{NULL}.}
+\item{ribbon}{logical, switches plotting of confidence intervals on (TRUE) and off (FALSE). Default: \code{FALSE}.}
 }
 \value{
 A ggplot2 object.

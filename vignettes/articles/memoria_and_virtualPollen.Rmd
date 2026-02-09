@@ -28,7 +28,7 @@ This article demonstrates how to run batch memory analyses across multiple virtu
 ## Setup
 
 ```{r install-deps, include = FALSE}
-for (pkg in c("knitr", "dplyr", "virtualPollen", "DT")) {
+for (pkg in c("knitr", "dplyr", "virtualPollen")) {
   if (!requireNamespace(pkg, quietly = TRUE)) {
     install.packages(pkg)
   }
@@ -76,7 +76,7 @@ str(simulation, max.level = 1)
 ```
 Each element is a dataframe with the results of a mechanistic simulation. The plot below shows a small section and subset of variables from the first simulated time series.
 
-```{r, fig.width=8, fig.height=4}
+```{r, fig.width=8, fig.height=4, echo = FALSE}
 simulation[[1]] |> 
   dplyr::filter(
     Time > 500 & Time < 1500
@@ -119,7 +119,7 @@ experiment <- memoria::runExperiment(
 
 The `plotExperiment()` function generates faceted plots showing memory patterns across all analyzed taxa:
 
-```{r plot-experiment, fig.width=8, fig.height = 6, warning = FALSE}
+```{r plot-experiment, fig.width=6, fig.height = 7, warning = FALSE}
 memoria::plotExperiment(
   experiment.output = experiment,
   parameters.file = parameters
@@ -155,14 +155,13 @@ The output includes:
 - **Variable**, **Lag**: Memory component and time lag.
 - **median**, **min**, **max**: Importance statistics across repetitions.
 - **R2mean**, **R2sd**: Model fit statistics.
-- **VIFmean**, **VIFsd**: Variance Inflation Factor (multicollinearity diagnostic; values > 5 indicate high collinearity).
 
 ## Extracting Memory Features
 
 The `extractMemoryFeatures()` function can process output from `experimentToTable()` to compute the eight memory features for each taxon:
 
 ```{r extract-features-batch}
-features <- extractMemoryFeatures(
+features <- memoria::extractMemoryFeatures(
   memory.pattern = experiment_table,
   exogenous.component = "Driver.A",
   endogenous.component = "Pollen"
@@ -170,8 +169,6 @@ features <- extractMemoryFeatures(
 
 dplyr::glimpse(features)
 ```
-
-
 
 
 The eight features (organized in three groups):

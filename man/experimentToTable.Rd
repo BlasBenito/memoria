@@ -4,14 +4,12 @@
 \alias{experimentToTable}
 \title{Turns the outcome of \code{\link{runExperiment}} into a long table.}
 \usage{
-experimentToTable(experiment.output = NULL, parameters.file = NULL, R2 = TRUE)
+experimentToTable(experiment.output = NULL, parameters.file = NULL)
 }
 \arguments{
 \item{experiment.output}{list, output of  \code{\link{runExperiment}}. Default: \code{NULL}.}
 
 \item{parameters.file}{dataframe of simulation parameters. Default: \code{NULL}.}
-
-\item{R2}{boolean. If TRUE, the average pseudo R-squared of the random forest models used to analyze the ecological memory pattern of the virtual taxa are shown with the taxon traits. Default: \code{TRUE}.}
 }
 \value{
 A dataframe.

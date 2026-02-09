@@ -4,13 +4,8 @@
 #'
 #' @param memory.output list, output of \code{\link{computeMemory}}. Default: \code{NULL}.
 #' @param ribbon logical, switches plotting of confidence intervals on (TRUE) and off (FALSE). Default: \code{FALSE}.
-#' @param data data.frame, for internal use by \code{\link{plotExperiment}}. When provided, used instead of \code{memory.output$memory}. Default: \code{NULL}.
+#' @param ... additional arguments for internal use.
 #' @param legend.position character, position of the legend. Default: \code{"right"}.
-#' @param base.theme character, base theme to use: \code{"bw"} for \code{theme_bw()} or \code{"classic"} for \code{theme_classic()}. Default: \code{"bw"}.
-#' @param xlab character, x-axis label. Default: \code{"Lag"}.
-#' @param ylab character, y-axis label. Default: \code{"Permutation Importance"}.
-#' @param title character, plot title. Default: \code{NULL}.
-#' @param ribbon.alpha numeric, alpha transparency for the ribbon. Default: \code{0.25}.
 #'
 #' @author Blas M. Benito  <blasbenito@gmail.com>
 #'
@@ -33,17 +28,16 @@
 plotMemory <- function(
   memory.output = NULL,
   ribbon = FALSE,
-  data = NULL,
   legend.position = "right",
-
-  base.theme = "bw",
-  xlab = "Lag",
-  ylab = "Permutation Importance",
-  title = NULL,
-  ribbon.alpha = 0.25
+  ...
 ) {
+  xlab = "Lag"
+  ylab = "Permutation Importance"
+  ribbon.alpha = 0.25
 
-  # Use data parameter if provided, otherwise extract from memory.output
+  # Extract data from ... if provided, otherwise use memory.output
+  dots <- list(...)
+  data <- dots$data
 
   if (is.null(data)) {
     data <- memory.output$memory
@@ -70,19 +64,16 @@ plotMemory <- function(
   # Add ribbon if requested
   if (ribbon) {
     plot.memory <- plot.memory +
-      geom_ribbon(aes(ymin = min, ymax = max), alpha = ribbon.alpha, colour = NA)
+      geom_ribbon(
+        aes(ymin = min, ymax = max),
+        alpha = ribbon.alpha,
+        colour = NA
+      )
   }
 
   # Add line
   plot.memory <- plot.memory +
     geom_line(alpha = line.alpha, linewidth = 1.5)
-
-  # Apply base theme
- if (base.theme == "classic") {
-    plot.memory <- plot.memory + theme_classic()
-  } else {
-    plot.memory <- plot.memory + theme_bw()
-  }
 
   # Add scales and labels
   plot.memory <- plot.memory +
@@ -100,11 +91,6 @@ plotMemory <- function(
       legend.position = legend.position,
       axis.text.x = element_text(size = 12)
     )
-
-  # Add title if provided
-  if (!is.null(title)) {
-    plot.memory <- plot.memory + ggtitle(title)
-  }
 
   return(plot.memory)
 }
