@@ -46,6 +46,14 @@ List with five slots.
   slot `memory`, with the median and confidence intervals of the
   predictions of all random forest models fitted.
 
+## See also
+
+Other example_data:
+[`climate`](https://blasbenito.github.io/memoria/reference/climate.md),
+[`palaeodata`](https://blasbenito.github.io/memoria/reference/palaeodata.md),
+[`palaeodataLagged`](https://blasbenito.github.io/memoria/reference/palaeodataLagged.md),
+[`pollen`](https://blasbenito.github.io/memoria/reference/pollen.md)
+
 ## Author
 
 Blas M. Benito \<blasbenito@gmail.com\>

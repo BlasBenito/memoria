@@ -11,12 +11,7 @@ analyses or plotting.
 ## Usage
 
 ``` r
-experimentToTable(
- experiment.output = NULL,
- parameters.file = NULL,
- sampling.names = NULL,
- R2 = TRUE
- )
+experimentToTable(experiment.output = NULL, parameters.file = NULL)
 ```
 
 ## Arguments
@@ -25,21 +20,11 @@ experimentToTable(
 
   list, output of
   [`runExperiment`](https://blasbenito.github.io/memoria/reference/runExperiment.md).
+  Default: `NULL`.
 
 - parameters.file:
 
-  dataframe of simulation parameters.
-
-- sampling.names:
-
-  vector of character strings with the names of the columns of
-  `simulations.file`.
-
-- R2:
-
-  boolean. If TRUE, the average pseudo R-squared of the random forest
-  models used to analyze the ecological memory pattern of the virtual
-  taxa are shown with the taxon traits.
+  dataframe of simulation parameters. Default: `NULL`.
 
 ## Value
 
@@ -56,6 +41,10 @@ analyses or plots with the data.
 
 [`runExperiment`](https://blasbenito.github.io/memoria/reference/runExperiment.md),
 [`plotExperiment`](https://blasbenito.github.io/memoria/reference/plotExperiment.md)
+
+Other virtualPollen:
+[`plotExperiment()`](https://blasbenito.github.io/memoria/reference/plotExperiment.md),
+[`runExperiment()`](https://blasbenito.github.io/memoria/reference/runExperiment.md)
 
 ## Author
 

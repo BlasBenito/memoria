@@ -33,6 +33,14 @@ dataframe with 6 columns and 800 rows.
   [http://lorraine-lisiecki.com/stack.html](http://lorraine-lisiecki.com/stack.md)
   for further details.
 
+## See also
+
+Other example_data:
+[`palaeodata`](https://blasbenito.github.io/memoria/reference/palaeodata.md),
+[`palaeodataLagged`](https://blasbenito.github.io/memoria/reference/palaeodataLagged.md),
+[`palaeodataMemory`](https://blasbenito.github.io/memoria/reference/palaeodataMemory.md),
+[`pollen`](https://blasbenito.github.io/memoria/reference/pollen.md)
+
 ## Author
 
 Blas M. Benito \<blasbenito@gmail.com\>

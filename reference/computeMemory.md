@@ -1,7 +1,7 @@
 # Quantifies ecological memory with Random Forest.
 
 Takes the output of
-[`prepareLaggedData`](https://blasbenito.github.io/memoria/reference/prepareLaggedData.md)
+[`prepareLaggedData`](https://blasbenito.github.io/memoria/reference/lagTimeSeries.md)
 to fit the following model with Random Forest:
 
 \\p\_{t} = p\_{t-1} +...+ p\_{t-n} + d\_{t} + d\_{t-1} +...+ d\_{t-n} +
@@ -38,9 +38,6 @@ computeMemory(
   random.mode = "autocorrelated",
   repetitions = 10,
   subset.response = "none",
-  min.node.size = 5,
-  num.trees = 500,
-  mtry = NULL,
   num.threads = 2
 )
 ```
@@ -50,65 +47,45 @@ computeMemory(
 - lagged.data:
 
   a lagged dataset resulting from
-  [`prepareLaggedData`](https://blasbenito.github.io/memoria/reference/prepareLaggedData.md).
+  [`prepareLaggedData`](https://blasbenito.github.io/memoria/reference/lagTimeSeries.md).
   See
   [`palaeodataLagged`](https://blasbenito.github.io/memoria/reference/palaeodataLagged.md)
-  as example.
+  as example. Default: `NULL`.
 
 - response:
 
   character string, name of the response variable. Not required if
   \`lagged.data\` was generated with \[prepareLaggedData\]. Default:
-  NULL
+  `NULL`.
 
 - drivers:
 
-  a character string or vector of character strings with variables to be
-  used as predictors in the model. Not required if \`lagged.data\` was
-  generated with \[prepareLaggedData\].. **Important:** `drivers` names
-  must not have the character "\_\_" (double underscore). Default: NULL
+  a character string or character vector with variables to be used as
+  predictors in the model. Not required if \`lagged.data\` was generated
+  with \[prepareLaggedData\]. **Important:** `drivers` names must not
+  have the character "\_\_" (double underscore). Default: `NULL`.
 
 - random.mode:
 
   either "none", "white.noise" or "autocorrelated". See details.
+  Default: `"autocorrelated"`.
 
 - repetitions:
 
-  integer, number of random forest models to fit.
+  integer, number of random forest models to fit. Default: `10`.
 
 - subset.response:
 
   character string with values "up", "down" or "none", triggers the
   subsetting of the input dataset. "up" only models memory on cases
   where the response's trend is positive, "down" selects cases with
-  negative trends, and "none" selects all cases.
-
-- min.node.size:
-
-  integer, argument of the
-  [ranger](http://imbs-hl.github.io/ranger/reference/ranger.md)
-  function. Minimal number of samples to be allocated in a terminal
-  node. Default is 5.
-
-- num.trees:
-
-  integer, argument of the
-  [ranger](http://imbs-hl.github.io/ranger/reference/ranger.md)
-  function. Number of regression trees to be fitted (size of the
-  forest). Default is 500
-
-- mtry:
-
-  integer, argument of the
-  [ranger](http://imbs-hl.github.io/ranger/reference/ranger.md)
-  function. Number of variables to possibly split at in each node.
-  Default: NULL.
+  negative trends, and "none" selects all cases. Default: `"none"`.
 
 - num.threads:
 
   integer, number of cores
   [ranger](http://imbs-hl.github.io/ranger/reference/ranger.md) can use
-  for multithreading. Default: 2
+  for multithreading. Default: `2`.
 
 ## Value
 
@@ -183,6 +160,10 @@ therefore, significant.
 
 [`plotMemory`](https://blasbenito.github.io/memoria/reference/plotMemory.md),
 [`extractMemoryFeatures`](https://blasbenito.github.io/memoria/reference/extractMemoryFeatures.md)
+
+Other memoria:
+[`extractMemoryFeatures()`](https://blasbenito.github.io/memoria/reference/extractMemoryFeatures.md),
+[`plotMemory()`](https://blasbenito.github.io/memoria/reference/plotMemory.md)
 
 ## Author
 

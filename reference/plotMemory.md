@@ -10,7 +10,7 @@ plotMemory(
   memory.output = NULL,
   ribbon = FALSE,
   legend.position = "right",
-  filename = NULL
+  ...
 )
 ```
 
@@ -20,19 +20,20 @@ plotMemory(
 
   list, output of
   [`computeMemory`](https://blasbenito.github.io/memoria/reference/computeMemory.md).
+  Default: `NULL`.
 
 - ribbon:
 
   logical, switches plotting of confidence intervals on (TRUE) and off
-  (FALSE). Default: FALSE
+  (FALSE). Default: `FALSE`.
 
 - legend.position:
 
-  character string, legend position (e.g., "right", "bottom", "none").
+  character, position of the legend. Default: `"right"`.
 
-- filename:
+- ...:
 
-  deprecated, not used. Kept for backwards compatibility.
+  additional arguments for internal use.
 
 ## Value
 
@@ -41,6 +42,10 @@ A ggplot object.
 ## See also
 
 [`computeMemory`](https://blasbenito.github.io/memoria/reference/computeMemory.md)
+
+Other memoria:
+[`computeMemory()`](https://blasbenito.github.io/memoria/reference/computeMemory.md),
+[`extractMemoryFeatures()`](https://blasbenito.github.io/memoria/reference/extractMemoryFeatures.md)
 
 ## Author
 
@@ -58,6 +63,5 @@ plotMemory(memory.output = palaeodataMemory)
 
 #with confidence ribbon
 plotMemory(memory.output = palaeodataMemory, ribbon = TRUE)
-
 
 ```

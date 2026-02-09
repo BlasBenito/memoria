@@ -1,17 +1,22 @@
 # Package index
 
-## All functions
+## Data Preparation
 
-- [`climate`](https://blasbenito.github.io/memoria/reference/climate.md)
-  : Dataframe with palaeoclimatic data.
+Prepare time series for ecological memory analyses.
+
+- [`alignTimeSeries()`](https://blasbenito.github.io/memoria/reference/alignTimeSeries.md)
+  [`mergePalaeoData()`](https://blasbenito.github.io/memoria/reference/alignTimeSeries.md)
+  : Align and join multiple time series to a common temporal resolution
+- [`lagTimeSeries()`](https://blasbenito.github.io/memoria/reference/lagTimeSeries.md)
+  [`prepareLaggedData()`](https://blasbenito.github.io/memoria/reference/lagTimeSeries.md)
+  : Create lagged versions of time series variables
+
+## Ecological Memory Analysis
+
+Analyze ecological memory in environmental time series.
 
 - [`computeMemory()`](https://blasbenito.github.io/memoria/reference/computeMemory.md)
   : Quantifies ecological memory with Random Forest.
-
-- [`experimentToTable()`](https://blasbenito.github.io/memoria/reference/experimentToTable.md)
-  :
-
-  Turns the outcome of `runExperiment` into a long table.
 
 - [`extractMemoryFeatures()`](https://blasbenito.github.io/memoria/reference/extractMemoryFeatures.md)
   :
@@ -19,8 +24,38 @@
   Extracts ecological memory features from the output of
   `computeMemory`.
 
-- [`mergePalaeoData()`](https://blasbenito.github.io/memoria/reference/mergePalaeoData.md)
-  : Merges palaeoecological datasets with different time resolution.
+- [`plotMemory()`](https://blasbenito.github.io/memoria/reference/plotMemory.md)
+  :
+
+  Plots output of `computeMemory`
+
+## Integration With [`virtualPollen`](https://github.com/BlasBenito/virtualPollen)
+
+Perform large experiments from simulations generated with the package
+`virtualPollen`.
+
+- [`experimentToTable()`](https://blasbenito.github.io/memoria/reference/experimentToTable.md)
+  :
+
+  Turns the outcome of `runExperiment` into a long table.
+
+- [`plotExperiment()`](https://blasbenito.github.io/memoria/reference/plotExperiment.md)
+  :
+
+  Plots the output of `runExperiment`.
+
+- [`runExperiment()`](https://blasbenito.github.io/memoria/reference/runExperiment.md)
+  :
+
+  Computes ecological memory patterns on simulated pollen curves
+  produced by the `virtualPollen` package.
+
+## Example Data
+
+Example data to play with.
+
+- [`climate`](https://blasbenito.github.io/memoria/reference/climate.md)
+  : Dataframe with palaeoclimatic data.
 
 - [`palaeodata`](https://blasbenito.github.io/memoria/reference/palaeodata.md)
   : Dataframe with pollen and climate data.
@@ -35,24 +70,5 @@
 
   Output of `computeMemory`
 
-- [`plotExperiment()`](https://blasbenito.github.io/memoria/reference/plotExperiment.md)
-  :
-
-  Plots the output of `runExperiment`.
-
-- [`plotMemory()`](https://blasbenito.github.io/memoria/reference/plotMemory.md)
-  :
-
-  Plots output of `computeMemory`
-
 - [`pollen`](https://blasbenito.github.io/memoria/reference/pollen.md) :
   Dataframe with pollen counts.
-
-- [`prepareLaggedData()`](https://blasbenito.github.io/memoria/reference/prepareLaggedData.md)
-  : Organizes time series data into lags.
-
-- [`runExperiment()`](https://blasbenito.github.io/memoria/reference/runExperiment.md)
-  :
-
-  Computes ecological memory patterns on simulated pollen curves
-  produced by the `virtualPollen` package.

@@ -8,79 +8,86 @@ to assess ecological memory on a large set of virtual pollen curves.
 
 ``` r
 runExperiment(
- simulations.file = NULL,
- selected.rows = 1,
- selected.columns = 1,
- parameters.file = NULL,
- parameters.names = NULL,
- sampling.names = NULL,
- driver.column = NULL,
- response.column = "Response_0",
- subset.response = "none",
- time.column = "Time",
- time.zoom = NULL,
- lags = NULL,
- repetitions = 10
- )
+  simulations.file = NULL,
+  selected.rows = NULL,
+  selected.columns = NULL,
+  parameters.file = NULL,
+  parameters.names = NULL,
+  driver.column = NULL,
+  response.column = "Pollen",
+  subset.response = "none",
+  time.column = "Time",
+  time.zoom = NULL,
+  lags = NULL,
+  repetitions = 10
+)
 ```
 
 ## Arguments
 
 - simulations.file:
 
-  list of dataframes, output of the function `simulatePopulation` of the
-  `virtualPollen` package.
+  List of dataframes produced by `virtualPollen::simulatePopulation`.
+  Each list element is a time series dataframe for one virtual taxon.
+  Can be a 1D list (one sampling scheme) or a 2D matrix-like list (rows
+  = taxa, columns = sampling schemes). See `virtualPollen::simulation`
+  for an example. Default: `NULL`.
 
 - selected.rows:
 
-  numeric vector, rows (virtual taxa) of `simulations.file` to be
-  analyzed.
+  Numeric vector indicating which virtual taxa (list elements) from
+  `simulations.file` to analyze. For example, `c(1, 3)` analyzes the 1st
+  and 3rd taxa. Default: `NULL` (analyzes all taxa).
 
 - selected.columns:
 
-  numeric vector, columns (experiment treatments) of `simulations.file`
-  to be analyzed.
+  Numeric vector indicating which sampling schemes (columns) from
+  `simulations.file` to analyze. Only relevant when `simulations.file`
+  has a 2D structure with multiple sampling schemes. Default: `NULL`
+  (uses the first sampling scheme only).
 
 - parameters.file:
 
-  dataframe of simulation parameters.
+  Dataframe of simulation parameters produced by
+  `virtualPollen::parametersDataframe`, with one row per virtual taxon.
+  Rows must align with `simulations.file`. See
+  `virtualPollen::parameters` for an example. Default: `NULL`.
 
 - parameters.names:
 
-  vector of character strings with names of traits and niche features
-  from `parameters.file` to be included in the analysis (i.e.
-  c("maximum.age", "fecundity", "niche.A.mean", "niche.A.sd"))
-
-- sampling.names:
-
-  vector of character strings with the names of the columns of
-  `simulations.file`.
+  Character vector of column names from `parameters.file` to include in
+  output labels. These help identify which simulation settings produced
+  each result. Example: `c("maximum.age", "fecundity")`. Default:
+  `NULL`.
 
 - driver.column:
 
-  vector of character strings, names of the columns to be considered as
-  drivers (generally, one of "Suitability", "Driver.A", "Driver.B").
+  Character vector of column names representing environmental drivers in
+  the simulation dataframes. Common choices: `"Driver.A"`, `"Driver.B"`,
+  or `"Suitability"`. Default: `NULL`.
 
 - response.column:
 
-  character string defining the response variable, typically
-  "Response_0".
+  Character string naming the response variable column in the simulation
+  dataframes. Use `"Pollen"` for pollen abundance from
+  `virtualPollen::simulation`. Default: `"Pollen"`.
 
 - subset.response:
 
   character string, one of "up", "down" or "none", triggers the
   subsetting of the input dataset. "up" only models ecological memory on
   cases where the response's trend is positive, "down" selects cases
-  with negative trends, and "none" selects all cases.
+  with negative trends, and "none" selects all cases. Default: `"none"`.
 
 - time.column:
 
   character string, name of the time/age column. Usually, "Time".
+  Default: `"Time"`.
 
 - time.zoom:
 
   numeric vector with two numbers defining the time/age extremes of the
-  time interval of interest.
+  time interval of interest. Default: `NULL`.
 
 - lags:
 
@@ -92,11 +99,11 @@ runExperiment(
   if the interval between consecutive samples is 100 years, lags should
   be something like `0, 100, 200, 300`. Lags can also be multiples of
   the time resolution, such as `0, 200, 400, 600` (when time resolution
-  is 100 years).
+  is 100 years). Default: `NULL`.
 
 - repetitions:
 
-  integer, number of random forest models to fit.
+  integer, number of random forest models to fit. Default: `10`.
 
 ## Value
 
@@ -142,6 +149,10 @@ A list with 2 slots:
 ## See also
 
 [`computeMemory`](https://blasbenito.github.io/memoria/reference/computeMemory.md)
+
+Other virtualPollen:
+[`experimentToTable()`](https://blasbenito.github.io/memoria/reference/experimentToTable.md),
+[`plotExperiment()`](https://blasbenito.github.io/memoria/reference/plotExperiment.md)
 
 ## Author
 

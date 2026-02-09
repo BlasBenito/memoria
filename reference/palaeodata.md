@@ -2,7 +2,7 @@
 
 A dataframe with a regular time grid of 0.2 ky resolution resulting from
 applying
-[`mergePalaeoData`](https://blasbenito.github.io/memoria/reference/mergePalaeoData.md)
+[`mergePalaeoData`](https://blasbenito.github.io/memoria/reference/alignTimeSeries.md)
 to the datasets
 [`climate`](https://blasbenito.github.io/memoria/reference/climate.md)
 and
@@ -46,6 +46,14 @@ dataframe with 10 columns and 7986 rows.
   the sea floor, see
   [http://lorraine-lisiecki.com/stack.html](http://lorraine-lisiecki.com/stack.md)
   for further details.
+
+## See also
+
+Other example_data:
+[`climate`](https://blasbenito.github.io/memoria/reference/climate.md),
+[`palaeodataLagged`](https://blasbenito.github.io/memoria/reference/palaeodataLagged.md),
+[`palaeodataMemory`](https://blasbenito.github.io/memoria/reference/palaeodataMemory.md),
+[`pollen`](https://blasbenito.github.io/memoria/reference/pollen.md)
 
 ## Author
 

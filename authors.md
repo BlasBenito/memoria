@@ -2,8 +2,8 @@
 
 ## Authors
 
-- **Blas M. Benito**. Author, maintainer, copyright holder.
-  [](https://orcid.org/0000-0001-5105-7232)
+- **[Blas M. Benito](https://blasbenito.com)**. Author, maintainer,
+  copyright holder. [](https://orcid.org/0000-0001-5105-7232)
 
 ## Citation
 
