@@ -1,6 +1,6 @@
 # Changelog
 
-## memoria 1.1.0 (2025-01-27)
+## memoria 1.1.0 (2026-02-09)
 
 ### Bug fixes
 

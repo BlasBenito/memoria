@@ -148,10 +148,12 @@ therefore, significant.
 
 - Wright, M. N. & Ziegler, A. (2017). ranger: A fast implementation of
   random forests for high dimensional data in C++ and R. J Stat Softw
-  77:1-17. <https://doi.org/10.18637/jss.v077.i01>.
+  77:1-17.
+  [doi:10.18637/jss.v077.i01](https://doi.org/10.18637/jss.v077.i01) .
 
 - Breiman, L. (2001). Random forests. Mach Learn, 45:5-32.
-  <https://doi.org/10.1023/A:1010933404324>.
+  [doi:10.1023/A:1010933404324](https://doi.org/10.1023/A%3A1010933404324)
+  .
 
 - Hastie, T., Tibshirani, R., Friedman, J. (2009). The Elements of
   Statistical Learning. Springer, New York. 2nd edition.
