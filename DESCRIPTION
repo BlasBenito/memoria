@@ -19,6 +19,7 @@ Imports:
   zoo,
   rlang
 Suggests:
-  testthat
+    spelling,
+    testthat
 URL: https://blasbenito.github.io/memoria/
 Language: en-US
