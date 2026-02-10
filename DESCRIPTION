@@ -7,7 +7,7 @@ Authors@R:
           email = "blasbenito@gmail.com", 
           role = c("aut", "cre", "cph"),
            comment = c(ORCID = "0000-0001-5105-7232"))
-Description: Quantifies ecological memory in long time-series using Random Forest models (Benito, Gil-Romera, and Birks 2019 <doi:10.1111/ecog.04772>) fitted with 'ranger' (Wright and Ziegler 2017 <doi:10.18637/jss.v077.i01>). Ecological memory is assessed by modeling a response variable as a function of lagged predictors, distinguishing endogenous memory (lagged response) from exogenous memory (lagged environmental drivers). Designed for palaeoecological datasets and simulated pollen curves from 'virtualPollen', but applicable to any long time-series with environmental drivers and a biotic response.
+Description: Quantifies ecological memory in long time-series using Random Forest models ('Benito', 'Gil-Romera', and 'Birks' 2019 <doi:10.1111/ecog.04772>) fitted with 'ranger' (Wright and Ziegler 2017 <doi:10.18637/jss.v077.i01>). Ecological memory is assessed by modeling a response variable as a function of lagged predictors, distinguishing endogenous memory (lagged response) from exogenous memory (lagged environmental drivers). Designed for palaeoecological datasets and simulated pollen curves from 'virtualPollen', but applicable to any long time-series with environmental drivers and a biotic response.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true

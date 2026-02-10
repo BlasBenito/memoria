@@ -22,3 +22,6 @@
 ^\.github$
 ^dev_scripts$
 ^tests$
+^CRAN-SUBMISSION$
+^LICENSE\.md$
+^vignettes$
