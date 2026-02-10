@@ -1,25 +1,29 @@
 ## Test environments
-* Local: Ubuntu 18.04.2 LTS, R 3.6.0
-* Rhub
-  * macOS 10.11 El Capitan, R-release
-  * Ubuntu Linux 16.04 LTS, R-devel
-  * Ubuntu Linux 16.04 LTS, R-release
-  * Windows Server 2008 R2 SP1, R-release, 32/64 bit
-  * Windows Server 2008 R2 SP1, R-oldrel, 32/64 bit
-  * Windows Server 2008 R2 SP1, R-devel, 32/64 bit
-* win-builder (devel, release, oldrelease)
 
+* Local: Ubuntu 24.04, R 4.4.2
+* R-hub v2:
+  * linux (R-devel)
+  * macos-arm64 (R-release)
+  * windows (R-release)
+  * atlas, c23, clang-asan, clang16, clang17, clang18, clang19
+  * gcc13, gcc14, intel, mkl, nold, nosuggests
+  * ubuntu-clang, ubuntu-gcc12, ubuntu-next, ubuntu-release
+* win-builder (R-devel)
 
 ## R CMD check results
+
 0 ERRORs | 0 WARNINGs | 1 NOTE.
 
 * checking CRAN incoming feasibility ... NOTE
 
 Maintainer: 'Blas M. Benito <blasbenito@gmail.com>'
-New submission
 
-Possibly mis-spelled words in DESCRIPTION:
-  Palaeoecological (3:41)
-  biotic (8:282)
-  palaeoecological (8:96)
-  virtualPollen (8:166)
+Possibly misspelled words in DESCRIPTION:
+  Birks (12:115)
+  Romera (12:103)
+
+These are not misspellings. They are author surnames from the cited reference: Benito, Gil-Romera, and Birks (2019).
+
+## Downstream dependencies
+
+There are currently no downstream dependencies for this package.
