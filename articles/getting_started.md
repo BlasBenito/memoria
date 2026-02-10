@@ -309,13 +309,13 @@ extractMemoryFeatures(
 #> Rows: 1
 #> Columns: 8
 #> $ label                <chr> "quercus"
-#> $ strength.endogenous  <dbl> 24.45535
-#> $ strength.exogenous   <dbl> 5.445508
-#> $ strength.concurrent  <dbl> 5.873879
+#> $ strength.endogenous  <dbl> 24.35066
+#> $ strength.exogenous   <dbl> 5.351078
+#> $ strength.concurrent  <dbl> 5.653404
 #> $ length.endogenous    <dbl> 0.4
-#> $ length.exogenous     <dbl> 0.4
+#> $ length.exogenous     <dbl> 0.3
 #> $ dominance.endogenous <dbl> 0.4
-#> $ dominance.exogenous  <dbl> 0.1
+#> $ dominance.exogenous  <dbl> 0
 ```
 
 The output contains eight features organized in three groups:
